@@ -1,0 +1,486 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ROX Exp Calculator</title>
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+            min-height: 100vh;
+            margin: 0;
+            padding: 20px;
+            color: #eee;
+        }
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: rgba(30, 30, 46, 0.9);
+            border-radius: 24px;
+            padding: 24px;
+            backdrop-filter: blur(10px);
+            box-shadow: 0 8px 32px rgba(0,0,0,0.3);
+        }
+        h1 {
+            text-align: center;
+            margin-top: 0;
+            color: #ffd700;
+        }
+        .input-group {
+            margin-bottom: 20px;
+        }
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: bold;
+            color: #ccc;
+        }
+        input, select {
+            width: 100%;
+            padding: 12px;
+            border-radius: 12px;
+            border: 1px solid #444;
+            background: #2a2a3a;
+            color: white;
+            font-size: 16px;
+        }
+        input[type="range"] {
+            padding: 0;
+        }
+        .row {
+            display: flex;
+            gap: 15px;
+            flex-wrap: wrap;
+        }
+        .row > * {
+            flex: 1;
+        }
+        .switch {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            cursor: pointer;
+        }
+        .switch input {
+            width: auto;
+            transform: scale(1.2);
+        }
+        .advanced-panel {
+            display: none;
+            margin-top: 20px;
+            padding: 20px;
+            background: rgba(0,0,0,0.3);
+            border-radius: 16px;
+        }
+        .advanced-panel.show {
+            display: block;
+        }
+        .results {
+            margin-top: 30px;
+            padding: 20px;
+            background: rgba(0,0,0,0.4);
+            border-radius: 16px;
+        }
+        .result-card {
+            background: #2a2a3a;
+            border-radius: 12px;
+            padding: 15px;
+            margin-bottom: 15px;
+        }
+        .result-card h3 {
+            margin: 0 0 10px 0;
+            color: #ffd700;
+        }
+        .monster-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 8px 0;
+            border-bottom: 1px solid #444;
+        }
+        .monster-name {
+            font-weight: bold;
+        }
+        .monster-exp {
+            color: #4caf50;
+        }
+        .monster-penalty {
+            font-size: 12px;
+            color: #888;
+        }
+        .badge {
+            background: #ffd700;
+            color: #1a1a2e;
+            padding: 4px 8px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: bold;
+        }
+        button {
+            background: #ffd700;
+            color: #1a1a2e;
+            border: none;
+            padding: 14px 28px;
+            border-radius: 40px;
+            font-size: 18px;
+            font-weight: bold;
+            cursor: pointer;
+            width: 100%;
+            transition: transform 0.1s;
+        }
+        button:active {
+            transform: scale(0.98);
+        }
+        hr {
+            border-color: #444;
+            margin: 20px 0;
+        }
+        .flex-between {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .odin-info {
+            font-size: 14px;
+            color: #aaa;
+            margin-top: 5px;
+        }
+        @media (max-width: 600px) {
+            .row {
+                flex-direction: column;
+            }
+            .container {
+                padding: 16px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>⚔️ ROX Exp Calculator ⚔️</h1>
+        
+        <!-- Основные настройки -->
+        <div class="input-group">
+            <label>🎯 Ваш уровень:</label>
+            <input type="number" id="playerLevel" value="80" min="1" max="150">
+        </div>
+        
+        <div class="input-group">
+            <label>📊 Множитель сервера (x1 = стандарт):</label>
+            <input type="range" id="serverBonus" min="0.5" max="3" step="0.01" value="1.00">
+            <div class="flex-between">
+                <span>0.5x</span>
+                <span id="serverBonusValue">1.00x</span>
+                <span>3x</span>
+            </div>
+        </div>
+        
+        <!-- Расширенный режим -->
+        <div class="switch">
+            <input type="checkbox" id="advancedMode">
+            <label>🔧 Расширенный режим</label>
+        </div>
+        
+        <div id="advancedPanel" class="advanced-panel">
+            <div class="row">
+                <div class="input-group">
+                    <label>📊 Тип опыта:</label>
+                    <select id="expType">
+                        <option value="base">Базовый опыт (Base)</option>
+                        <option value="job">Опыт профессии (Job)</option>
+                    </select>
+                </div>
+                <div class="input-group">
+                    <label>👥 Количество в пати:</label>
+                    <input type="number" id="partySize" min="1" max="5" value="1">
+                </div>
+            </div>
+            <div class="row">
+                <div class="input-group">
+                    <label>🎭 Разных классов в пати:</label>
+                    <input type="number" id="classVariety" min="1" max="5" value="1">
+                </div>
+                <div class="input-group">
+                    <label>⏱️ Время убийства (сек):</label>
+                    <input type="number" id="killTime" min="0.1" step="0.1" value="5">
+                </div>
+            </div>
+            <div class="input-group">
+                <div class="switch">
+                    <input type="checkbox" id="odinBless">
+                    <label>✨ Благословение Одина (x5 опыт)</label>
+                </div>
+            </div>
+            <div class="input-group" id="odinPointsGroup" style="display: none;">
+                <label>💎 Очков Одина в запасе:</label>
+                <input type="number" id="odinPoints" min="0" value="100">
+                <div class="odin-info">
+                    Маленькие мобы: 1 очко | Средние: 2 очка | Большие: 3 очка
+                </div>
+            </div>
+        </div>
+        
+        <button onclick="calculate()">🔍 НАЙТИ ЛУЧШИЕ ВАРИАНТЫ</button>
+        
+        <div id="results" class="results">
+            <div style="text-align: center; color: #888;">Введите уровень и нажмите кнопку</div>
+        </div>
+    </div>
+
+    <script>
+        let monsters = { small: [], medium: [], large: [] };
+        
+        // Загрузка базы монстров
+        async function loadMonsters() {
+            try {
+                const response = await fetch('/mobs');
+                const data = await response.json();
+                monsters = data;
+                console.log(`📦 Загружено монстров: ${monsters.small.length + monsters.medium.length + monsters.large.length}`);
+            } catch (error) {
+                console.error('Ошибка загрузки монстров:', error);
+                // Демо-данные на случай ошибки
+                monsters = {
+                    small: [{name:"Poring",level:1,baseExp:32,jobExp:32}],
+                    medium: [{name:"Drops",level:7,baseExp:33,jobExp:55}],
+                    large: [{name:"Anubis",level:65,baseExp:495,jobExp:165}]
+                };
+            }
+        }
+        
+        // Расчёт штрафа за разницу уровней
+        function getPenalty(monsterLevel, playerLevel) {
+            const diff = monsterLevel - playerLevel;
+            if (diff >= 0 && diff <= 3) return 1.0;
+            if (diff >= 4 && diff <= 6) return 0.8;
+            if (diff >= 7 && diff <= 8) return 0.6;
+            if (diff === 9) return 0.4;
+            if (diff === 10) return 0.2;
+            if (diff >= 11) return 0.1;
+            return 1.0; // монстр ниже игрока
+        }
+        
+        // Размер моба для Одина
+        function getMonsterSize(monster) {
+            for (let m of monsters.small) if (m.name === monster.name) return 'small';
+            for (let m of monsters.medium) if (m.name === monster.name) return 'medium';
+            for (let m of monsters.large) if (m.name === monster.name) return 'large';
+            return 'medium';
+        }
+        
+        // Стоимость Одина для моба
+        function getOdinCost(monster) {
+            const size = getMonsterSize(monster);
+            if (size === 'small') return 1;
+            if (size === 'medium') return 2;
+            return 3;
+        }
+        
+        // Бонус пати
+        function getPartyBonus(partySize, classVariety) {
+            let sizeBonus = 0;
+            if (partySize === 2) sizeBonus = 0.10;
+            else if (partySize === 3) sizeBonus = 0.20;
+            else if (partySize === 4) sizeBonus = 0.30;
+            else if (partySize === 5) sizeBonus = 0.40;
+            
+            let classBonus = 0;
+            if (classVariety === 2) classBonus = 0.05;
+            else if (classVariety === 3) classBonus = 0.10;
+            else if (classVariety === 4) classBonus = 0.15;
+            else if (classVariety === 5) classBonus = 0.20;
+            
+            return 1 + sizeBonus + classBonus;
+        }
+        
+        // Основная функция расчёта
+        async function calculate() {
+            const playerLevel = parseInt(document.getElementById('playerLevel').value);
+            const serverBonus = parseFloat(document.getElementById('serverBonus').value);
+            const advancedMode = document.getElementById('advancedMode').checked;
+            
+            let allMonsters = [
+                ...monsters.small.map(m => ({...m, size: 'small'})),
+                ...monsters.medium.map(m => ({...m, size: 'medium'})),
+                ...monsters.large.map(m => ({...m, size: 'large'}))
+            ];
+            
+            // Расчёт для каждого монстра
+            let results = allMonsters.map(monster => {
+                let penalty = getPenalty(monster.level, playerLevel);
+                let baseExp = monster.baseExp * penalty * serverBonus;
+                let jobExp = monster.jobExp * penalty * serverBonus;
+                
+                let partyBonus = 1;
+                let odinMult = 1;
+                let finalBase = baseExp;
+                let finalJob = jobExp;
+                
+                if (advancedMode) {
+                    const partySize = parseInt(document.getElementById('partySize').value);
+                    const classVariety = parseInt(document.getElementById('classVariety').value);
+                    partyBonus = getPartyBonus(partySize, classVariety);
+                    finalBase = baseExp * partyBonus;
+                    finalJob = jobExp * partyBonus;
+                    
+                    if (document.getElementById('odinBless').checked) {
+                        odinMult = 5;
+                        finalBase *= 5;
+                        finalJob *= 5;
+                    }
+                }
+                
+                return {
+                    name: monster.name,
+                    level: monster.level,
+                    baseExp: Math.floor(finalBase),
+                    jobExp: Math.floor(finalJob),
+                    baseRaw: monster.baseExp,
+                    jobRaw: monster.jobExp,
+                    penalty: penalty,
+                    partyBonus: partyBonus,
+                    odinMult: odinMult,
+                    size: monster.size,
+                    odinCost: getOdinCost(monster)
+                };
+            });
+            
+            // Сортировка
+            let topBase = [...results].sort((a,b) => b.baseExp - a.baseExp).slice(0, 5);
+            let topJob = [...results].sort((a,b) => b.jobExp - a.jobExp).slice(0, 5);
+            
+            // Вывод результатов
+            const resultsDiv = document.getElementById('results');
+            
+            if (!advancedMode) {
+                // Обычный режим — топ 3 Base и топ 3 Job
+                let html = `
+                    <h2>🎯 РЕЗУЛЬДАТЫ ДЛЯ УРОВНЯ ${playerLevel}</h2>
+                    <div class="result-card">
+                        <h3>⚔️ ТОП-3 ПО БАЗОВОМУ ОПЫТУ</h3>
+                        ${topBase.slice(0,3).map(m => `
+                            <div class="monster-item">
+                                <div>
+                                    <span class="monster-name">${m.name}</span>
+                                    <span class="monster-penalty"> (lvl ${m.level}, ${Math.round(m.penalty*100)}% опыта)</span>
+                                </div>
+                                <div class="monster-exp">${m.baseExp.toLocaleString()} XP</div>
+                            </div>
+                        `).join('')}
+                    </div>
+                    <div class="result-card">
+                        <h3>💼 ТОП-3 ПО ДЖОБ ОПЫТУ</h3>
+                        ${topJob.slice(0,3).map(m => `
+                            <div class="monster-item">
+                                <div>
+                                    <span class="monster-name">${m.name}</span>
+                                    <span class="monster-penalty"> (lvl ${m.level}, ${Math.round(m.penalty*100)}% опыта)</span>
+                                </div>
+                                <div class="monster-exp">${m.jobExp.toLocaleString()} XP</div>
+                            </div>
+                        `).join('')}
+                    </div>
+                `;
+                resultsDiv.innerHTML = html;
+            } else {
+                // Расширенный режим
+                const expType = document.getElementById('expType').value;
+                const killTime = parseFloat(document.getElementById('killTime').value);
+                const odinPoints = parseInt(document.getElementById('odinPoints').value);
+                const odinBless = document.getElementById('odinBless').checked;
+                
+                let sorted = expType === 'base' 
+                    ? [...results].sort((a,b) => b.baseExp - a.baseExp)
+                    : [...results].sort((a,b) => b.jobExp - a.jobExp);
+                
+                let top1 = sorted[0];
+                let expPerHour = (expType === 'base' ? top1.baseExp : top1.jobExp) * (3600 / killTime);
+                let odinMinutes = 0;
+                
+                if (odinBless && odinPoints > 0) {
+                    let cost = top1.odinCost;
+                    let killsLeft = Math.floor(odinPoints / cost);
+                    odinMinutes = Math.floor(killsLeft * killTime / 60);
+                }
+                
+                let html = `
+                    <h2>🎯 РАСШИРЕННЫЙ РАСЧЁТ</h2>
+                    <div class="result-card">
+                        <h3>🏆 ТОП-1 МОНСТР</h3>
+                        <div class="monster-item">
+                            <div>
+                                <span class="monster-name">${top1.name}</span>
+                                <span class="monster-penalty"> (уровень ${top1.level})</span>
+                            </div>
+                            <div class="monster-exp">${expType === 'base' ? top1.baseExp : top1.jobExp} XP</div>
+                        </div>
+                        <div class="monster-item">
+                            <div>Размер:</div>
+                            <div>${top1.size === 'small' ? 'Маленький 🟢' : top1.size === 'medium' ? 'Средний 🟡' : 'Большой 🔴'}</div>
+                        </div>
+                        <div class="monster-item">
+                            <div>Штраф за уровень:</div>
+                            <div>${Math.round(top1.penalty*100)}%</div>
+                        </div>
+                        <div class="monster-item">
+                            <div>Бонус пати:</div>
+                            <div>+${Math.round((top1.partyBonus-1)*100)}%</div>
+                        </div>
+                    </div>
+                    
+                    <div class="result-card">
+                        <h3>⏱️ СТАТИСТИКА ФАРМА</h3>
+                        <div class="monster-item">
+                            <div>Опыта в минуту:</div>
+                            <div>${Math.floor((expType === 'base' ? top1.baseExp : top1.jobExp) * (60 / killTime)).toLocaleString()} XP</div>
+                        </div>
+                        <div class="monster-item">
+                            <div>Опыта в час:</div>
+                            <div>${Math.floor(expPerHour).toLocaleString()} XP</div>
+                        </div>
+                `;
+                
+                if (odinBless && odinPoints > 0) {
+                    html += `
+                        <div class="monster-item">
+                            <div>💰 Стоимость Одина за моба:</div>
+                            <div>${top1.odinCost} очк.</div>
+                        </div>
+                        <div class="monster-item">
+                            <div>⏳ Одина хватит на:</div>
+                            <div>${odinMinutes} минут</div>
+                        </div>
+                    `;
+                }
+                
+                html += `</div>`;
+                resultsDiv.innerHTML = html;
+            }
+            
+            // Обновление отображения ползунка
+            document.getElementById('serverBonusValue').innerText = serverBonus.toFixed(2) + 'x';
+        }
+        
+        // Обработчики UI
+        document.getElementById('advancedMode').addEventListener('change', (e) => {
+            document.getElementById('advancedPanel').classList.toggle('show', e.target.checked);
+        });
+        
+        document.getElementById('odinBless').addEventListener('change', (e) => {
+            document.getElementById('odinPointsGroup').style.display = e.target.checked ? 'block' : 'none';
+        });
+        
+        document.getElementById('serverBonus').addEventListener('input', (e) => {
+            document.getElementById('serverBonusValue').innerText = parseFloat(e.target.value).toFixed(2) + 'x';
+        });
+        
+        // Загрузка данных и запуск
+        loadMonsters().then(() => {
+            calculate();
+        });
+    </script>
+</body>
+</html>
