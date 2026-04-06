@@ -25,12 +25,12 @@ async function loadMonsters() {
 // Штраф за разницу уровней
 function getPenalty(monsterLevel, playerLevel) {
     const diff = monsterLevel - playerLevel;
-    if (diff >= 0 && diff <= 3) return 1.0;      // 100%
-    if (diff >= 4 && diff <= 6) return 0.8;      // 80%
-    if (diff >= 7 && diff <= 8) return 0.6;      // 60%
-    if (diff === 9) return 0.4;                   // 40%
-    if (diff === 10) return 0.2;                  // 20%
-    if (diff >= 11) return 0.1;                   // 10%
+    if (diff >= 0 && diff <= 3) return 1.0;
+    if (diff >= 4 && diff <= 6) return 0.8;
+    if (diff >= 7 && diff <= 8) return 0.6;
+    if (diff === 9) return 0.4;
+    if (diff === 10) return 0.2;
+    if (diff >= 11) return 0.1;
     return 1.0;
 }
 
@@ -71,9 +71,7 @@ function getOdinCost(monsterName) {
 // Основная функция расчёта
 async function calculate() {
     const playerLevel = parseInt(document.getElementById('playerLevel').value);
-    const serverBonusRaw = parseFloat(document.getElementById('serverBonus').value);
-    const serverBonusX2 = document.getElementById('serverBonusX2').checked;
-    const serverBonus = serverBonusRaw * (serverBonusX2 ? 2.0 : 1.0);
+    const serverBonus = parseFloat(document.getElementById('serverBonus').value);
     const advancedMode = document.getElementById('advancedMode').checked;
     
     const totalMonsters = (monsters.small?.length || 0) + (monsters.medium?.length || 0) + (monsters.large?.length || 0);
@@ -123,8 +121,6 @@ async function calculate() {
             level: monster.level,
             baseExp: baseExp,
             jobExp: jobExp,
-            baseRaw: monster.baseExp,
-            jobRaw: monster.jobExp,
             penalty: penalty,
             partySizeBonus: partySizeBonus,
             classBonus: classBonus,
