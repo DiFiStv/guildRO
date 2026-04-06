@@ -1,0 +1,174 @@
+* {
+    box-sizing: border-box;
+}
+
+body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+    min-height: 100vh;
+    margin: 0;
+    padding: 20px;
+    color: #eee;
+}
+
+.container {
+    max-width: 800px;
+    margin: 0 auto;
+    background: rgba(30, 30, 46, 0.9);
+    border-radius: 24px;
+    padding: 24px;
+    backdrop-filter: blur(10px);
+    box-shadow: 0 8px 32px rgba(0,0,0,0.3);
+}
+
+h1 {
+    text-align: center;
+    margin-top: 0;
+    color: #ffd700;
+}
+
+.input-group {
+    margin-bottom: 20px;
+}
+
+label {
+    display: block;
+    margin-bottom: 8px;
+    font-weight: bold;
+    color: #ccc;
+}
+
+input, select {
+    width: 100%;
+    padding: 12px;
+    border-radius: 12px;
+    border: 1px solid #444;
+    background: #2a2a3a;
+    color: white;
+    font-size: 16px;
+}
+
+.row {
+    display: flex;
+    gap: 15px;
+    flex-wrap: wrap;
+}
+
+.row > * {
+    flex: 1;
+}
+
+.switch {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    cursor: pointer;
+}
+
+.switch input {
+    width: auto;
+    transform: scale(1.2);
+    margin: 0;
+}
+
+.advanced-panel {
+    display: none;
+    margin-top: 20px;
+    padding: 20px;
+    background: rgba(0,0,0,0.3);
+    border-radius: 16px;
+}
+
+.advanced-panel.show {
+    display: block;
+}
+
+.results {
+    margin-top: 30px;
+    padding: 20px;
+    background: rgba(0,0,0,0.4);
+    border-radius: 16px;
+}
+
+.result-card {
+    background: #2a2a3a;
+    border-radius: 12px;
+    padding: 15px;
+    margin-bottom: 15px;
+}
+
+.result-card h3 {
+    margin: 0 0 10px 0;
+    color: #ffd700;
+}
+
+.monster-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 8px 0;
+    border-bottom: 1px solid #444;
+}
+
+.monster-name {
+    font-weight: bold;
+}
+
+.monster-exp {
+    color: #4caf50;
+    font-weight: bold;
+}
+
+.monster-penalty {
+    font-size: 12px;
+    color: #888;
+    margin-left: 8px;
+}
+
+button {
+    background: #ffd700;
+    color: #1a1a2e;
+    border: none;
+    padding: 14px 28px;
+    border-radius: 40px;
+    font-size: 18px;
+    font-weight: bold;
+    cursor: pointer;
+    width: 100%;
+    transition: transform 0.1s;
+}
+
+button:active {
+    transform: scale(0.98);
+}
+
+.flex-between {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.odin-info {
+    font-size: 14px;
+    color: #aaa;
+    margin-top: 5px;
+}
+
+.badge {
+    background: #ffd700;
+    color: #1a1a2e;
+    padding: 2px 8px;
+    border-radius: 20px;
+    font-size: 11px;
+    font-weight: bold;
+    margin-right: 8px;
+}
+
+@media (max-width: 600px) {
+    .row {
+        flex-direction: column;
+    }
+    .container {
+        padding: 16px;
+    }
+}
