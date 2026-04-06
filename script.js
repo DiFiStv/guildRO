@@ -3,7 +3,6 @@ let monsters = { small: [], medium: [], large: [] };
 // Загрузка базы монстров
 async function loadMonsters() {
     try {
-        // Добавляем случайный параметр чтобы избежать кэширования
         const timestamp = Date.now();
         const response = await fetch(`mobs.json?t=${timestamp}`);
         
@@ -15,31 +14,42 @@ async function loadMonsters() {
         monsters = data;
         
         const total = (monsters.small?.length || 0) + (monsters.medium?.length || 0) + (monsters.large?.length || 0);
-        console.log(`✅ Загружено монстров: ${total} (малых: ${monsters.small?.length || 0}, средних: ${monsters.medium?.length || 0}, больших: ${monsters.large?.length || 0})`);
-        
-        if (total === 0) {
-            console.warn('⚠️ База монстров пуста!');
-            document.getElementById('results').innerHTML = '<div style="text-align:center;color:orange;">⚠️ База монстров пуста. Добавь монстров в mobs.json</div>';
-        }
-        
+        console.log(`✅ Загружено монстров: ${total}`);
         return true;
     } catch (error) {
-        console.error('❌ Ошибка загрузки монстров:', error);
-        document.getElementById('results').innerHTML = `<div style="text-align:center;color:red;">❌ Ошибка загрузки базы монстров. Проверь файл mobs.json</div>`;
+        console.error('❌ Ошибка загрузки:', error);
         return false;
     }
 }
 
-// Расчёт штрафа за разницу уровней
+// Штраф за разницу уровней (исправлено)
 function getPenalty(monsterLevel, playerLevel) {
     const diff = monsterLevel - playerLevel;
-    if (diff >= 0 && diff <= 3) return 1.0;
-    if (diff >= 4 && diff <= 6) return 0.8;
-    if (diff >= 7 && diff <= 8) return 0.6;
-    if (diff === 9) return 0.4;
-    if (diff === 10) return 0.2;
-    if (diff >= 11) return 0.1;
-    return 1.0;
+    if (diff >= 0 && diff <= 3) return 1.0;      // 100%
+    if (diff >= 4 && diff <= 6) return 0.8;      // 80%
+    if (diff >= 7 && diff <= 8) return 0.6;      // 60%
+    if (diff === 9) return 0.4;                   // 40%
+    if (diff === 10) return 0.2;                  // 20%
+    if (diff >= 11) return 0.1;                   // 10%
+    return 1.0; // монстр ниже игрока
+}
+
+// Бонус пати (исправлено)
+function getPartySizeBonus(partySize) {
+    if (partySize === 1) return 1.0;
+    if (partySize === 2) return 1.10;
+    if (partySize === 3) return 1.20;
+    if (partySize === 4) return 1.30;
+    return 1.40; // 5 игроков
+}
+
+// Бонус за разные классы (исправлено)
+function getClassBonus(classVariety) {
+    if (classVariety === 1) return 1.0;
+    if (classVariety === 2) return 1.05;
+    if (classVariety === 3) return 1.10;
+    if (classVariety === 4) return 1.15;
+    return 1.20; // 5 классов
 }
 
 // Определение размера моба
@@ -58,35 +68,17 @@ function getOdinCost(monsterName) {
     return 3;
 }
 
-// Бонус пати
-function getPartyBonus(partySize, classVariety) {
-    let sizeBonus = 0;
-    if (partySize === 2) sizeBonus = 0.10;
-    else if (partySize === 3) sizeBonus = 0.20;
-    else if (partySize === 4) sizeBonus = 0.30;
-    else if (partySize === 5) sizeBonus = 0.40;
-    
-    let classBonus = 0;
-    if (classVariety === 2) classBonus = 0.05;
-    else if (classVariety === 3) classBonus = 0.10;
-    else if (classVariety === 4) classBonus = 0.15;
-    else if (classVariety === 5) classBonus = 0.20;
-    
-    return 1 + sizeBonus + classBonus;
-}
-
 // Основная функция расчёта
 async function calculate() {
     const playerLevel = parseInt(document.getElementById('playerLevel').value);
-    const serverBonus = document.getElementById('serverBonusX2').checked ? 2.0 : 1.0;
+    const serverBonus = parseFloat(document.getElementById('serverBonus').value);
     const advancedMode = document.getElementById('advancedMode').checked;
     
-    // Проверка, что монстры загружены
     const totalMonsters = (monsters.small?.length || 0) + (monsters.medium?.length || 0) + (monsters.large?.length || 0);
     if (totalMonsters === 0) {
-        document.getElementById('results').innerHTML = '<div style="text-align:center;color:orange;">⏳ Загрузка базы монстров...</div>';
         await loadMonsters();
         if ((monsters.small?.length || 0) + (monsters.medium?.length || 0) + (monsters.large?.length || 0) === 0) {
+            document.getElementById('results').innerHTML = '<div style="text-align:center;color:red;">❌ Нет данных о монстрах</div>';
             return;
         }
     }
@@ -97,35 +89,35 @@ async function calculate() {
         ...(monsters.large || []).map(m => ({...m, size: 'large'}))
     ];
     
+    let partySizeBonus = 1;
+    let classBonus = 1;
+    let odinMult = 1;
+    
+    if (advancedMode) {
+        const partySize = parseInt(document.getElementById('partySize').value);
+        const classVariety = parseInt(document.getElementById('classVariety').value);
+        partySizeBonus = getPartySizeBonus(partySize);
+        classBonus = getClassBonus(classVariety);
+        if (document.getElementById('odinBless').checked) {
+            odinMult = 5;
+        }
+    }
+    
     let results = allMonsters.map(monster => {
         let penalty = getPenalty(monster.level, playerLevel);
-        let baseExp = Math.floor(monster.baseExp * penalty * serverBonus);
-        let jobExp = Math.floor(monster.jobExp * penalty * serverBonus);
         
-        let partyBonus = 1;
-        let finalBase = baseExp;
-        let finalJob = jobExp;
-        
-        if (advancedMode) {
-            const partySize = parseInt(document.getElementById('partySize').value);
-            const classVariety = parseInt(document.getElementById('classVariety').value);
-            partyBonus = getPartyBonus(partySize, classVariety);
-            finalBase = Math.floor(baseExp * partyBonus);
-            finalJob = Math.floor(jobExp * partyBonus);
-            
-            if (document.getElementById('odinBless').checked) {
-                finalBase *= 5;
-                finalJob *= 5;
-            }
-        }
+        // Базовая формула с учётом всех множителей
+        let baseExp = Math.floor(monster.baseExp * penalty * serverBonus * partySizeBonus * classBonus * odinMult);
+        let jobExp = Math.floor(monster.jobExp * penalty * serverBonus * partySizeBonus * classBonus * odinMult);
         
         return {
             name: monster.name,
             level: monster.level,
-            baseExp: finalBase,
-            jobExp: finalJob,
+            baseExp: baseExp,
+            jobExp: jobExp,
             penalty: penalty,
-            partyBonus: partyBonus,
+            partySizeBonus: partySizeBonus,
+            classBonus: classBonus,
             size: monster.size
         };
     });
@@ -141,29 +133,35 @@ async function calculate() {
             <h2>🎯 РЕЗУЛЬТАТЫ ДЛЯ УРОВНЯ ${playerLevel}</h2>
             <div class="result-card">
                 <h3>⚔️ ТОП-5 ПО БАЗОВОМУ ОПЫТУ</h3>
-                ${topBase.map((m, i) => `
+                ${topBase.map((m, i) => {
+                    let penaltyText = '';
+                    if (m.penalty < 1) penaltyText = ` (${Math.round(m.penalty*100)}% штраф)`;
+                    return `
                     <div class="monster-item">
                         <div>
                             <span class="badge">#${i+1}</span>
                             <span class="monster-name">${m.name}</span>
-                            <span class="monster-penalty">(lvl ${m.level}, ${Math.round(m.penalty*100)}% опыта)</span>
+                            <span class="monster-penalty">(lvl ${m.level}${penaltyText})</span>
                         </div>
                         <div class="monster-exp">${m.baseExp.toLocaleString()} XP</div>
                     </div>
-                `).join('')}
+                `}).join('')}
             </div>
             <div class="result-card">
                 <h3>💼 ТОП-5 ПО ДЖОБ ОПЫТУ</h3>
-                ${topJob.map((m, i) => `
+                ${topJob.map((m, i) => {
+                    let penaltyText = '';
+                    if (m.penalty < 1) penaltyText = ` (${Math.round(m.penalty*100)}% штраф)`;
+                    return `
                     <div class="monster-item">
                         <div>
                             <span class="badge">#${i+1}</span>
                             <span class="monster-name">${m.name}</span>
-                            <span class="monster-penalty">(lvl ${m.level}, ${Math.round(m.penalty*100)}% опыта)</span>
+                            <span class="monster-penalty">(lvl ${m.level}${penaltyText})</span>
                         </div>
                         <div class="monster-exp">${m.jobExp.toLocaleString()} XP</div>
                     </div>
-                `).join('')}
+                `}).join('')}
             </div>
         `;
         resultsDiv.innerHTML = html;
@@ -189,17 +187,19 @@ async function calculate() {
             odinMinutes = Math.floor(killsLeft * killTime / 60);
         }
         
+        let penaltyText = top1.penalty < 1 ? ` (${Math.round(top1.penalty*100)}% штраф)` : ' (100%)';
+        
         let html = `
             <h2>🎯 РАСШИРЕННЫЙ РАСЧЁТ</h2>
             <div class="result-card">
                 <h3>🏆 ТОП-1 МОНСТР</h3>
                 <div class="monster-item">
-                    <div><span class="monster-name">${top1.name}</span> <span class="monster-penalty">(уровень ${top1.level})</span></div>
+                    <div><span class="monster-name">${top1.name}</span> <span class="monster-penalty">(уровень ${top1.level}${penaltyText})</span></div>
                     <div class="monster-exp">${expPerKill.toLocaleString()} XP</div>
                 </div>
                 <div class="monster-item"><div>Размер:</div><div>${top1.size === 'small' ? 'Маленький 🟢' : top1.size === 'medium' ? 'Средний 🟡' : 'Большой 🔴'}</div></div>
-                <div class="monster-item"><div>Штраф за уровень:</div><div>${Math.round(top1.penalty*100)}%</div></div>
-                <div class="monster-item"><div>Бонус пати:</div><div>+${Math.round((top1.partyBonus-1)*100)}%</div></div>
+                <div class="monster-item"><div>Бонус пати:</div><div>+${Math.round((top1.partySizeBonus-1)*100)}%</div></div>
+                <div class="monster-item"><div>Бонус классов:</div><div>+${Math.round((top1.classBonus-1)*100)}%</div></div>
             </div>
             <div class="result-card">
                 <h3>⏱️ СТАТИСТИКА ФАРМА</h3>
@@ -218,6 +218,12 @@ async function calculate() {
     }
 }
 
+// Обновление отображения ползунка
+function updateServerBonusValue() {
+    const val = parseFloat(document.getElementById('serverBonus').value);
+    document.getElementById('serverBonusValue').innerText = val.toFixed(2) + 'x';
+}
+
 // UI обработчики
 document.getElementById('advancedMode').addEventListener('change', (e) => {
     document.getElementById('advancedPanel').classList.toggle('show', e.target.checked);
@@ -227,6 +233,7 @@ document.getElementById('odinBless').addEventListener('change', (e) => {
     document.getElementById('odinPointsGroup').style.display = e.target.checked ? 'block' : 'none';
 });
 
+document.getElementById('serverBonus').addEventListener('input', updateServerBonusValue);
 document.getElementById('calculateBtn').addEventListener('click', calculate);
 
 // Загрузка данных и запуск

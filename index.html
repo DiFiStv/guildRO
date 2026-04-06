@@ -28,11 +28,13 @@
         <div id="advancedPanel" class="advanced-panel">
             <div class="row">
                 <div class="input-group">
-                    <label>📊 Тип опыта:</label>
-                    <select id="expType">
-                        <option value="base">Базовый опыт (Base)</option>
-                        <option value="job">Опыт профессии (Job)</option>
-                    </select>
+                    <label>🎚️ Множитель сервера:</label>
+                    <input type="range" id="serverBonus" min="0.5" max="3" step="0.01" value="1.00">
+                    <div class="flex-between">
+                        <span>0.5x</span>
+                        <span id="serverBonusValue">1.12x</span>
+                        <span>3x</span>
+                    </div>
                 </div>
                 <div class="input-group">
                     <label>👥 Количество в пати:</label>
