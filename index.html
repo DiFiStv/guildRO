@@ -12,7 +12,7 @@
         
         <div class="input-group">
             <label>🎯 Ваш уровень:</label>
-            <input type="number" id="playerLevel" value="59" min="1" max="150">
+            <input type="number" id="playerLevel" value="50" min="1" max="150">
         </div>
         
         <div class="input-group">
@@ -32,6 +32,13 @@
         
         <div id="advancedPanel" class="advanced-panel">
             <div class="row">
+                <div class="input-group">
+                    <label>📊 Тип опыта:</label>
+                    <select id="expType">
+                        <option value="base">Базовый опыт (Base)</option>
+                        <option value="job">Опыт профессии (Job)</option>
+                    </select>
+                </div>
                 <div class="input-group">
                     <label>👥 Количество в пати:</label>
                     <input type="number" id="partySize" min="1" max="5" value="1">

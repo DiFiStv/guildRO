@@ -48,6 +48,10 @@ input, select {
     font-size: 16px;
 }
 
+input[type="range"] {
+    padding: 0;
+}
+
 .row {
     display: flex;
     gap: 15px;

@@ -18,6 +18,12 @@ async function loadMonsters() {
         return true;
     } catch (error) {
         console.error('❌ Ошибка загрузки:', error);
+        // Демо-данные на случай ошибки
+        monsters = {
+            small: [{name:"Poring",level:1,baseExp:32,jobExp:32}],
+            medium: [{name:"Drops",level:7,baseExp:33,jobExp:55}],
+            large: [{name:"Anubis",level:65,baseExp:554,jobExp:184}]
+        };
         return false;
     }
 }
@@ -34,38 +40,36 @@ function getPenalty(monsterLevel, playerLevel) {
     return 1.0;
 }
 
-// Бонус пати
-function getPartySizeBonus(partySize) {
-    if (partySize === 1) return 1.0;
-    if (partySize === 2) return 1.10;
-    if (partySize === 3) return 1.20;
-    if (partySize === 4) return 1.30;
-    return 1.40;
-}
-
-// Бонус за разные классы
-function getClassBonus(classVariety) {
-    if (classVariety === 1) return 1.0;
-    if (classVariety === 2) return 1.05;
-    if (classVariety === 3) return 1.10;
-    if (classVariety === 4) return 1.15;
-    return 1.20;
-}
-
-// Определение размера моба
-function getMonsterSize(monsterName) {
-    if (monsters.small?.some(m => m.name === monsterName)) return 'small';
-    if (monsters.medium?.some(m => m.name === monsterName)) return 'medium';
-    if (monsters.large?.some(m => m.name === monsterName)) return 'large';
-    return 'medium';
+// Размер моба
+function getMonsterSize(monster) {
+    if (monsters.small?.some(m => m.name === monster.name)) return 'small';
+    if (monsters.medium?.some(m => m.name === monster.name)) return 'medium';
+    return 'large';
 }
 
 // Стоимость Одина
-function getOdinCost(monsterName) {
-    const size = getMonsterSize(monsterName);
+function getOdinCost(monster) {
+    const size = getMonsterSize(monster);
     if (size === 'small') return 1;
     if (size === 'medium') return 2;
     return 3;
+}
+
+// Бонус пати и классов
+function getPartyBonus(partySize, classVariety) {
+    let sizeBonus = 0;
+    if (partySize === 2) sizeBonus = 0.10;
+    else if (partySize === 3) sizeBonus = 0.20;
+    else if (partySize === 4) sizeBonus = 0.30;
+    else if (partySize === 5) sizeBonus = 0.40;
+    
+    let classBonus = 0;
+    if (classVariety === 2) classBonus = 0.05;
+    else if (classVariety === 3) classBonus = 0.10;
+    else if (classVariety === 4) classBonus = 0.15;
+    else if (classVariety === 5) classBonus = 0.20;
+    
+    return 1 + sizeBonus + classBonus;
 }
 
 // Основная функция расчёта
@@ -74,62 +78,54 @@ async function calculate() {
     const serverBonus = parseFloat(document.getElementById('serverBonus').value);
     const advancedMode = document.getElementById('advancedMode').checked;
     
-    const totalMonsters = (monsters.small?.length || 0) + (monsters.medium?.length || 0) + (monsters.large?.length || 0);
-    if (totalMonsters === 0) {
-        await loadMonsters();
-        if ((monsters.small?.length || 0) + (monsters.medium?.length || 0) + (monsters.large?.length || 0) === 0) {
-            document.getElementById('results').innerHTML = '<div style="text-align:center;color:red;">❌ Нет данных о монстрах</div>';
-            return;
-        }
-    }
-    
     let allMonsters = [
         ...(monsters.small || []).map(m => ({...m, size: 'small'})),
         ...(monsters.medium || []).map(m => ({...m, size: 'medium'})),
         ...(monsters.large || []).map(m => ({...m, size: 'large'}))
     ];
     
-    // Параметры для расширенного режима
-    let partySizeBonus = 1;
-    let classBonus = 1;
-    let odinMult = 1;
-    let killTime = 5;
-    let odinPoints = 0;
-    let expType = 'base';
-    
-    if (advancedMode) {
-        const partySize = parseInt(document.getElementById('partySize').value);
-        const classVariety = parseInt(document.getElementById('classVariety').value);
-        partySizeBonus = getPartySizeBonus(partySize);
-        classBonus = getClassBonus(classVariety);
-        killTime = parseFloat(document.getElementById('killTime').value);
-        odinPoints = parseInt(document.getElementById('odinPoints').value);
-        expType = document.getElementById('expType').value;
-        if (document.getElementById('odinBless').checked) {
-            odinMult = 5;
-        }
+    if (allMonsters.length === 0) {
+        document.getElementById('results').innerHTML = '<div style="text-align:center;color:red;">❌ Нет данных о монстрах. Проверь mobs.json</div>';
+        return;
     }
     
     let results = allMonsters.map(monster => {
         let penalty = getPenalty(monster.level, playerLevel);
+        let baseExp = Math.floor(monster.baseExp * penalty * serverBonus);
+        let jobExp = Math.floor(monster.jobExp * penalty * serverBonus);
         
-        let baseExp = Math.floor(monster.baseExp * penalty * serverBonus * partySizeBonus * classBonus * odinMult);
-        let jobExp = Math.floor(monster.jobExp * penalty * serverBonus * partySizeBonus * classBonus * odinMult);
+        let partyBonus = 1;
+        let odinMult = 1;
+        let finalBase = baseExp;
+        let finalJob = jobExp;
+        
+        if (advancedMode) {
+            const partySize = parseInt(document.getElementById('partySize').value);
+            const classVariety = parseInt(document.getElementById('classVariety').value);
+            partyBonus = getPartyBonus(partySize, classVariety);
+            finalBase = Math.floor(baseExp * partyBonus);
+            finalJob = Math.floor(jobExp * partyBonus);
+            
+            if (document.getElementById('odinBless').checked) {
+                odinMult = 5;
+                finalBase *= 5;
+                finalJob *= 5;
+            }
+        }
         
         return {
             name: monster.name,
             level: monster.level,
-            baseExp: baseExp,
-            jobExp: jobExp,
+            baseExp: finalBase,
+            jobExp: finalJob,
             penalty: penalty,
-            partySizeBonus: partySizeBonus,
-            classBonus: classBonus,
+            partyBonus: partyBonus,
+            odinMult: odinMult,
             size: monster.size,
-            odinCost: getOdinCost(monster.name)
+            odinCost: getOdinCost(monster)
         };
     });
     
-    // Сортировка
     let topBase = [...results].sort((a,b) => b.baseExp - a.baseExp).slice(0, 5);
     let topJob = [...results].sort((a,b) => b.jobExp - a.jobExp).slice(0, 5);
     
@@ -141,38 +137,39 @@ async function calculate() {
             <h2>🎯 РЕЗУЛЬТАТЫ ДЛЯ УРОВНЯ ${playerLevel}</h2>
             <div class="result-card">
                 <h3>⚔️ ТОП-5 ПО БАЗОВОМУ ОПЫТУ</h3>
-                ${topBase.map((m, i) => {
-                    let penaltyText = m.penalty < 1 ? ` (${Math.round(m.penalty*100)}%)` : '';
-                    return `
+                ${topBase.map((m, i) => `
                     <div class="monster-item">
                         <div>
                             <span class="badge">#${i+1}</span>
                             <span class="monster-name">${m.name}</span>
-                            <span class="monster-penalty">(lvl ${m.level}${penaltyText})</span>
+                            <span class="monster-penalty"> (lvl ${m.level}, ${Math.round(m.penalty*100)}%)</span>
                         </div>
                         <div class="monster-exp">${m.baseExp.toLocaleString()} XP</div>
                     </div>
-                `}).join('')}
+                `).join('')}
             </div>
             <div class="result-card">
                 <h3>💼 ТОП-5 ПО ДЖОБ ОПЫТУ</h3>
-                ${topJob.map((m, i) => {
-                    let penaltyText = m.penalty < 1 ? ` (${Math.round(m.penalty*100)}%)` : '';
-                    return `
+                ${topJob.map((m, i) => `
                     <div class="monster-item">
                         <div>
                             <span class="badge">#${i+1}</span>
                             <span class="monster-name">${m.name}</span>
-                            <span class="monster-penalty">(lvl ${m.level}${penaltyText})</span>
+                            <span class="monster-penalty"> (lvl ${m.level}, ${Math.round(m.penalty*100)}%)</span>
                         </div>
                         <div class="monster-exp">${m.jobExp.toLocaleString()} XP</div>
                     </div>
-                `}).join('')}
+                `).join('')}
             </div>
         `;
         resultsDiv.innerHTML = html;
     } else {
         // РАСШИРЕННЫЙ РЕЖИМ - ТОП 1 С ДЕТАЛИЗАЦИЕЙ
+        const expType = document.getElementById('expType').value;
+        const killTime = parseFloat(document.getElementById('killTime').value);
+        const odinPoints = parseInt(document.getElementById('odinPoints').value);
+        const odinBless = document.getElementById('odinBless').checked;
+        
         let sorted = [...results].sort((a,b) => 
             expType === 'base' ? b.baseExp - a.baseExp : b.jobExp - a.jobExp
         );
@@ -181,15 +178,12 @@ async function calculate() {
         let expPerKill = expType === 'base' ? top1.baseExp : top1.jobExp;
         let expPerMin = expPerKill * (60 / killTime);
         let expPerHour = expPerKill * (3600 / killTime);
-        
         let odinMinutes = 0;
-        const odinBless = document.getElementById('odinBless').checked;
+        
         if (odinBless && odinPoints > 0) {
             let killsLeft = Math.floor(odinPoints / top1.odinCost);
             odinMinutes = Math.floor(killsLeft * killTime / 60);
         }
-        
-        let penaltyText = top1.penalty < 1 ? `${Math.round(top1.penalty*100)}% штраф` : '100%';
         
         let html = `
             <h2>🎯 РАСШИРЕННЫЙ РАСЧЁТ</h2>
@@ -199,90 +193,23 @@ async function calculate() {
                     <div><span class="monster-name">${top1.name}</span> <span class="monster-penalty">(уровень ${top1.level})</span></div>
                     <div class="monster-exp">${expPerKill.toLocaleString()} XP</div>
                 </div>
-                <div class="monster-item">
-                    <div>Размер:</div>
-                    <div>${top1.size === 'small' ? 'Маленький 🟢 (1 Один)' : top1.size === 'medium' ? 'Средний 🟡 (2 Одина)' : 'Большой 🔴 (3 Одина)'}</div>
-                </div>
-                <div class="monster-item">
-                    <div>Штраф за уровень:</div>
-                    <div>${penaltyText}</div>
-                </div>
-                <div class="monster-item">
-                    <div>Бонус пати (${document.getElementById('partySize').value} чел):</div>
-                    <div>+${Math.round((top1.partySizeBonus-1)*100)}%</div>
-                </div>
-                <div class="monster-item">
-                    <div>Бонус классов (${document.getElementById('classVariety').value} классов):</div>
-                    <div>+${Math.round((top1.classBonus-1)*100)}%</div>
-                </div>
+                <div class="monster-item"><div>Размер:</div><div>${top1.size === 'small' ? 'Маленький 🟢' : top1.size === 'medium' ? 'Средний 🟡' : 'Большой 🔴'}</div></div>
+                <div class="monster-item"><div>Штраф за уровень:</div><div>${Math.round(top1.penalty*100)}%</div></div>
+                <div class="monster-item"><div>Бонус пати:</div><div>+${Math.round((top1.partyBonus-1)*100)}%</div></div>
             </div>
             <div class="result-card">
                 <h3>⏱️ СТАТИСТИКА ФАРМА</h3>
-                <div class="monster-item">
-                    <div>Время убийства:</div>
-                    <div>${killTime} сек</div>
-                </div>
-                <div class="monster-item">
-                    <div>Опыта в минуту:</div>
-                    <div><strong>${Math.floor(expPerMin).toLocaleString()} XP</strong></div>
-                </div>
-                <div class="monster-item">
-                    <div>Опыта в час:</div>
-                    <div><strong>${Math.floor(expPerHour).toLocaleString()} XP</strong></div>
-                </div>
+                <div class="monster-item"><div>Опыта в минуту:</div><div>${Math.floor(expPerMin).toLocaleString()} XP</div></div>
+                <div class="monster-item"><div>Опыта в час:</div><div>${Math.floor(expPerHour).toLocaleString()} XP</div></div>
         `;
         
-        if (odinBless) {
+        if (odinBless && odinPoints > 0) {
             html += `
-                <div class="monster-item">
-                    <div>✨ Благословение Одина:</div>
-                    <div>×5 опыт (активно)</div>
-                </div>
+                <div class="monster-item"><div>💰 Стоимость Одина за моба:</div><div>${top1.odinCost} очк.</div></div>
+                <div class="monster-item"><div>⏳ Одина хватит на:</div><div>${odinMinutes} мин</div></div>
             `;
-            if (odinPoints > 0) {
-                html += `
-                    <div class="monster-item">
-                        <div>💰 Стоимость Одина за моба:</div>
-                        <div>${top1.odinCost} очк.</div>
-                    </div>
-                    <div class="monster-item">
-                        <div>💎 Очков Одина в запасе:</div>
-                        <div>${odinPoints}</div>
-                    </div>
-                    <div class="monster-item">
-                        <div>⏳ Одина хватит на:</div>
-                        <div><strong>${odinMinutes} минут</strong> (${Math.floor(odinMinutes/60)} ч ${odinMinutes%60} мин)</div>
-                    </div>
-                `;
-            } else if (odinPoints === 0) {
-                html += `
-                    <div class="monster-item">
-                        <div>⚠️ Очков Одина:</div>
-                        <div style="color:orange;">0 — добавь в настройках</div>
-                    </div>
-                `;
-            }
         }
-        
         html += `</div>`;
-        
-        // Добавим топ-3 для справки
-        html += `
-            <div class="result-card">
-                <h3>📋 ТОП-3 ДЛЯ СПРАВКИ (${expType === 'base' ? 'Base' : 'Job'} опыт)</h3>
-                ${sorted.slice(0, 3).map((m, i) => `
-                    <div class="monster-item">
-                        <div>
-                            <span class="badge">#${i+1}</span>
-                            <span class="monster-name">${m.name}</span>
-                            <span class="monster-penalty">(lvl ${m.level})</span>
-                        </div>
-                        <div class="monster-exp">${(expType === 'base' ? m.baseExp : m.jobExp).toLocaleString()} XP</div>
-                    </div>
-                `).join('')}
-            </div>
-        `;
-        
         resultsDiv.innerHTML = html;
     }
 }
