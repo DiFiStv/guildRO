@@ -31,12 +31,26 @@ async function loadMonsters() {
 // Штраф за разницу уровней
 function getPenalty(monsterLevel, playerLevel) {
     const diff = monsterLevel - playerLevel;
+    
+    // Монстр выше игрока
     if (diff >= 0 && diff <= 3) return 1.0;
     if (diff >= 4 && diff <= 6) return 0.8;
     if (diff >= 7 && diff <= 8) return 0.6;
     if (diff === 9) return 0.4;
     if (diff === 10) return 0.2;
     if (diff >= 11) return 0.1;
+    
+    // Монстр ниже игрока (симметрично)
+    if (diff < 0) {
+        const absDiff = Math.abs(diff);
+        if (absDiff >= 0 && absDiff <= 3) return 1.0;
+        if (absDiff >= 4 && absDiff <= 6) return 0.8;
+        if (absDiff >= 7 && absDiff <= 8) return 0.6;
+        if (absDiff === 9) return 0.4;
+        if (absDiff === 10) return 0.2;
+        if (absDiff >= 11) return 0.1;
+    }
+    
     return 1.0;
 }
 
