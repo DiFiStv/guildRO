@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Калькулятор теней - SUPER местечко</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="container">
+        <div class="nav-bar">
+            <a href="index.html" class="home-btn">🏠 На главную</a>
+            <span class="page-title">🔨 Калькулятор теней</span>
+            <a href="farm.html" class="switch-btn">⚔️ К фарму →</a>
+        </div>
+        
+        <div class="input-group">
+            <label>📋 Вставьте данные из Excel/Google Sheets:</label>
+            <textarea id="dataInput" rows="12" placeholder='Скопируйте таблицу в формате:
+Название    1⭐    2⭐    3⭐    4⭐
+Почетный меч    0    4    4    2
+Копье завоевания    0    3    7    0
+Верный меч    0    1    4    2
+Могучий молот    3    5    9    3
+...'></textarea>
+            <div class="odin-info">
+                💡 Подсказка: Скопируйте таблицу из Excel или Google Sheets и вставьте сюда.<br>
+                Формат: Название, затем 4 числа (1⭐, 2⭐, 3⭐, 4⭐).<br>
+                Калькулятор покажет, сколько нужно докупить 1⭐, чтобы избавиться от 1⭐, 2⭐, 3⭐ и получить максимум 4⭐.
+            </div>
+        </div>
+        
+        <button id="loadBtn">📋 ЗАГРУЗИТЬ ДАННЫЕ</button>
+        
+        <div id="craftResults" class="results">
+            <div style="text-align: center; color: #888;">Вставьте данные из Excel и нажмите "Загрузить данные"</div>
+        </div>
+    </div>
+
+    <script src="shadow.js"></script>
+</body>
+</html>

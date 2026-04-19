@@ -3,77 +3,30 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ROX Exp Calculator</title>
+    <title>SUPER местечко - ROX Tools</title>
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <div class="container">
-        <h1>⚔️ ROX Exp Calculator ⚔️</h1>
+    <div class="container hero">
+        <h1>🌟 Добро пожаловать в SUPER местечко! 🌟</h1>
+        <p class="subtitle">Лучшие инструменты для Ragnarok X</p>
         
-        <div class="input-group">
-            <label>🎯 Ваш уровень:</label>
-            <input type="number" id="playerLevel" value="50" min="1" max="150">
+        <div class="hero-buttons">
+            <a href="farm.html" class="hero-btn farm-btn">
+                <span class="btn-icon">⚔️</span>
+                <span class="btn-title">Калькулятор фарма</span>
+                <span class="btn-desc">Узнай лучших мобов для прокачки</span>
+            </a>
+            <a href="shadow.html" class="hero-btn shadow-btn">
+                <span class="btn-icon">🔨</span>
+                <span class="btn-title">Калькулятор теней</span>
+                <span class="btn-desc">Оптимизируй части экипировки</span>
+            </a>
         </div>
         
-        <div class="input-group">
-            <label>🎚️ Множитель сервера:</label>
-            <input type="range" id="serverBonus" min="0.5" max="5" step="0.01" value="1.00">
-            <div class="flex-between">
-                <span>0.5x</span>
-                <span id="serverBonusValue">1.00x</span>
-                <span>5x</span>
-            </div>
-        </div>
-        
-        <div class="switch">
-            <input type="checkbox" id="advancedMode">
-            <label>🔧 Расширенный режим</label>
-        </div>
-        
-        <div id="advancedPanel" class="advanced-panel">
-            <div class="row">
-                <div class="input-group">
-                    <label>📊 Тип опыта:</label>
-                    <select id="expType">
-                        <option value="base">Базовый опыт (Base)</option>
-                        <option value="job">Опыт профессии (Job)</option>
-                    </select>
-                </div>
-                <div class="input-group">
-                    <label>👥 Количество в пати:</label>
-                    <input type="number" id="partySize" min="1" max="5" value="1">
-                </div>
-            </div>
-            <div class="row">
-                <div class="input-group">
-                    <label>🎭 Разных классов в пати:</label>
-                    <input type="number" id="classVariety" min="1" max="5" value="1">
-                </div>
-                <div class="input-group">
-                    <label>⏱️ Время убийства (сек):</label>
-                    <input type="number" id="killTime" min="0.1" step="0.1" value="5">
-                </div>
-            </div>
-            <div class="input-group">
-                <div class="switch">
-                    <input type="checkbox" id="odinBless">
-                    <label>✨ Благословение Одина (x5 опыт)</label>
-                </div>
-            </div>
-            <div class="input-group" id="odinPointsGroup" style="display: none;">
-                <label>💎 Очков Одина в запасе:</label>
-                <input type="number" id="odinPoints" min="0" value="100">
-                <div class="odin-info">Маленькие: 1 очко | Средние: 2 | Большие: 3</div>
-            </div>
-        </div>
-        
-        <button id="calculateBtn">🔍 НАЙТИ ЛУЧШИЕ ВАРИАНТЫ</button>
-        
-        <div id="results" class="results">
-            <div style="text-align: center; color: #888;">Введите уровень и нажмите кнопку</div>
-        </div>
+        <footer class="hero-footer">
+            <p>🎮 ROX Tools v1.0 | Для настоящих искателей приключений</p>
+        </footer>
     </div>
-
-    <script src="script.js"></script>
 </body>
 </html>
