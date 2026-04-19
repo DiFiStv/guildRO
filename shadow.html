@@ -26,17 +26,40 @@
             <div class="odin-info">
                 💡 Подсказка: Скопируйте таблицу из Excel или Google Sheets и вставьте сюда.<br>
                 Формат: Название, затем 4 числа (1⭐, 2⭐, 3⭐, 4⭐).<br>
-                Калькулятор покажет, сколько нужно докупить 1⭐, чтобы избавиться от 1⭐, 2⭐, 3⭐ и получить максимум 4⭐.
+                <strong>Минимальная очистка</strong> — быстрая конвертация с минимальными вложениями (оставляет остатки 1⭐, 2⭐ и 3⭐).<br>
+                <strong>Максимальная очистка</strong> — полная конвертация всего в 4⭐ (требуется значительно больше частей 1⭐).
             </div>
         </div>
         
-        <button id="loadBtn">📋 ЗАГРУЗИТЬ ДАННЫЕ</button>
+        <div class="row">
+            <button id="loadBtnMin" style="background: #4caf50;">🔨 МИНИМАЛЬНАЯ ОЧИСТКА</button>
+            <button id="loadBtnFull" style="background: #ff9800;">⚡ МАКСИМАЛЬНАЯ ОЧИСТКА</button>
+        </div>
         
         <div id="craftResults" class="results">
-            <div style="text-align: center; color: #888;">Вставьте данные из Excel и нажмите "Загрузить данные"</div>
+            <div style="text-align: center; color: #888;">Вставьте данные из Excel и нажмите кнопку</div>
         </div>
     </div>
 
     <script src="shadow.js"></script>
+    <script src="shadowfull.js"></script>
+    
+    <script>
+        document.getElementById('loadBtnMin').addEventListener('click', () => {
+            if (typeof window.loadDataMin === 'function') {
+                window.loadDataMin();
+            } else {
+                alert('Ошибка: минимальный калькулятор не загружен');
+            }
+        });
+        
+        document.getElementById('loadBtnFull').addEventListener('click', () => {
+            if (typeof window.loadDataFull === 'function') {
+                window.loadDataFull();
+            } else {
+                alert('Ошибка: максимальный калькулятор не загружен');
+            }
+        });
+    </script>
 </body>
 </html>
