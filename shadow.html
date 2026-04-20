@@ -26,8 +26,8 @@
             <div class="odin-info">
                 💡 Подсказка: Скопируйте таблицу из Excel или Google Sheets и вставьте сюда.<br>
                 Формат: Название, затем 4 числа (1⭐, 2⭐, 3⭐, 4⭐).<br>
-                <strong>Минимальная очистка</strong> — быстрая конвертация с минимальными вложениями (оставляет остатки 1⭐, 2⭐ и 3⭐).<br>
-                <strong>Максимальная очистка</strong> — полная конвертация всего в 4⭐ (требуется значительно больше частей 1⭐).
+                <strong>Минимальная очистка</strong> — быстрая конвертация с минимальными вложениями (покупаем только если нужно ≤8 шт. 1⭐).<br>
+                <strong>Максимальная очистка</strong> — полная конвертация всего в 4⭐ (покупаем всегда, сколько нужно).
             </div>
         </div>
         
@@ -42,14 +42,13 @@
     </div>
 
     <script src="shadow.js"></script>
-    <script src="shadowfull.js"></script>
     
     <script>
         document.getElementById('loadBtnMin').addEventListener('click', () => {
             if (typeof window.loadDataMin === 'function') {
                 window.loadDataMin();
             } else {
-                alert('Ошибка: минимальный калькулятор не загружен');
+                alert('Ошибка: калькулятор не загружен');
             }
         });
         
@@ -57,7 +56,7 @@
             if (typeof window.loadDataFull === 'function') {
                 window.loadDataFull();
             } else {
-                alert('Ошибка: максимальный калькулятор не загружен');
+                alert('Ошибка: калькулятор не загружен');
             }
         });
     </script>
