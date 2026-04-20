@@ -2,7 +2,7 @@
     let items = [];
     let userData = {};
 
-    async function loadItemsMin() {
+    async function loadItems() {
         try {
             const timestamp = Date.now();
             const response = await fetch(`shadow.json?t=${timestamp}`);
@@ -13,7 +13,7 @@
             
             const data = await response.json();
             items = data.items;
-            console.log(`✅ [Минимальная] Загружено предметов: ${items.length}`);
+            console.log(`✅ Загружено предметов: ${items.length}`);
             
             items.forEach(item => {
                 userData[item.id] = { rank1: 0, rank2: 0, rank3: 0, rank4: 0 };
@@ -71,108 +71,107 @@
         };
     }
 
-    function convertWithoutBuying(ranks) {
-        let m1 = ranks.rank1;
-        let m2 = ranks.rank2;
-        let m3 = ranks.rank3;
-        let m4 = ranks.rank4;
-        let steps = [];
+    // Главная формула: сколько нужно докупить 1⭐
+    function calculateNeeded1star(m1, m2, m3, mode) {
+        // Переводим всё в эквивалент 1⭐
+        let total = m1 + m2 * 3 + m3 * 9;
         
-        let convert34 = Math.floor(m3 / 3);
-        if (convert34 > 0) {
-            steps.push(`🔹 ${convert34 * 3} шт. 3⭐ → +${convert34} шт. 4⭐`);
-            m4 += convert34;
-            m3 = m3 % 3;
+        // Сколько нужно до ближайшего числа, кратного 27
+        let need = (27 - (total % 27)) % 27;
+        
+        if (mode === 'min') {
+            // Минимальная очистка: покупаем только если нужно ≤ 8
+            if (need > 8) {
+                return -1; // Нецелесообразно
+            }
         }
         
-        let convert23 = Math.floor(m2 / 3);
-        if (convert23 > 0) {
-            steps.push(`🔹 ${convert23 * 3} шт. 2⭐ → +${convert23} шт. 3⭐`);
-            m3 += convert23;
-            m2 = m2 % 3;
-        }
-        
-        let convert12 = Math.floor(m1 / 3);
-        if (convert12 > 0) {
-            steps.push(`🔹 ${convert12 * 3} шт. 1⭐ → +${convert12} шт. 2⭐`);
-            m2 += convert12;
-            m1 = m1 % 3;
-        }
-        
-        return { rank1: m1, rank2: m2, rank3: m3, rank4: m4, steps: steps };
+        return need;
     }
 
-    function calculateNeeded(ranks) {
-        let m1 = ranks.rank1;
-        let m2 = ranks.rank2;
-        let m3 = ranks.rank3;
-        let m4 = ranks.rank4;
-        let steps = [];
-        let k = 0;
+    // Синтез после покупки
+    function synthesize(m1, m2, m3, m4, bought1star) {
+        let total = m1 + bought1star + m2 * 3 + m3 * 9;
         
-        let n3 = (3 - (m3 % 3)) % 3;
-        let n2 = (3 - (m2 % 3)) % 3;
+        // Сколько целых 4⭐ получится
+        let new4star = m4 + Math.floor(total / 27);
         
-        steps.push(`📊 Остатки после конвертации: 1⭐=${m1}, 2⭐=${m2}, 3⭐=${m3}, 4⭐=${m4}`);
-        steps.push(`📊 Нужно добавить: 2⭐=${n2}, 3⭐=${n3} до кратного 3`);
+        return new4star;
+    }
+
+    // Полный расчёт для одного предмета
+    function calculateFull(ranks, mode) {
+        const m1 = ranks.rank1;
+        const m2 = ranks.rank2;
+        const m3 = ranks.rank3;
+        const m4 = ranks.rank4;
         
-        if (n2 > 0) {
-            k = Math.abs(n2 * 3 - m1);
-            steps.push(`🔸 k = |${n2} × 3 - ${m1}| = ${k}`);
+        // Сначала синтезируем то, что есть (без докупки)
+        // Приводим остатки к <3 простым делением
+        let total = m1 + m2 * 3 + m3 * 9;
+        let free4star = m4 + Math.floor(total / 27);
+        let remainder = total % 27;
+        
+        // Теперь считаем, сколько нужно докупить
+        let need = calculateNeeded1star(remainder % 3, Math.floor(remainder / 3) % 3, Math.floor(remainder / 9), mode);
+        
+        let final4star = free4star;
+        let needText = '';
+        let alertClass = '';
+        
+        if (need === -1) {
+            needText = '-';
+            alertClass = 'alert-row';
+            // Нецелесообразно, ничего не покупаем
+            final4star = free4star;
+        } else if (need === 0) {
+            needText = '0';
         } else {
-            k = Math.abs(0 - m1);
-            steps.push(`🔸 n2 = 0, k = |0 - ${m1}| = ${k}`);
+            needText = need + ' шт.';
+            final4star = free4star + Math.floor((remainder + need) / 27);
         }
         
-        m1 = m1 + k;
-        if (k > 0) steps.push(`🔸 Докупаем ${k} шт. 1⭐ → 1⭐ стало: ${ranks.rank1} + ${k} = ${m1}`);
-        
-        let convert12 = Math.floor(m1 / 3);
-        m2 = m2 + convert12;
-        if (convert12 > 0) steps.push(`🔹 ${convert12 * 3} шт. 1⭐ → +${convert12} шт. 2⭐`);
-        m1 = 0;
-        
-        let convert23 = Math.floor(m2 / 3);
-        m3 = m3 + convert23;
-        if (convert23 > 0) steps.push(`🔹 ${convert23 * 3} шт. 2⭐ → +${convert23} шт. 3⭐`);
-        m2 = 0;
-        
-        let convert34 = Math.floor(m3 / 3);
-        m4 = m4 + convert34;
-        if (convert34 > 0) steps.push(`🔹 ${convert34 * 3} шт. 3⭐ → +${convert34} шт. 4⭐`);
-        m3 = 0;
-        
-        return { finalRank4: m4, needed1star: k, steps: steps };
+        return {
+            final4star: final4star,
+            needText: needText,
+            alertClass: alertClass,
+            need: need
+        };
     }
 
-    function calculateFull(ranks) {
-        const afterConvert = convertWithoutBuying(ranks);
-        const result = calculateNeeded(afterConvert);
-        const allSteps = [...afterConvert.steps, ...result.steps];
-        return { finalRank4: result.finalRank4, needed1star: result.needed1star, steps: allSteps };
-    }
-
-    function calculateAll() {
+    function calculateAll(mode) {
         const results = [];
         for (const item of items) {
             const ranks = getItemRanks(item.id);
-            const result = calculateFull(ranks);
-            results.push({ id: item.id, name: item.name, original: ranks, result: result });
+            const result = calculateFull(ranks, mode);
+            results.push({
+                id: item.id,
+                name: item.name,
+                original: ranks,
+                result: result
+            });
         }
         return results;
     }
 
-    function displayCraft() {
-        const results = calculateAll();
+    function displayCraft(mode) {
+        const results = calculateAll(mode);
+        
+        const title = mode === 'min' 
+            ? '🔨 МИНИМАЛЬНАЯ ОЧИСТКА (быстрая конвертация)'
+            : '🔨 МАКСИМАЛЬНАЯ ОЧИСТКА (полная конвертация в 4⭐)';
+        
+        const description = mode === 'min'
+            ? '🎯 Цель: получить максимум 4⭐ с минимальными вложениями (покупаем только если нужно ≤8 шт. 1⭐)<br>🔴 "-" означает, что покупка нецелесообразна'
+            : '🎯 Цель: ПОЛНОСТЬЮ избавиться от 1⭐, 2⭐, 3⭐ (покупаем всегда, сколько нужно)';
         
         let html = `
-            <h2>🔨 МИНИМАЛЬНАЯ ОЧИСТКА (быстрая конвертация)</h2>
+            <h2>${title}</h2>
             <div class="result-card">
                 <h3>📊 Результаты</h3>
                 <div class="odin-info" style="margin-bottom: 15px;">
                     💡 Правило: 3 части нижнего ранга = 1 часть верхнего<br>
-                    🎯 Цель: получить максимум 4⭐ с минимальными вложениями<br>
-                    📦 Остатки 2⭐ и 3⭐ останутся в инвентаре
+                    ${description}
                 </div>
                 <table class="craft-table">
                     <thead>
@@ -194,29 +193,14 @@
             const res = item.result;
             
             html += `
-                <tr>
+                <tr class="${res.alertClass}">
                     <td class="craft-img"><img src="${imgPath}" alt="${item.name}" class="item-icon" onerror="this.src='data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 width=%2264%22 height=%2264%22 viewBox=%220 0 24 24%22 fill=%22none%22 stroke=%22%23666%22 stroke-width=%221%22%3E%3Crect x=%222%22 y=%222%22 width=%2220%22 height=%2220%22 rx=%222.18%22%3E%3C/rect%3E%3C/svg%3E'"></td>
-                    <td class="craft-name">${item.name}</td>
+                    <td class="craft-name">${item.name}${res.need === -1 ? ' ⚠️' : ''}</td>
                     <td class="craft-orig">${orig.rank1} / ${orig.rank2} / ${orig.rank3} / ${orig.rank4}</td>
-                    <td class="craft-need">${res.needed1star > 0 ? res.needed1star + ' шт.' : '—'}</td>
-                    <td class="craft-gain">${res.finalRank4}</td>
+                    <td class="craft-need">${res.needText}</td>
+                    <td class="craft-gain">${res.final4star}</td>
                 </tr>
             `;
-            
-            if (res.steps.length > 0 && (res.needed1star > 0 || res.finalRank4 > 0)) {
-                html += `
-                    <tr class="detail-row">
-                        <td colspan="5" class="detail-cell">
-                            <details>
-                                <summary>📋 Детали расчёта</summary>
-                                <div class="detail-steps">
-                                    ${res.steps.map(s => `<div>${s}</div>`).join('')}
-                                </div>
-                            </details>
-                        </td>
-                    </tr>
-                `;
-            }
         });
         
         html += `
@@ -225,8 +209,11 @@
             </div>
         `;
         
-        const totalNeeded = results.reduce((sum, item) => sum + item.result.needed1star, 0);
-        const totalRank4 = results.reduce((sum, item) => sum + item.result.finalRank4, 0);
+        const totalNeeded = results.reduce((sum, item) => {
+            const need = item.result.need;
+            return sum + (need > 0 ? need : 0);
+        }, 0);
+        const totalRank4 = results.reduce((sum, item) => sum + item.result.final4star, 0);
         
         html += `
             <div class="result-card">
@@ -245,8 +232,12 @@
         document.getElementById('craftResults').innerHTML = html;
     }
 
+    // Сохраняем текущий режим
+    let currentMode = 'min';
+    
     window.loadDataMin = async function() {
-        await loadItemsMin();
+        currentMode = 'min';
+        await loadItems();
         
         const rawText = document.getElementById('dataInput').value;
         if (!rawText.trim()) {
@@ -259,8 +250,28 @@
         
         Object.assign(userData, parsed);
         
-        alert(`✅ [Минимальная] Загружено данных для ${loadedCount} предметов`);
-        displayCraft();
+        alert(`✅ Загружено данных для ${loadedCount} предметов`);
+        displayCraft(currentMode);
+        return true;
+    };
+    
+    window.loadDataFull = async function() {
+        currentMode = 'full';
+        await loadItems();
+        
+        const rawText = document.getElementById('dataInput').value;
+        if (!rawText.trim()) {
+            alert('Вставьте данные из Excel!');
+            return false;
+        }
+        
+        const parsed = parseTableData(rawText);
+        const loadedCount = Object.keys(parsed).length;
+        
+        Object.assign(userData, parsed);
+        
+        alert(`✅ Загружено данных для ${loadedCount} предметов`);
+        displayCraft(currentMode);
         return true;
     };
 })();
