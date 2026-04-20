@@ -456,3 +456,19 @@ details summary:hover {
         font-size: 12px;
     }
 }
+
+/* Подсветка строк с остатками */
+.alert-row {
+    background: rgba(255, 0, 0, 0.2) !important;
+    border-left: 3px solid #ff4444;
+}
+
+.alert-row:hover {
+    background: rgba(255, 0, 0, 0.3) !important;
+}
+
+/* Дополнительно: можно добавить иконку предупреждения */
+.alert-row .craft-name::before {
+    content: "⚠️ ";
+    font-size: 14px;
+}
