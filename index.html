@@ -3,56 +3,62 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SUPER местечко - ROX Tools</title>
+    <title>Калькулятор теней - SUPER местечко</title>
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <div class="container hero">
-        <h1>🌟 Добро пожаловать в SUPER местечко! 🌟</h1>
-        <p class="subtitle">Лучшие инструменты для Ragnarok X</p>
-        
-        <div class="hero-buttons">
-            <a href="farm.html" class="hero-btn farm-btn">
-                <span class="btn-icon">⚔️</span>
-                <span class="btn-title">Калькулятор фарма</span>
-                <span class="btn-desc">Узнай лучших мобов для прокачки</span>
-            </a>
-            <a href="shadow.html" class="hero-btn shadow-btn">
-                <span class="btn-icon">🔨</span>
-                <span class="btn-title">Калькулятор теней</span>
-                <span class="btn-desc">Оптимизируй части экипировки</span>
-            </a>
+    <div class="container">
+        <div class="nav-bar">
+            <a href="index.html" class="home-btn">🏠 На главную</a>
+            <span class="page-title">🔨 Калькулятор теней</span>
+            <a href="farm.html" class="switch-btn">⚔️ К фарму →</a>
         </div>
         
-        <footer class="hero-footer">
-            <div class="footer-text">
-                <p>Гильдия SUPER прошла непростой путь становления и продолжает развиваться.</p>
-                <p>Нам нужны смелые и активные игроки. Нам нужны те, кто не ищет место потеплее, а кто готов вместе с нами создать своё - самое лучшее SUPER место.</p>
+        <div class="input-group">
+            <label>📋 Вставьте данные из Excel/Google Sheets:</label>
+            <textarea id="dataInput" rows="12" placeholder='Скопируйте таблицу в формате:
+Название    1⭐    2⭐    3⭐    4⭐
+Почетный меч    0    4    4    2
+Копье завоевания    0    3    7    0
+Верный меч    0    1    4    2
+Могучий молот    3    5    9    3
+...'></textarea>
+            <div class="odin-info">
+                💡 Подсказка: Скопируйте таблицу из Excel или Google Sheets и вставьте сюда.<br>
+                Формат: Название, затем 4 числа (1⭐, 2⭐, 3⭐, 4⭐).<br>
+                <strong>Минимальная очистка</strong> — быстрая конвертация с минимальными вложениями (покупаем только если нужно ≤8 шт. 1⭐).<br>
+                <strong>Максимальная очистка</strong> — полная конвертация всего в 4⭐ (покупаем всегда, сколько нужно).
             </div>
-            
-            <div class="social-links">
-                <a href="https://vk.com/superguildro" target="_blank" class="social-link">
-                    <img src="img/vk.png" alt="VK" class="social-icon">
-                    <span>ВКонтакте</span>
-                </a>
-                <a href="https://t.me/SUPERguildRO" target="_blank" class="social-link">
-                    <img src="img/tg.png" alt="Telegram" class="social-icon">
-                    <span>Telegram</span>
-                </a>
-                <a href="https://www.youtube.com/EzyGames" target="_blank" class="social-link">
-                    <img src="img/yt.png" alt="YouTube" class="social-icon">
-                    <span>YouTube</span>
-                </a>
-                <a href="https://discord.gg/63xw9FbPA7" target="_blank" class="social-link">
-                    <img src="img/ds.png" alt="Discord" class="social-icon">
-                    <span>Discord</span>
-                </a>
-            </div>
-            
-            <div class="footer-copyright">
-                <p>© 2026 SUPER местечко | Все права защищены</p>
-            </div>
-        </footer>
+        </div>
+        
+        <div class="row">
+            <button id="loadBtnMin" style="background: #4caf50;">🔨 МИНИМАЛЬНАЯ ОЧИСТКА</button>
+            <button id="loadBtnFull" style="background: #ff9800;">⚡ МАКСИМАЛЬНАЯ ОЧИСТКА</button>
+        </div>
+        
+        <div id="craftResults" class="results">
+            <div style="text-align: center; color: #888;">Вставьте данные из Excel и нажмите кнопку</div>
+        </div>
     </div>
+
+    <script src="shadow.js"></script>
+    
+    <script>
+        document.getElementById('loadBtnMin').addEventListener('click', () => {
+            if (typeof window.loadDataMin === 'function') {
+                window.loadDataMin();
+            } else {
+                alert('Ошибка: калькулятор не загружен');
+            }
+        });
+        
+        document.getElementById('loadBtnFull').addEventListener('click', () => {
+            if (typeof window.loadDataFull === 'function') {
+                window.loadDataFull();
+            } else {
+                alert('Ошибка: калькулятор не загружен');
+            }
+        });
+    </script>
 </body>
 </html>
