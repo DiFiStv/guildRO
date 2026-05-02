@@ -2,39 +2,39 @@ import discord
 from discord import app_commands
 from discord.ui import Select, View, Button
 import json
-import asyncio
+import os
 
-TOKEN = 'ТВОЙ_ТОКЕН_БОТА'
-GUILD_ID = 123456789012345678
+# Токен берем из переменных окружения (настройки хостинга)
+TOKEN = os.environ.get('DISCORD_TOKEN')
+if not TOKEN:
+    raise ValueError("Токен не найден! Установите переменную окружения DISCORD_TOKEN")
+
+# ID сервера — опционально, для быстрой синхронизации
+GUILD_ID = 123456789012345678  # замените на ваш ID
 
 intents = discord.Intents.default()
 intents.message_content = True
 intents.guilds = True
 intents.voice_states = True
 
-# Загружаем названия
+# Загружаем названия из JSON
 def load_room_names():
     with open('room_names.json', 'r', encoding='utf-8') as f:
         data = json.load(f)
         return data['rooms']
 
 ROOM_NAMES = load_room_names()
-ITEMS_PER_PAGE = 25  # Discord лимит на Select
+ITEMS_PER_PAGE = 25
 
 class PaginatedSelectView(View):
     def __init__(self, page=0):
         super().__init__(timeout=60)
         self.page = page
         self.total_pages = (len(ROOM_NAMES) + ITEMS_PER_PAGE - 1) // ITEMS_PER_PAGE
-        
-        # Добавляем Select с названиями для текущей страницы
         self.add_item(self.create_select())
-        
-        # Добавляем кнопки навигации
         if self.total_pages > 1:
             self.add_item(self.create_prev_button())
             self.add_item(self.create_next_button())
-            self.add_item(self.create_page_indicator())
     
     def create_select(self):
         start = self.page * ITEMS_PER_PAGE
@@ -42,11 +42,8 @@ class PaginatedSelectView(View):
         page_names = ROOM_NAMES[start:end]
         
         select = Select(
-            placeholder=f"📋 Страница {self.page + 1}/{self.total_pages} · Выбери название комнаты",
-            options=[
-                discord.SelectOption(label=name[:100], value=name)
-                for name in page_names
-            ]
+            placeholder=f"📋 Страница {self.page + 1}/{self.total_pages} · Выбери название",
+            options=[discord.SelectOption(label=name[:100], value=name) for name in page_names]
         )
         
         async def select_callback(interaction: discord.Interaction):
@@ -73,62 +70,47 @@ class PaginatedSelectView(View):
     
     def create_prev_button(self):
         button = Button(label="◀ Назад", style=discord.ButtonStyle.secondary)
-        
-        async def button_callback(interaction: discord.Interaction):
+        async def callback(interaction: discord.Interaction):
             if self.page > 0:
                 await interaction.response.edit_message(view=PaginatedSelectView(page=self.page - 1))
             else:
                 await interaction.response.send_message("Это первая страница!", ephemeral=True)
-        
-        button.callback = button_callback
+        button.callback = callback
         return button
     
     def create_next_button(self):
         button = Button(label="Вперёд ▶", style=discord.ButtonStyle.secondary)
-        
-        async def button_callback(interaction: discord.Interaction):
+        async def callback(interaction: discord.Interaction):
             if self.page + 1 < self.total_pages:
                 await interaction.response.edit_message(view=PaginatedSelectView(page=self.page + 1))
             else:
                 await interaction.response.send_message("Это последняя страница!", ephemeral=True)
-        
-        button.callback = button_callback
-        return button
-    
-    def create_page_indicator(self):
-        button = Button(
-            label=f"📄 {self.page + 1}/{self.total_pages}",
-            style=discord.ButtonStyle.secondary,
-            disabled=True
-        )
-        
-        async def dummy_callback(interaction: discord.Interaction):
-            pass
-        
-        button.callback = dummy_callback
+        button.callback = callback
         return button
 
 class Client(discord.Client):
     def __init__(self):
         super().__init__(intents=intents)
-        self.synced = False
-
+        self.tree = app_commands.CommandTree(self)
+    
+    async def setup_hook(self):
+        if GUILD_ID:
+            guild = discord.Object(id=GUILD_ID)
+            self.tree.copy_global_to(guild=guild)
+            await self.tree.sync(guild=guild)
+        else:
+            await self.tree.sync()
+    
     async def on_ready(self):
-        await self.wait_until_ready()
-        if not self.synced:
-            await tree.sync(guild=discord.Object(id=GUILD_ID))
-            self.synced = True
         print(f'✅ Бот {self.user} запущен! Загружено {len(ROOM_NAMES)} названий комнат')
 
 client = Client()
-tree = app_commands.CommandTree(client)
 
-@tree.command(name="комната", description="Создать голосовую комнату на 6 человек")
+@client.tree.command(name="комната", description="Создать голосовую комнату на 6 человек")
 async def create_room_command(interaction: discord.Interaction):
     view = PaginatedSelectView(page=0)
     await interaction.response.send_message(
-        "🎤 **Выбери название для голосовой комнаты (лимит: 6 человек):**\n"
-        "└ Используй кнопки ◀ Назад / Вперёд ▶ для навигации",
+        "🎤 **Выбери название для голосовой комнаты (лимит: 6 человек)**\n└ Используй кнопки ◀ Назад / Вперёд ▶",
         view=view,
         ephemeral=True
     )
