@@ -16,24 +16,39 @@
         
         <div class="input-group">
             <label>📋 Вставьте данные из Excel/Google Sheets:</label>
-            <textarea id="dataInput" rows="12" placeholder='Скопируйте таблицу в формате:
-Название    1⭐    2⭐    3⭐    4⭐
-Почетный меч    0    4    4    2
-Копье завоевания    0    3    7    0
-Верный меч    0    1    4    2
-Могучий молот    3    5    9    3
-...'></textarea>
+            <textarea id="dataInput" rows="12"></textarea>
             <div class="odin-info">
                 💡 Подсказка: Скопируйте таблицу из Excel или Google Sheets и вставьте сюда.<br>
                 Формат: Название, затем 4 числа (1⭐, 2⭐, 3⭐, 4⭐).<br>
                 <strong>Минимальная очистка</strong> — быстрая конвертация с минимальными вложениями (покупаем только если нужно ≤8 шт. 1⭐).<br>
-                <strong>Максимальная очистка</strong> — полная конвертация всего в 4⭐ (покупаем всегда, сколько нужно).
+                <strong>Максимальная очистка</strong> — полная конвертация всего в выбранный ранк (покупаем всегда, сколько нужно).
             </div>
         </div>
         
-        <div class="row">
-            <button id="loadBtnMin" style="background: #4caf50;">🔨 МИНИМАЛЬНАЯ ОЧИСТКА</button>
-            <button id="loadBtnFull" style="background: #ff9800;">⚡ МАКСИМАЛЬНАЯ ОЧИСТКА</button>
+        <div class="controls-row">
+            <div class="controls-top">
+                <div class="rank-selector">
+                    <label for="targetRank">🎯 Необходимый ранг тени:</label>
+                    <select id="targetRank">
+                        <option value="2">2⭐</option>
+                        <option value="3">3⭐</option>
+                        <option value="4" selected>4⭐</option>
+                    </select>
+                </div>
+                
+                <div class="break-selector">
+                    <label for="breakHigher">💥 Сломать части следующего ранга</label>
+                    <div class="checkbox-wrapper">
+                        <input type="checkbox" id="breakHigher">
+                        <span>Разобрать части следующего ранга</span>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="controls-buttons">
+                <button id="loadBtnMin" class="btn-min">🔨 МИНИМАЛЬНАЯ ОЧИСТКА</button>
+                <button id="loadBtnFull" class="btn-full">⚡ МАКСИМАЛЬНАЯ ОЧИСТКА</button>
+            </div>
         </div>
         
         <div id="craftResults" class="results">
@@ -44,9 +59,23 @@
     <script src="shadow.js"></script>
     
     <script>
+        // Автозаполнение текстового поля при загрузке
+        document.addEventListener('DOMContentLoaded', async function() {
+            try {
+                const response = await fetch('shadow.json');
+                const data = await response.json();
+                const defaultText = data.items.map(item => `${item.name} 0 0 0 0`).join('\n');
+                document.getElementById('dataInput').value = defaultText;
+            } catch (e) {
+                console.log('Не удалось загрузить shadow.json для автозаполнения');
+            }
+        });
+
         document.getElementById('loadBtnMin').addEventListener('click', () => {
             if (typeof window.loadDataMin === 'function') {
-                window.loadDataMin();
+                const targetRank = parseInt(document.getElementById('targetRank').value);
+                const breakHigher = document.getElementById('breakHigher').checked;
+                window.loadDataMin(targetRank, breakHigher);
             } else {
                 alert('Ошибка: калькулятор не загружен');
             }
@@ -54,7 +83,9 @@
         
         document.getElementById('loadBtnFull').addEventListener('click', () => {
             if (typeof window.loadDataFull === 'function') {
-                window.loadDataFull();
+                const targetRank = parseInt(document.getElementById('targetRank').value);
+                const breakHigher = document.getElementById('breakHigher').checked;
+                window.loadDataFull(targetRank, breakHigher);
             } else {
                 alert('Ошибка: калькулятор не загружен');
             }

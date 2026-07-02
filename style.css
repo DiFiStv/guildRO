@@ -472,3 +472,253 @@ details summary:hover {
     content: "⚠️ ";
     font-size: 14px;
 }
+
+/* Добавляем в конец файла style.css */
+
+/* Новая верстка с выпадающим списком и чекбоксом */
+.controls-row {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    margin: 15px 0;
+}
+
+.controls-top {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 30px;
+    align-items: flex-start;
+}
+
+.controls-top .rank-selector {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    flex: 1 1 200px;
+    min-width: 180px;
+}
+
+.controls-top .rank-selector label {
+    margin: 0;
+    font-weight: bold;
+    color: #ccc;
+    font-size: 14px;
+}
+
+.controls-top .rank-selector select {
+    padding: 10px 14px;
+    border-radius: 40px;
+    border: 1px solid #444;
+    background: #2a2a3a;
+    color: white;
+    font-size: 16px;
+    cursor: pointer;
+    width: 100%;
+}
+
+.controls-top .break-selector {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    flex: 1 1 200px;
+    min-width: 180px;
+}
+
+.controls-top .break-selector label {
+    margin: 0;
+    font-weight: bold;
+    color: #ccc;
+    font-size: 14px;
+}
+
+.controls-top .break-selector .checkbox-wrapper {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.controls-top .break-selector input[type="checkbox"] {
+    width: 22px;
+    height: 22px;
+    cursor: pointer;
+    accent-color: #ffd700;
+    flex: 0 0 auto;
+    margin: 0;
+}
+
+.controls-top .break-selector .checkbox-wrapper span {
+    color: #aaa;
+    font-size: 14px;
+}
+
+.controls-buttons {
+    display: flex;
+    gap: 15px;
+    flex-wrap: wrap;
+}
+
+.controls-buttons .btn-min {
+    background: #4caf50;
+    flex: 1 1 200px;
+    min-width: 180px;
+    padding: 14px 28px;
+    border: none;
+    border-radius: 40px;
+    font-size: 18px;
+    font-weight: bold;
+    cursor: pointer;
+    color: white;
+    transition: transform 0.1s;
+}
+
+.controls-buttons .btn-min:hover {
+    opacity: 0.9;
+}
+
+.controls-buttons .btn-full {
+    background: #ff9800;
+    flex: 1 1 200px;
+    min-width: 180px;
+    padding: 14px 28px;
+    border: none;
+    border-radius: 40px;
+    font-size: 18px;
+    font-weight: bold;
+    cursor: pointer;
+    color: white;
+    transition: transform 0.1s;
+}
+
+.controls-buttons .btn-full:hover {
+    opacity: 0.9;
+}
+
+.controls-buttons button:active {
+    transform: scale(0.98);
+}
+
+/* Адаптация для мобильных устройств */
+@media (max-width: 600px) {
+    .controls-top {
+        flex-direction: column;
+        gap: 15px;
+    }
+    
+    .controls-top .rank-selector,
+    .controls-top .break-selector {
+        flex: 1 1 auto;
+        min-width: unset;
+        width: 100%;
+    }
+    
+    .controls-buttons {
+        flex-direction: column;
+    }
+    
+    .controls-buttons .btn-min,
+    .controls-buttons .btn-full {
+        flex: 1 1 auto;
+        min-width: unset;
+        width: 100%;
+    }
+}
+/* Стили для расширенного режима */
+#advancedPanel .row {
+    display: flex;
+    gap: 15px;
+    flex-wrap: wrap;
+}
+
+#advancedPanel .row > * {
+    flex: 1;
+    min-width: 150px;
+}
+
+#advancedPanel select,
+#advancedPanel input[type="number"] {
+    width: 100%;
+    padding: 10px 14px;
+    border-radius: 12px;
+    border: 1px solid #444;
+    background: #2a2a3a;
+    color: white;
+    font-size: 15px;
+}
+
+#advancedPanel .odin-info {
+    font-size: 13px;
+    color: #aaa;
+    margin-top: 8px;
+    padding: 10px;
+    background: rgba(0,0,0,0.2);
+    border-radius: 8px;
+    border-left: 3px solid #ffd700;
+}
+
+/* Результаты в расширенном режиме */
+.result-card .monster-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 8px 0;
+    border-bottom: 1px solid rgba(255,255,255,0.05);
+}
+
+.result-card .monster-item:last-child {
+    border-bottom: none;
+}
+
+.result-card .monster-name {
+    font-weight: bold;
+    color: #ffd700;
+}
+
+.result-card .monster-exp {
+    color: #4caf50;
+    font-weight: bold;
+    font-size: 15px;
+}
+
+.result-card .monster-penalty {
+    font-size: 12px;
+    color: #888;
+    margin-left: 8px;
+}
+
+/* Поля ввода в результатах */
+#results .input-group {
+    margin-bottom: 12px;
+}
+
+#results .input-group label {
+    font-size: 14px;
+    color: #aaa;
+    margin-bottom: 4px;
+}
+
+#results .input-group input {
+    width: 100%;
+    padding: 10px 14px;
+    border-radius: 12px;
+    border: 1px solid #444;
+    background: #2a2a3a;
+    color: white;
+    font-size: 15px;
+}
+
+#results .input-group input:focus {
+    outline: none;
+    border-color: #ffd700;
+}
+
+/* Адаптация для мобильных */
+@media (max-width: 600px) {
+    #advancedPanel .row {
+        flex-direction: column;
+        gap: 10px;
+    }
+    
+    #advancedPanel .row > * {
+        min-width: unset;
+    }
+}

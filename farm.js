@@ -1,4 +1,6 @@
 let monsters = { small: [], medium: [], large: [] };
+let currentMonsterData = null;
+let currentResults = null;
 
 // Загрузка базы монстров
 async function loadMonsters() {
@@ -15,6 +17,9 @@ async function loadMonsters() {
         
         const total = (monsters.small?.length || 0) + (monsters.medium?.length || 0) + (monsters.large?.length || 0);
         console.log(`✅ Загружено монстров: ${total}`);
+        
+        // Заполняем список мобов
+        updateMonsterList('medium');
         return true;
     } catch (error) {
         console.error('❌ Ошибка загрузки:', error);
@@ -24,11 +29,34 @@ async function loadMonsters() {
             medium: [{name:"Drops",level:7,baseExp:33,jobExp:55}],
             large: [{name:"Anubis",level:65,baseExp:554,jobExp:184}]
         };
+        updateMonsterList('medium');
         return false;
     }
 }
 
-// Штраф за разницу уровней (исправленный)
+// Обновление списка мобов
+function updateMonsterList(size) {
+    const select = document.getElementById('monsterSelect');
+    const monsterList = monsters[size] || [];
+    select.innerHTML = '';
+    
+    if (monsterList.length === 0) {
+        select.innerHTML = '<option value="">Нет мобов</option>';
+        return;
+    }
+    
+    // Сортируем по уровню
+    const sorted = [...monsterList].sort((a, b) => a.level - b.level);
+    
+    sorted.forEach(monster => {
+        const option = document.createElement('option');
+        option.value = monster.name;
+        option.textContent = `${monster.name} (${monster.level} lvl)`;
+        select.appendChild(option);
+    });
+}
+
+// Штраф за разницу уровней
 function getPenalty(monsterLevel, playerLevel) {
     const diff = monsterLevel - playerLevel;
     const absDiff = Math.abs(diff);
@@ -43,22 +71,7 @@ function getPenalty(monsterLevel, playerLevel) {
     return 1.0;
 }
 
-// Размер моба
-function getMonsterSize(monster) {
-    if (monsters.small?.some(m => m.name === monster.name)) return 'small';
-    if (monsters.medium?.some(m => m.name === monster.name)) return 'medium';
-    return 'large';
-}
-
-// Стоимость Одина
-function getOdinCost(monster) {
-    const size = getMonsterSize(monster);
-    if (size === 'small') return 1;
-    if (size === 'medium') return 2;
-    return 3;
-}
-
-// Бонус пати и классов
+// Бонус пати
 function getPartyBonus(partySize, classVariety) {
     let sizeBonus = 0;
     if (partySize === 2) sizeBonus = 0.10;
@@ -75,66 +88,54 @@ function getPartyBonus(partySize, classVariety) {
     return 1 + sizeBonus + classBonus;
 }
 
+// Получение размера моба
+function getMonsterSize(monsterName) {
+    for (const [size, list] of Object.entries(monsters)) {
+        if (list.some(m => m.name === monsterName)) {
+            return size;
+        }
+    }
+    return 'medium';
+}
+
 // Основная функция расчёта
 async function calculateExp() {
     const playerLevel = parseInt(document.getElementById('playerLevel').value);
     const serverBonus = parseFloat(document.getElementById('serverBonus').value);
     const advancedMode = document.getElementById('advancedMode').checked;
     
-    let allMonsters = [
-        ...(monsters.small || []).map(m => ({...m, size: 'small'})),
-        ...(monsters.medium || []).map(m => ({...m, size: 'medium'})),
-        ...(monsters.large || []).map(m => ({...m, size: 'large'}))
-    ];
-    
-    if (allMonsters.length === 0) {
-        document.getElementById('results').innerHTML = '<div style="text-align:center;color:red;">❌ Нет данных о монстрах. Проверь mobs.json</div>';
-        return;
-    }
-    
-    let results = allMonsters.map(monster => {
-        let penalty = getPenalty(monster.level, playerLevel);
-        let baseExp = Math.floor(monster.baseExp * penalty * serverBonus);
-        let jobExp = Math.floor(monster.jobExp * penalty * serverBonus);
+    if (!advancedMode) {
+        // === ПРОСТОЙ РЕЖИМ: ТОП-5 ===
+        let allMonsters = [
+            ...(monsters.small || []).map(m => ({...m, size: 'small'})),
+            ...(monsters.medium || []).map(m => ({...m, size: 'medium'})),
+            ...(monsters.large || []).map(m => ({...m, size: 'large'}))
+        ];
         
-        let partyBonus = 1;
-        let odinMult = 1;
-        let finalBase = baseExp;
-        let finalJob = jobExp;
-        
-        if (advancedMode) {
-            const partySize = parseInt(document.getElementById('partySize').value);
-            const classVariety = parseInt(document.getElementById('classVariety').value);
-            partyBonus = getPartyBonus(partySize, classVariety);
-            finalBase = Math.floor(baseExp * partyBonus);
-            finalJob = Math.floor(jobExp * partyBonus);
-            
-            if (document.getElementById('odinBless').checked) {
-                odinMult = 5;
-                finalBase *= 5;
-                finalJob *= 5;
-            }
+        if (allMonsters.length === 0) {
+            document.getElementById('results').innerHTML = '<div style="text-align:center;color:red;">❌ Нет данных о монстрах. Проверь mobs.json</div>';
+            return;
         }
         
-        return {
-            name: monster.name,
-            level: monster.level,
-            baseExp: finalBase,
-            jobExp: finalJob,
-            penalty: penalty,
-            partyBonus: partyBonus,
-            odinMult: odinMult,
-            size: monster.size,
-            odinCost: getOdinCost(monster)
-        };
-    });
-    
-    let topBase = [...results].sort((a,b) => b.baseExp - a.baseExp).slice(0, 5);
-    let topJob = [...results].sort((a,b) => b.jobExp - a.jobExp).slice(0, 5);
-    
-    const resultsDiv = document.getElementById('results');
-    
-    if (!advancedMode) {
+        let results = allMonsters.map(monster => {
+            let penalty = getPenalty(monster.level, playerLevel);
+            let baseExp = Math.floor(monster.baseExp * penalty * serverBonus);
+            let jobExp = Math.floor(monster.jobExp * penalty * serverBonus);
+            
+            return {
+                name: monster.name,
+                level: monster.level,
+                baseExp: baseExp,
+                jobExp: jobExp,
+                penalty: penalty,
+                size: monster.size
+            };
+        });
+        
+        let topBase = [...results].sort((a,b) => b.baseExp - a.baseExp).slice(0, 5);
+        let topJob = [...results].sort((a,b) => b.jobExp - a.jobExp).slice(0, 5);
+        
+        const resultsDiv = document.getElementById('results');
         let html = `
             <h2>🎯 РЕЗУЛЬТАТЫ ДЛЯ УРОВНЯ ${playerLevel}</h2>
             <div class="result-card">
@@ -165,55 +166,213 @@ async function calculateExp() {
             </div>
         `;
         resultsDiv.innerHTML = html;
-    } else {
-        const expType = document.getElementById('expType').value;
-        const killTime = parseFloat(document.getElementById('killTime').value);
-        const odinPoints = parseInt(document.getElementById('odinPoints').value);
-        const odinBless = document.getElementById('odinBless').checked;
-        
-        let sorted = [...results].sort((a,b) => 
-            expType === 'base' ? b.baseExp - a.baseExp : b.jobExp - a.jobExp
-        );
-        
-        let top1 = sorted[0];
-        let expPerKill = expType === 'base' ? top1.baseExp : top1.jobExp;
-        let expPerMin = expPerKill * (60 / killTime);
-        let expPerHour = expPerKill * (3600 / killTime);
-        let odinMinutes = 0;
-        
-        if (odinBless && odinPoints > 0) {
-            let killsLeft = Math.floor(odinPoints / top1.odinCost);
-            odinMinutes = Math.floor(killsLeft * killTime / 60);
-        }
-        
-        let html = `
-            <h2>🎯 РАСШИРЕННЫЙ РАСЧЁТ</h2>
-            <div class="result-card">
-                <h3>🏆 ТОП-1 МОНСТР</h3>
-                <div class="monster-item">
-                    <div><span class="monster-name">${top1.name}</span> <span class="monster-penalty">(уровень ${top1.level})</span></div>
-                    <div class="monster-exp">${expPerKill.toLocaleString()} XP</div>
-                </div>
-                <div class="monster-item"><div>Размер:</div><div>${top1.size === 'small' ? 'Маленький 🟢' : top1.size === 'medium' ? 'Средний 🟡' : 'Большой 🔴'}</div></div>
-                <div class="monster-item"><div>Штраф за уровень:</div><div>${Math.round(top1.penalty*100)}%</div></div>
-                <div class="monster-item"><div>Бонус пати:</div><div>+${Math.round((top1.partyBonus-1)*100)}%</div></div>
-            </div>
-            <div class="result-card">
-                <h3>⏱️ СТАТИСТИКА ФАРМА</h3>
-                <div class="monster-item"><div>Опыта в минуту:</div><div>${Math.floor(expPerMin).toLocaleString()} XP</div></div>
-                <div class="monster-item"><div>Опыта в час:</div><div>${Math.floor(expPerHour).toLocaleString()} XP</div></div>
-        `;
-        
-        if (odinBless && odinPoints > 0) {
-            html += `
-                <div class="monster-item"><div>💰 Стоимость Одина за моба:</div><div>${top1.odinCost} очк.</div></div>
-                <div class="monster-item"><div>💎 Очков Одина в запасе:</div><div>${odinPoints}</div></div>
-                <div class="monster-item"><div>⏳ Одина хватит на:</div><div>${odinMinutes} мин</div></div>
-            `;
-        }
-        html += `</div>`;
-        resultsDiv.innerHTML = html;
+        currentResults = null;
+        return;
     }
+    
+    // === РАСШИРЕННЫЙ РЕЖИМ ===
+    const monsterName = document.getElementById('monsterSelect').value;
+    if (!monsterName) {
+        alert('Выберите моба!');
+        return;
+    }
+    
+    const partySize = parseInt(document.getElementById('partySize').value);
+    const classVariety = parseInt(document.getElementById('classVariety').value);
+    const killTime = parseFloat(document.getElementById('killTime').value);
+    
+    // Находим выбранного моба
+    let selectedMonster = null;
+    let monsterSize = '';
+    for (const [size, list] of Object.entries(monsters)) {
+        const found = list.find(m => m.name === monsterName);
+        if (found) {
+            selectedMonster = found;
+            monsterSize = size;
+            break;
+        }
+    }
+    
+    if (!selectedMonster) {
+        alert('Моб не найден!');
+        return;
+    }
+    
+    // Расчёт опыта
+    const penalty = getPenalty(selectedMonster.level, playerLevel);
+    const partyBonus = getPartyBonus(partySize, classVariety);
+    const sizeNames = { small: 'Маленький 🟢', medium: 'Средний 🟡', large: 'Большой 🔴' };
+    
+    // Опыт за моба (до пати)
+    const basePerMonster = Math.floor(selectedMonster.baseExp * penalty * serverBonus);
+    const jobPerMonster = Math.floor(selectedMonster.jobExp * penalty * serverBonus);
+    
+    // Опыт с учётом пати (делим на количество человек)
+    const basePerPerson = Math.floor(basePerMonster * partyBonus / partySize);
+    const jobPerPerson = Math.floor(jobPerMonster * partyBonus / partySize);
+    
+    // Время убийства с учётом пати
+    const killTimeParty = killTime / partySize;
+    
+    // Опыт в минуту и час
+    const basePerMin = Math.floor(basePerPerson * (60 / killTimeParty));
+    const jobPerMin = Math.floor(jobPerPerson * (60 / killTimeParty));
+    const basePerHour = basePerMin * 60;
+    const jobPerHour = jobPerMin * 60;
+    
+    // Сохраняем результаты для полей "опыт/часы"
+    currentResults = {
+        basePerHour: basePerHour,
+        jobPerHour: jobPerHour,
+        basePerMonster: basePerMonster,
+        jobPerMonster: jobPerMonster,
+        basePerPerson: basePerPerson,
+        jobPerPerson: jobPerPerson
+    };
+    
+    // Формируем HTML результата
+    const resultsDiv = document.getElementById('results');
+    let html = `
+        <h2>📊 РЕЗУЛЬТАТЫ</h2>
+        
+        <div class="result-card">
+            <h3>📋 Общая информация</h3>
+            <div class="monster-item">
+                <div><span class="monster-name">${selectedMonster.name}</span> (${selectedMonster.level} lvl)</div>
+                <div class="monster-exp">Base: ${basePerMonster.toLocaleString()} &nbsp;|&nbsp; Job: ${jobPerMonster.toLocaleString()}</div>
+            </div>
+            <div class="monster-item">
+                <div>Опыт в пати (на человека):</div>
+                <div class="monster-exp">Base: ${basePerPerson.toLocaleString()} &nbsp;|&nbsp; Job: ${jobPerPerson.toLocaleString()}</div>
+            </div>
+            <div class="monster-item">
+                <div>Размер:</div>
+                <div>${sizeNames[monsterSize] || monsterSize}</div>
+            </div>
+            <div class="monster-item">
+                <div>Коэффициент опыта:</div>
+                <div>${Math.round(penalty * 100)}%</div>
+            </div>
+            <div class="monster-item">
+                <div>Бонус пати:</div>
+                <div>+${Math.round((partyBonus - 1) * 100)}%</div>
+            </div>
+        </div>
+        
+        <div class="result-card">
+            <h3>⏱️ Статистика фарма</h3>
+            <div class="monster-item">
+                <div>Опыта в минуту:</div>
+                <div class="monster-exp">Base: ${basePerMin.toLocaleString()} &nbsp;|&nbsp; Job: ${jobPerMin.toLocaleString()}</div>
+            </div>
+            <div class="monster-item">
+                <div>Опыта в час:</div>
+                <div class="monster-exp">Base: ${basePerHour.toLocaleString()} &nbsp;|&nbsp; Job: ${jobPerHour.toLocaleString()}</div>
+            </div>
+        </div>
+    `;
+    
+    // Добавляем блок расчёта цели
+    html += `
+        <div class="result-card">
+            <h3>🎯 Расчёт цели</h3>
+            <div class="input-group">
+                <label>Сколько необходимо набрать опыта:</label>
+                <input type="number" id="targetExp" min="0" step="1000" value="1000000" placeholder="Введите количество опыта">
+            </div>
+            <div class="input-group">
+                <label>Сколько часов качаться:</label>
+                <input type="number" id="targetHours" min="0" step="0.1" value="1" placeholder="Введите количество часов">
+            </div>
+            <div id="timeToTarget" style="margin-top: 15px; padding: 15px; background: rgba(0,0,0,0.2); border-radius: 12px;">
+                <div class="monster-item">
+                    <div>Нужно набрать опыта:</div>
+                    <div class="monster-exp" id="displayTargetExp">1,000,000 XP</div>
+                </div>
+                <div class="monster-item">
+                    <div>Потребуется времени:</div>
+                    <div class="monster-exp" id="displayTargetTime">1 час 0 минут</div>
+                </div>
+                <div class="monster-item">
+                    <div>Или убийств:</div>
+                    <div class="monster-exp" id="displayTargetKills">4,425</div>
+                </div>
+            </div>
+        </div>
+    `;
+    
+    resultsDiv.innerHTML = html;
+    
+    // Настраиваем взаимосвязь полей
+    setupTargetFields();
+}
+
+// Настройка взаимосвязи полей "опыт" и "часы"
+function setupTargetFields() {
+    const targetExp = document.getElementById('targetExp');
+    const targetHours = document.getElementById('targetHours');
+    const displayTargetExp = document.getElementById('displayTargetExp');
+    const displayTargetTime = document.getElementById('displayTargetTime');
+    const displayTargetKills = document.getElementById('displayTargetKills');
+    
+    if (!targetExp || !targetHours) return;
+    
+    // Функция обновления отображения
+    function updateDisplay(exp, hours) {
+        const basePerHour = currentResults?.basePerHour || 1;
+        const basePerMonster = currentResults?.basePerPerson || 1;
+        
+        if (exp !== undefined && exp !== null && exp > 0) {
+            const calculatedHours = exp / basePerHour;
+            const hoursInt = Math.floor(calculatedHours);
+            const minutesInt = Math.round((calculatedHours - hoursInt) * 60);
+            const kills = Math.ceil(exp / basePerMonster);
+            
+            displayTargetExp.textContent = `${Math.floor(exp).toLocaleString()} XP`;
+            displayTargetTime.textContent = `${hoursInt} час ${minutesInt} минут`;
+            displayTargetKills.textContent = `${kills.toLocaleString()}`;
+            
+            // Обновляем поле часов (без зацикливания)
+            if (!targetHours.matches(':focus')) {
+                targetHours.value = calculatedHours.toFixed(1);
+            }
+        }
+    }
+    
+    // При вводе опыта
+    targetExp.addEventListener('input', function() {
+        const exp = parseFloat(this.value);
+        if (exp && exp > 0) {
+            updateDisplay(exp);
+        }
+    });
+    
+    // При вводе часов
+    targetHours.addEventListener('input', function() {
+        const hours = parseFloat(this.value);
+        if (hours && hours > 0 && currentResults) {
+            const exp = hours * currentResults.basePerHour;
+            displayTargetExp.textContent = `${Math.floor(exp).toLocaleString()} XP`;
+            
+            const hoursInt = Math.floor(hours);
+            const minutesInt = Math.round((hours - hoursInt) * 60);
+            const kills = Math.ceil(exp / currentResults.basePerPerson);
+            
+            displayTargetTime.textContent = `${hoursInt} час ${minutesInt} минут`;
+            displayTargetKills.textContent = `${kills.toLocaleString()}`;
+            
+            // Обновляем поле опыта (без зацикливания)
+            if (!targetExp.matches(':focus')) {
+                targetExp.value = Math.floor(exp);
+            }
+        }
+    });
+    
+    // Инициализация
+    setTimeout(() => {
+        const initialExp = parseFloat(targetExp.value) || 1000000;
+        updateDisplay(initialExp);
+    }, 100);
 }
 
 // Обновление отображения ползунка
@@ -222,15 +381,62 @@ function updateServerBonusValue() {
     document.getElementById('serverBonusValue').innerText = val.toFixed(2) + 'x';
 }
 
-// UI обработчики
-document.getElementById('advancedMode').addEventListener('change', (e) => {
-    document.getElementById('advancedPanel').classList.toggle('show', e.target.checked);
+// Обработчик изменения размера моба
+document.getElementById('monsterSize').addEventListener('change', function() {
+    updateMonsterList(this.value);
 });
 
-document.getElementById('odinBless').addEventListener('change', (e) => {
-    document.getElementById('odinPointsGroup').style.display = e.target.checked ? 'block' : 'none';
+// Обработчик изменения количества человек в пати
+document.getElementById('partySize').addEventListener('change', function() {
+    const partySize = parseInt(this.value);
+    const classSelect = document.getElementById('classVariety');
+    const currentClass = parseInt(classSelect.value);
+    
+    // Ограничиваем количество классов
+    while (classSelect.options.length > 0) {
+        classSelect.remove(0);
+    }
+    
+    for (let i = 1; i <= partySize; i++) {
+        const option = document.createElement('option');
+        option.value = i;
+        option.textContent = i;
+        classSelect.appendChild(option);
+    }
+    
+    // Устанавливаем значение, если оно было больше нового максимума
+    if (currentClass > partySize) {
+        classSelect.value = partySize;
+    } else {
+        classSelect.value = currentClass;
+    }
 });
 
+// Переключение расширенного режима
+document.getElementById('advancedMode').addEventListener('change', function() {
+    const panel = document.getElementById('advancedPanel');
+    const btn = document.getElementById('calculateBtn');
+    
+    if (this.checked) {
+        panel.classList.add('show');
+        btn.style.background = '#4caf50';
+        btn.textContent = '🔍 РАССЧИТАТЬ';
+        // Обновляем список мобов
+        const size = document.getElementById('monsterSize').value;
+        updateMonsterList(size);
+        // Обновляем ограничение классов
+        document.getElementById('partySize').dispatchEvent(new Event('change'));
+    } else {
+        panel.classList.remove('show');
+        btn.style.background = '#ffd700';
+        btn.textContent = '🔍 НАЙТИ ЛУЧШИЕ ВАРИАНТЫ';
+        // Очищаем результаты
+        document.getElementById('results').innerHTML = '<div style="text-align: center; color: #888;">Введите уровень и нажмите кнопку</div>';
+        currentResults = null;
+    }
+});
+
+// Обработчики событий
 document.getElementById('serverBonus').addEventListener('input', updateServerBonusValue);
 document.getElementById('calculateBtn').addEventListener('click', calculateExp);
 

@@ -71,13 +71,55 @@
         };
     }
 
-    // Главная формула: сколько нужно докупить 1⭐
-    function calculateNeeded1star(m1, m2, m3, mode) {
-        // Переводим всё в эквивалент 1⭐
-        let total = m1 + m2 * 3 + m3 * 9;
+    // Функция для "ломки" частей следующего ранга
+    function breakHigherRanks(ranks, targetRank) {
+        let m1 = ranks.rank1;
+        let m2 = ranks.rank2;
+        let m3 = ranks.rank3;
+        let m4 = ranks.rank4;
         
-        // Сколько нужно до ближайшего числа, кратного 27
-        let need = (27 - (total % 27)) % 27;
+        // Если целевой ранг - 3⭐, ломаем 4⭐ в 3⭐
+        if (targetRank === 3) {
+            // 1 предмет 4⭐ = 2 предмета 3⭐
+            m3 += m4 * 2;
+            m4 = 0;
+        }
+        // Если целевой ранг - 2⭐, ломаем 4⭐ и 3⭐ в 2⭐
+        else if (targetRank === 2) {
+            // 1 предмет 4⭐ = 6 предметов 2⭐ (2*3)
+            m2 += m4 * 6;
+            m4 = 0;
+            // 1 предмет 3⭐ = 2 предмета 2⭐
+            m2 += m3 * 2;
+            m3 = 0;
+        }
+        // Если целевой ранг - 4⭐, не ломаем ничего
+        // (4⭐ уже максимальный)
+        
+        return { rank1: m1, rank2: m2, rank3: m3, rank4: m4 };
+    }
+
+    // Универсальная формула для любого целевого ранга
+    function calculateNeeded(ranks, targetRank, mode) {
+        const m1 = ranks.rank1;
+        const m2 = ranks.rank2;
+        const m3 = ranks.rank3;
+        const m4 = ranks.rank4;
+        
+        // Переводим всё в эквивалент 1⭐
+        let total = m1 + m2 * 3 + m3 * 9 + m4 * 27;
+        
+        // Определяем делитель для целевого ранга
+        let divisor;
+        switch(targetRank) {
+            case 2: divisor = 3; break;
+            case 3: divisor = 9; break;
+            case 4: 
+            default: divisor = 27; break;
+        }
+        
+        // Сколько нужно до ближайшего числа, кратного divisor
+        let need = (divisor - (total % divisor)) % divisor;
         
         if (mode === 'min') {
             // Минимальная очистка: покупаем только если нужно ≤ 8
@@ -89,33 +131,54 @@
         return need;
     }
 
-    // Синтез после покупки
-    function synthesize(m1, m2, m3, m4, bought1star) {
-        let total = m1 + bought1star + m2 * 3 + m3 * 9;
-        
-        // Сколько целых 4⭐ получится
-        let new4star = m4 + Math.floor(total / 27);
-        
-        return new4star;
-    }
-
     // Полный расчёт для одного предмета
-    function calculateFull(ranks, mode) {
-        const m1 = ranks.rank1;
-        const m2 = ranks.rank2;
-        const m3 = ranks.rank3;
-        const m4 = ranks.rank4;
+    function calculateFull(ranks, mode, targetRank, breakHigher) {
+        let m1 = ranks.rank1;
+        let m2 = ranks.rank2;
+        let m3 = ranks.rank3;
+        let m4 = ranks.rank4;
         
-        // Сначала синтезируем то, что есть (без докупки)
-        // Приводим остатки к <3 простым делением
-        let total = m1 + m2 * 3 + m3 * 9;
-        let free4star = m4 + Math.floor(total / 27);
-        let remainder = total % 27;
+        // Если включена "ломка" - разбираем части следующего ранга
+        if (breakHigher) {
+            const broken = breakHigherRanks({ rank1: m1, rank2: m2, rank3: m3, rank4: m4 }, targetRank);
+            m1 = broken.rank1;
+            m2 = broken.rank2;
+            m3 = broken.rank3;
+            m4 = broken.rank4;
+        }
+        
+        // Определяем делитель для целевого ранга
+        let divisor;
+        switch(targetRank) {
+            case 2: divisor = 3; break;
+            case 3: divisor = 9; break;
+            case 4: 
+            default: divisor = 27; break;
+        }
+        
+        // Считаем общее количество в эквиваленте 1⭐
+        let total;
+        if (breakHigher || targetRank === 4) {
+            // Если ломаем или целевой 4⭐ - используем все ранги
+            total = m1 + m2 * 3 + m3 * 9 + m4 * 27;
+        } else {
+            // Если НЕ ломаем - используем только ранги ≤ targetRank
+            if (targetRank === 3) {
+                total = m1 + m2 * 3 + m3 * 9;  // 4⭐ не трогаем
+            } else if (targetRank === 2) {
+                total = m1 + m2 * 3;  // 3⭐ и 4⭐ не трогаем
+            } else {
+                total = m1 + m2 * 3 + m3 * 9 + m4 * 27; // на всякий случай
+            }
+        }
+        
+        let freeTarget = Math.floor(total / divisor);
+        let remainder = total % divisor;
         
         // Теперь считаем, сколько нужно докупить
-        let need = calculateNeeded1star(remainder % 3, Math.floor(remainder / 3) % 3, Math.floor(remainder / 9), mode);
+        let need = calculateNeeded({ rank1: m1, rank2: m2, rank3: m3, rank4: m4 }, targetRank, mode);
         
-        let final4star = free4star;
+        let finalTarget = freeTarget;
         let needText = '';
         let alertClass = '';
         
@@ -123,27 +186,32 @@
             needText = '-';
             alertClass = 'alert-row';
             // Нецелесообразно, ничего не покупаем
-            final4star = free4star;
+            finalTarget = freeTarget;
         } else if (need === 0) {
             needText = '0';
         } else {
             needText = need + ' шт.';
-            final4star = free4star + Math.floor((remainder + need) / 27);
+            finalTarget = freeTarget + Math.floor((remainder + need) / divisor);
         }
         
+        // Сохраняем информацию о том, были ли сломаны части
+        const wasBroken = breakHigher && (targetRank === 2 || targetRank === 3);
+        
         return {
-            final4star: final4star,
+            finalTarget: finalTarget,
             needText: needText,
             alertClass: alertClass,
-            need: need
+            need: need,
+            wasBroken: wasBroken,
+            brokenRanks: wasBroken ? { rank1: m1, rank2: m2, rank3: m3, rank4: m4 } : null
         };
     }
 
-    function calculateAll(mode) {
+    function calculateAll(mode, targetRank, breakHigher) {
         const results = [];
         for (const item of items) {
             const ranks = getItemRanks(item.id);
-            const result = calculateFull(ranks, mode);
+            const result = calculateFull(ranks, mode, targetRank, breakHigher);
             results.push({
                 id: item.id,
                 name: item.name,
@@ -154,16 +222,21 @@
         return results;
     }
 
-    function displayCraft(mode) {
-        const results = calculateAll(mode);
+    function displayCraft(mode, targetRank, breakHigher) {
+        const results = calculateAll(mode, targetRank, breakHigher);
+        
+        const rankNames = {2: '2⭐', 3: '3⭐', 4: '4⭐'};
+        const rankEmoji = {2: '⭐', 3: '⭐⭐', 4: '⭐⭐⭐'};
         
         const title = mode === 'min' 
-            ? '🔨 МИНИМАЛЬНАЯ ОЧИСТКА (быстрая конвертация)'
-            : '🔨 МАКСИМАЛЬНАЯ ОЧИСТКА (полная конвертация в 4⭐)';
+            ? `🔨 МИНИМАЛЬНАЯ ОЧИСТКА → ${rankNames[targetRank]} (быстрая конвертация)`
+            : `⚡ МАКСИМАЛЬНАЯ ОЧИСТКА → ${rankNames[targetRank]} (полная конвертация)`;
+        
+        const breakText = breakHigher ? ' 💥 (слом частей следующего ранга)' : '';
         
         const description = mode === 'min'
-            ? '🎯 Цель: получить максимум 4⭐ с минимальными вложениями (покупаем только если нужно ≤8 шт. 1⭐)<br>🔴 "-" означает, что покупка нецелесообразна'
-            : '🎯 Цель: ПОЛНОСТЬЮ избавиться от 1⭐, 2⭐, 3⭐ (покупаем всегда, сколько нужно)';
+            ? `🎯 Цель: получить максимум ${rankNames[targetRank]} с минимальными вложениями (покупаем только если нужно ≤8 шт. 1⭐)<br>🔴 "-" означает, что покупка нецелесообразна${breakText}`
+            : `🎯 Цель: ПОЛНОСТЬЮ избавиться от 1⭐, 2⭐, 3⭐ и получить ${rankNames[targetRank]} (покупаем всегда, сколько нужно)${breakText}`;
         
         let html = `
             <h2>${title}</h2>
@@ -179,8 +252,9 @@
                             <th>Изображение</th>
                             <th>Предмет</th>
                             <th>Было (1⭐/2⭐/3⭐/4⭐)</th>
+                            ${breakHigher && (targetRank === 2 || targetRank === 3) ? '<th>После ломки (1⭐/2⭐/3⭐/4⭐)</th>' : ''}
                             <th>Нужно докупить 1⭐</th>
-                            <th>Итого 4⭐</th>
+                            <th>Итого ${rankNames[targetRank]}</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -192,13 +266,20 @@
             const orig = item.original;
             const res = item.result;
             
+            let brokenRow = '';
+            if (res.wasBroken && res.brokenRanks) {
+                const br = res.brokenRanks;
+                brokenRow = `<td class="craft-orig">${br.rank1} / ${br.rank2} / ${br.rank3} / ${br.rank4}</td>`;
+            }
+            
             html += `
                 <tr class="${res.alertClass}">
                     <td class="craft-img"><img src="${imgPath}" alt="${item.name}" class="item-icon" onerror="this.src='data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 width=%2264%22 height=%2264%22 viewBox=%220 0 24 24%22 fill=%22none%22 stroke=%22%23666%22 stroke-width=%221%22%3E%3Crect x=%222%22 y=%222%22 width=%2220%22 height=%2220%22 rx=%222.18%22%3E%3C/rect%3E%3C/svg%3E'"></td>
                     <td class="craft-name">${item.name}${res.need === -1 ? ' ⚠️' : ''}</td>
                     <td class="craft-orig">${orig.rank1} / ${orig.rank2} / ${orig.rank3} / ${orig.rank4}</td>
+                    ${brokenRow}
                     <td class="craft-need">${res.needText}</td>
-                    <td class="craft-gain">${res.final4star}</td>
+                    <td class="craft-gain">${res.finalTarget}</td>
                 </tr>
             `;
         });
@@ -213,7 +294,7 @@
             const need = item.result.need;
             return sum + (need > 0 ? need : 0);
         }, 0);
-        const totalRank4 = results.reduce((sum, item) => sum + item.result.final4star, 0);
+        const totalTarget = results.reduce((sum, item) => sum + item.result.finalTarget, 0);
         
         html += `
             <div class="result-card">
@@ -223,8 +304,8 @@
                     <div class="craft-need">${totalNeeded} шт.</div>
                 </div>
                 <div class="monster-item">
-                    <div>🎯 Всего получено 4⭐:</div>
-                    <div class="craft-total">${totalRank4} шт.</div>
+                    <div>🎯 Всего получено ${rankNames[targetRank]}:</div>
+                    <div class="craft-total">${totalTarget} шт.</div>
                 </div>
             </div>
         `;
@@ -234,9 +315,13 @@
 
     // Сохраняем текущий режим
     let currentMode = 'min';
+    let currentTargetRank = 4;
+    let currentBreakHigher = false;
     
-    window.loadDataMin = async function() {
+    window.loadDataMin = async function(targetRank = 4, breakHigher = false) {
         currentMode = 'min';
+        currentTargetRank = targetRank;
+        currentBreakHigher = breakHigher;
         await loadItems();
         
         const rawText = document.getElementById('dataInput').value;
@@ -251,12 +336,14 @@
         Object.assign(userData, parsed);
         
         alert(`✅ Загружено данных для ${loadedCount} предметов`);
-        displayCraft(currentMode);
+        displayCraft(currentMode, currentTargetRank, currentBreakHigher);
         return true;
     };
     
-    window.loadDataFull = async function() {
+    window.loadDataFull = async function(targetRank = 4, breakHigher = false) {
         currentMode = 'full';
+        currentTargetRank = targetRank;
+        currentBreakHigher = breakHigher;
         await loadItems();
         
         const rawText = document.getElementById('dataInput').value;
@@ -271,7 +358,7 @@
         Object.assign(userData, parsed);
         
         alert(`✅ Загружено данных для ${loadedCount} предметов`);
-        displayCraft(currentMode);
+        displayCraft(currentMode, currentTargetRank, currentBreakHigher);
         return true;
     };
 })();
