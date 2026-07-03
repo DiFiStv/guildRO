@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Дела гильдии - SUPER местечко</title>
+    <link rel="stylesheet" href="../style.css">
+    <link rel="stylesheet" href="week.css">
+</head>
+<body>
+    <div class="container">
+        <div class="nav-bar">
+            <a href="../index.html" class="home-btn">🏠 На главную</a>
+            <span class="page-title">📋 Еженедельные активности</span>
+            <a href="../shadow.html" class="switch-btn">🔨 К теням →</a>
+        </div>
+
+        <div class="week-header">
+            <h1>📋 ЕЖЕНЕДЕЛЬНЫЕ АКТИВНОСТИ ГИЛЬДИИ SUPER</h1>
+            <div class="week-controls">
+                <button id="saveBtn" class="save-btn">💾 Сохранить </button>
+                <span id="weekInfo" class="week-info">Неделя: Загрузка...</span>
+            </div>
+        </div>
+
+        <div id="tableContainer">
+            <div style="text-align: center; color: #888; padding: 40px;">Загрузка данных...</div>
+        </div>
+
+        <div class="legend">
+            <span class="legend-item"><span class="status-dot status-ok">✅</span> Выполнено</span>
+            <span class="legend-item"><span class="status-dot status-wait">🔄</span> В процессе</span>
+            <span class="legend-item"><span class="status-dot status-no">❌</span> Не выполнено</span>
+        </div>
+    </div>
+
+    <script src="week.js"></script>
+</body>
+</html>

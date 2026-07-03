@@ -1,0 +1,30 @@
+{
+  "groups": [
+    {
+      "name": "Основа",
+      "players": [
+        {"id": 1, "nick": "Дифис (Прист)", "tower": 1, "doomsday": 0, "kvm_tue": 1, "kvm_thu": 1, "kvm_sun": 0, "gvg": 1},
+        {"id": 2, "nick": "Суши (Данса)", "tower": 0, "doomsday": 1, "kvm_tue": 1, "kvm_thu": 1, "kvm_sun": 0, "gvg": 0},
+        {"id": 3, "nick": "Денис (Лук)", "tower": 0, "doomsday": 1, "kvm_tue": 1, "kvm_thu": 1, "kvm_sun": 0, "gvg": 0},
+        {"id": 4, "nick": "Борис (Рыцарь)", "tower": 1, "doomsday": 0, "kvm_tue": 1, "kvm_thu": 1, "kvm_sun": 0, "gvg": 1},
+        {"id": 5, "nick": "Андрей (Рыцарь)", "tower": 0, "doomsday": 0, "kvm_tue": 1, "kvm_thu": 1, "kvm_sun": 0, "gvg": 0},
+        {"id": 6, "nick": "Саня (Монк)", "tower": 0, "doomsday": 0, "kvm_tue": 1, "kvm_thu": 1, "kvm_sun": 0, "gvg": 0},
+        {"id": 7, "nick": "Муля (Лук)", "tower": 0, "doomsday": 0, "kvm_tue": 1, "kvm_thu": 1, "kvm_sun": 0, "gvg": 0}
+      ]
+    },
+    {
+      "name": "Твины",
+      "players": [
+        {"id": 8, "nick": "Дифис (Лук)", "tower": 0, "doomsday": 0, "kvm_tue": 1, "kvm_thu": 1, "kvm_sun": 0, "gvg": 0},
+        {"id": 9, "nick": "Дифис (Хим)", "tower": 0, "doomsday": 0, "kvm_tue": 1, "kvm_thu": 1, "kvm_sun": 0, "gvg": 0},
+        {"id": 10, "nick": "Дифис (Син)", "tower": 0, "doomsday": 0, "kvm_tue": 1, "kvm_thu": 1, "kvm_sun": 0, "gvg": 0},
+        {"id": 11, "nick": "Дифис (Маг)", "tower": 0, "doomsday": 0, "kvm_tue": 1, "kvm_thu": 1, "kvm_sun": 0, "gvg": 0},
+        {"id": 12, "nick": "Суши (Прист)", "tower": 0, "doomsday": 0, "kvm_tue": 1, "kvm_thu": 1, "kvm_sun": 0, "gvg": 0},
+        {"id": 13, "nick": "Суши (Кузнец)", "tower": 0, "doomsday": 0, "kvm_tue": 1, "kvm_thu": 1, "kvm_sun": 0, "gvg": 0},
+        {"id": 14, "nick": "Суши (Бард)", "tower": 0, "doomsday": 0, "kvm_tue": 1, "kvm_thu": 1, "kvm_sun": 0, "gvg": 0},
+        {"id": 15, "nick": "Суши (Проф)", "tower": 0, "doomsday": 0, "kvm_tue": 1, "kvm_thu": 1, "kvm_sun": 0, "gvg": 0},
+        {"id": 16, "nick": "Борис (Маг)", "tower": 0, "doomsday": 0, "kvm_tue": 1, "kvm_thu": 1, "kvm_sun": 0, "gvg": 0}
+      ]
+    }
+  ]
+}

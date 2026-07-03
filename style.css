@@ -722,3 +722,98 @@ details summary:hover {
         min-width: unset;
     }
 }
+
+/* ========== СЕКЦИЯ "ДЕЛА ГИЛЬДИИ" НА ГЛАВНОЙ ========== */
+.guild-section {
+    margin: 30px auto 40px;
+    max-width: 600px;
+    background: rgba(255, 215, 0, 0.05);
+    border: 2px solid rgba(255, 215, 0, 0.2);
+    border-radius: 20px;
+    padding: 25px 30px;
+    transition: all 0.3s ease;
+}
+
+.guild-section:hover {
+    border-color: rgba(255, 215, 0, 0.4);
+    background: rgba(255, 215, 0, 0.08);
+    box-shadow: 0 10px 30px rgba(255, 215, 0, 0.1);
+}
+
+.guild-header {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+    margin-bottom: 20px;
+}
+
+.guild-icon {
+    font-size: 2em;
+}
+
+.guild-title {
+    font-size: 1.6em;
+    font-weight: bold;
+    color: #ffd700;
+    letter-spacing: 2px;
+}
+
+.guild-links {
+    display: flex;
+    justify-content: center;
+}
+
+.guild-btn {
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 215, 0, 0.2);
+    border-radius: 16px;
+    padding: 20px 30px;
+    text-decoration: none;
+    color: white;
+    transition: all 0.3s ease;
+    text-align: center;
+    width: 100%;
+    max-width: 350px;
+}
+
+.guild-btn:hover {
+    transform: translateY(-3px);
+    border-color: #ffd700;
+    background: rgba(255, 215, 0, 0.1);
+    box-shadow: 0 8px 25px rgba(255, 215, 0, 0.15);
+}
+
+.guild-btn-icon {
+    font-size: 2.5em;
+    display: block;
+    margin-bottom: 8px;
+}
+
+.guild-btn-title {
+    font-size: 1.2em;
+    font-weight: bold;
+    display: block;
+    color: #ffd700;
+    margin-bottom: 5px;
+}
+
+.guild-btn-desc {
+    font-size: 0.85em;
+    color: #aaa;
+}
+
+@media (max-width: 600px) {
+    .guild-section {
+        padding: 20px;
+        margin: 20px 10px;
+    }
+    
+    .guild-title {
+        font-size: 1.3em;
+    }
+    
+    .guild-btn {
+        padding: 15px 20px;
+    }
+}
