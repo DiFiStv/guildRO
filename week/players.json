@@ -11,7 +11,8 @@
         {"id": 6, "nick": "Саня (Монк)", "tower": 0, "doomsday": 0, "kvm_tue": 0, "kvm_thu": 0, "kvm_sun": 0, "gvg": 0},
         {"id": 7, "nick": "Муля (Лук)", "tower": 0, "doomsday": 0, "kvm_tue": 0, "kvm_thu": 0, "kvm_sun": 0, "gvg": 0},
         {"id": 8, "nick": "Аня (Лук)", "tower": 0, "doomsday": 0, "kvm_tue": 0, "kvm_thu": 0, "kvm_sun": 0, "gvg": 0},
-        {"id": 9, "nick": "Эли (Мудрец)", "tower": 0, "doomsday": 0, "kvm_tue": 0, "kvm_thu": 0, "kvm_sun": 0, "gvg": 0}
+        {"id": 9, "nick": "Жека (Рыцарь)", "tower": 0, "doomsday": 0, "kvm_tue": 0, "kvm_thu": 0, "kvm_sun": 0, "gvg": 0},
+        {"id": 10, "nick": "Эли (Мудрец)", "tower": 0, "doomsday": 0, "kvm_tue": 0, "kvm_thu": 0, "kvm_sun": 0, "gvg": 0}
       ]
     },
     {
