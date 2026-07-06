@@ -5,7 +5,7 @@
       "players": [
         {"id": 1, "nick": "Дифис (Прист)", "tower": 0, "doomsday": 0, "kvm_tue": 0, "kvm_thu": 0, "kvm_sun": 0, "gvg": 0},
         {"id": 2, "nick": "Суши (Данса)", "tower": 0, "doomsday": 0, "kvm_tue": 0, "kvm_thu": 0, "kvm_sun": 0, "gvg": 0},
-        {"id": 3, "nick": "Денис (Лук)", "tower": 0, "doomsday": 0, "kvm_tue": 1, "kvm_thu": 1, "kvm_sun": 0, "gvg": 0},
+        {"id": 3, "nick": "Денис (Лук)", "tower": 0, "doomsday": 0, "kvm_tue": 0, "kvm_thu": 0, "kvm_sun": 0, "gvg": 0},
         {"id": 4, "nick": "Борис (Рыцарь)", "tower": 0, "doomsday": 0, "kvm_tue": 0, "kvm_thu": 0, "kvm_sun": 0, "gvg": 0},
         {"id": 5, "nick": "Андрей (Рыцарь)", "tower": 0, "doomsday": 0, "kvm_tue": 0, "kvm_thu": 0, "kvm_sun": 0, "gvg": 0},
         {"id": 6, "nick": "Саня (Монк)", "tower": 0, "doomsday": 0, "kvm_tue": 0, "kvm_thu": 0, "kvm_sun": 0, "gvg": 0},
