@@ -22,13 +22,26 @@
     flex-wrap: wrap;
 }
 
+.controls-left,
+.controls-right {
+    display: flex;
+    gap: 8px;
+    align-items: center;
+}
+
+.week-info {
+    color: #aaa;
+    font-size: 14px;
+    white-space: nowrap;
+    margin-left: auto;
+}
+
+/* Кнопки */
 .save-btn {
-    background: #4caf50;
-    color: white;
     border: none;
-    padding: 10px 24px;
+    padding: 8px 16px;
     border-radius: 40px;
-    font-size: 16px;
+    font-size: 14px;
     font-weight: bold;
     cursor: pointer;
     transition: opacity 0.2s;
@@ -39,10 +52,24 @@
     opacity: 0.85;
 }
 
-.week-info {
-    color: #aaa;
-    font-size: 14px;
-    white-space: nowrap;
+.save-json {
+    background: #4caf50;
+    color: white;
+}
+
+.save-txt {
+    background: #ff9800;
+    color: white;
+}
+
+.save-reset {
+    background: #f44336;
+    color: white;
+}
+
+.save-stats {
+    background: #9c27b0;
+    color: white;
 }
 
 /* Таблица */
@@ -58,7 +85,7 @@
     border-collapse: collapse;
     font-size: 14px;
     min-width: 700px;
-    user-select: none; /* Запрет выделения текста для всей таблицы */
+    user-select: none;
 }
 
 .week-table th {
@@ -78,7 +105,7 @@
     vertical-align: middle;
 }
 
-/* Заголовки групп - с полем ввода справа */
+/* Заголовки групп */
 .week-table .group-header td {
     background: rgba(255, 215, 0, 0.08);
     color: #ffd700;
@@ -142,20 +169,18 @@
     min-width: 120px;
 }
 
-/* Статусы - запрет выделения */
 .week-table .col-status {
     text-align: center;
     font-size: 20px;
     cursor: pointer;
     min-width: 50px;
     transition: opacity 0.2s;
-    user-select: none; /* Запрет выделения текста в ячейках статусов */
+    user-select: none;
     -webkit-user-select: none;
     -moz-user-select: none;
     -ms-user-select: none;
 }
 
-/* Убираем увеличение при наведении, оставляем только прозрачность */
 .week-table .col-status:hover {
     opacity: 0.7;
 }
@@ -172,7 +197,6 @@
     color: #ff9800;
 }
 
-/* Строка итогов */
 .week-table .total-row td {
     background: #1a1a2e;
     color: #ffd700;
@@ -185,125 +209,166 @@
     color: #ffd700;
 }
 
-/* Убираем отдельную строку для добавления */
-.week-table .add-row {
-    display: none;
-}
-
-/* Легенда - теперь с символами */
-.legend {
-    display: flex;
-    justify-content: center;
-    gap: 25px;
-    flex-wrap: wrap;
-    margin-top: 20px;
-    padding: 12px;
-    background: rgba(0,0,0,0.2);
+/* КВМ Секция */
+.kvm-section {
+    margin: 20px 0;
+    padding: 15px 20px;
+    background: rgba(0,0,0,0.3);
     border-radius: 12px;
+    border: 1px solid #444;
 }
 
-.legend-item {
+.kvm-section h3 {
+    margin: 0 0 12px 0;
+    color: #ffd700;
+    font-size: 16px;
+}
+
+.kvm-row {
+    display: flex;
+    gap: 30px;
+    flex-wrap: wrap;
+}
+
+.kvm-item {
     display: flex;
     align-items: center;
-    gap: 8px;
-    color: #aaa;
-    font-size: 13px;
+    gap: 10px;
 }
 
-.legend-symbol {
-    font-size: 18px;
-    line-height: 1;
+.kvm-item label {
+    color: #ccc;
+    font-weight: bold;
+    font-size: 14px;
+    margin: 0;
 }
 
-.legend-symbol.symbol-ok {
+.kvm-item input {
+    width: 80px;
+    padding: 6px 10px;
+    border-radius: 8px;
+    border: 1px solid #444;
+    background: #2a2a3a;
+    color: white;
+    font-size: 14px;
+    text-align: center;
+}
+
+.kvm-item input:focus {
+    outline: none;
+    border-color: #ffd700;
+}
+
+.kvm-total {
+    margin-top: 12px;
+    padding-top: 12px;
+    border-top: 1px solid #444;
+    text-align: center;
+    font-size: 16px;
+    color: #ffd700;
+}
+
+.kvm-total strong {
+    font-size: 20px;
     color: #4caf50;
 }
 
-.legend-symbol.symbol-wait {
-    color: #ff9800;
+/* Иномир */
+.otherworld-section {
+    margin: 20px 0;
 }
 
-.legend-symbol.symbol-no {
-    color: #ff4444;
+.otherworld-cloud {
+    position: relative;
+    padding: 30px 40px;
+    border-radius: 20px;
+    background: linear-gradient(135deg, #1a0533, #2d1b69, #1a0533);
+    background-size: 200% 200%;
+    animation: cloudPulse 4s ease-in-out infinite;
+    text-align: center;
+    overflow: hidden;
+    border: 1px solid rgba(138, 43, 226, 0.3);
+    min-height: 120px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
-/* Адаптация для мобильных */
+@keyframes cloudPulse {
+    0% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+    100% { background-position: 0% 50%; }
+}
+
+.otherworld-cloud .particles {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    overflow: hidden;
+}
+
+.otherworld-cloud .particle {
+    position: absolute;
+    color: rgba(200, 150, 255, 0.6);
+    font-size: 14px;
+    animation: particleFloat 6s ease-in-out infinite;
+}
+
+.particle:nth-child(1) { top: 10%; left: 5%; animation-delay: 0s; font-size: 12px; }
+.particle:nth-child(2) { top: 20%; right: 10%; animation-delay: 0.8s; font-size: 16px; }
+.particle:nth-child(3) { bottom: 15%; left: 15%; animation-delay: 1.6s; font-size: 10px; }
+.particle:nth-child(4) { bottom: 25%; right: 5%; animation-delay: 2.4s; font-size: 18px; }
+.particle:nth-child(5) { top: 50%; left: 30%; animation-delay: 3.2s; font-size: 14px; }
+.particle:nth-child(6) { top: 40%; right: 25%; animation-delay: 0.4s; font-size: 11px; }
+.particle:nth-child(7) { bottom: 40%; left: 45%; animation-delay: 1.2s; font-size: 15px; }
+.particle:nth-child(8) { top: 70%; right: 35%; animation-delay: 2.0s; font-size: 13px; }
+
+@keyframes particleFloat {
+    0%, 100% { transform: translateY(0px) scale(1); opacity: 0.6; }
+    25% { transform: translateY(-10px) scale(1.2); opacity: 1; }
+    50% { transform: translateY(5px) scale(0.8); opacity: 0.8; }
+    75% { transform: translateY(-5px) scale(1.1); opacity: 0.9; }
+}
+
+.otherworld-content {
+    position: relative;
+    z-index: 1;
+}
+
+.otherworld-title {
+    font-size: 28px;
+    font-weight: bold;
+    color: #d4bfff;
+    text-shadow: 0 0 20px rgba(138, 43, 226, 0.5), 0 0 40px rgba(138, 43, 226, 0.3);
+    letter-spacing: 3px;
+    margin-bottom: 8px;
+}
+
+.otherworld-info {
+    font-size: 18px;
+    color: #b8a0d8;
+    text-shadow: 0 0 15px rgba(138, 43, 226, 0.3);
+    letter-spacing: 1px;
+}
+
+/* Адаптация */
 @media (max-width: 768px) {
-    .week-header {
-        flex-direction: column;
-        align-items: stretch;
-        gap: 10px;
+    .otherworld-title {
+        font-size: 20px;
     }
-
-    .week-header h1 {
-        font-size: 1.2em;
-        text-align: center;
+    
+    .otherworld-info {
+        font-size: 14px;
     }
-
-    .week-controls {
-        justify-content: center;
+    
+    .kvm-total {
+        font-size: 14px;
     }
-
-    .week-table {
-        font-size: 12px;
-        min-width: 600px;
-    }
-
-    .week-table th,
-    .week-table td {
-        padding: 8px 6px;
-    }
-
-    .week-table .col-nick {
-        font-size: 12px;
-        min-width: 80px;
-        padding-left: 10px;
-    }
-
-    .week-table .col-status {
-        font-size: 16px;
-        min-width: 35px;
-    }
-
-    .legend {
-        gap: 15px;
-        font-size: 12px;
-    }
-
-    .legend-symbol {
-        font-size: 15px;
-    }
-
-    /* Адаптация для контролов в заголовке группы */
-    .week-table .group-header .group-controls {
-        display: flex;
-        align-items: center;
-        gap: 6px;
-        float: none;
-        margin-top: 5px;
-        justify-content: flex-end;
-    }
-
-    .week-table .group-header .group-controls .add-input {
-        width: 100px;
-        font-size: 11px;
-        padding: 3px 8px;
-    }
-
-    .week-table .group-header .group-controls .add-btn {
-        font-size: 11px;
-        padding: 3px 10px;
-    }
-
-    .week-table .group-header td {
-        display: flex;
-        flex-wrap: wrap;
-        justify-content: space-between;
-        align-items: center;
-        padding: 8px 10px;
-    }
-
-    .week-table .group-header .group-name {
-        padding-left: 0;
+    
+    .kvm-total strong {
+        font-size: 17px;
     }
 }

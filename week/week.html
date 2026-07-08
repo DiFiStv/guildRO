@@ -18,8 +18,15 @@
         <div class="week-header">
             <h1>📋 ЕЖЕНЕДЕЛЬНЫЕ АКТИВНОСТИ ГИЛЬДИИ SUPER</h1>
             <div class="week-controls">
-                <button id="saveBtn" class="save-btn">💾 Сохранить </button>
-                <span id="weekInfo" class="week-info">Неделя: Загрузка...</span>
+                <div class="controls-left">
+                    <button id="saveJsonBtn" class="save-btn save-json">💾 JSON</button>
+                    <button id="saveTxtBtn" class="save-btn save-txt">📊 Excel</button>
+                </div>
+                <div class="controls-right">
+                    <button id="resetBtn" class="save-btn save-reset">🔄 Обнулить</button>
+                    <button id="saveStatsBtn" class="save-btn save-stats">📈 Статистика</button>
+                </div>
+                <span id="weekInfo" class="week-info">📅 Неделя: Загрузка...</span>
             </div>
         </div>
 
@@ -27,10 +34,58 @@
             <div style="text-align: center; color: #888; padding: 40px;">Загрузка данных...</div>
         </div>
 
+        <!-- КВМ Очки -->
+        <div class="kvm-section">
+            <h3>📊 КВМ ОЧКИ</h3>
+            <div class="kvm-row">
+                <div class="kvm-item">
+                    <label>Вторник:</label>
+                    <input type="number" id="kvmTuePoints" min="0" max="9999" value="0" oninput="updateKvmTotal()">
+                </div>
+                <div class="kvm-item">
+                    <label>Четверг:</label>
+                    <input type="number" id="kvmThuPoints" min="0" max="9999" value="0" oninput="updateKvmTotal()">
+                </div>
+                <div class="kvm-item">
+                    <label>Воскресенье:</label>
+                    <input type="number" id="kvmSunPoints" min="0" max="9999" value="0" oninput="updateKvmTotal()">
+                </div>
+            </div>
+            <div class="kvm-total" id="kvmTotal">
+                <span>📊 Итого КВМ очков: <strong id="kvmTotalSum">0</strong></span>
+            </div>
+        </div>
+
+        <!-- Иномир -->
+        <div class="otherworld-section">
+            <div class="otherworld-cloud" id="otherworldCloud">
+                <div class="particles">
+                    <span class="particle">✦</span>
+                    <span class="particle">✦</span>
+                    <span class="particle">✦</span>
+                    <span class="particle">✦</span>
+                    <span class="particle">✦</span>
+                    <span class="particle">✦</span>
+                    <span class="particle">✦</span>
+                    <span class="particle">✦</span>
+                </div>
+                <div class="otherworld-content">
+                    <div class="otherworld-title" id="otherworldTitle">🌌 ИНОМИР</div>
+                    <div class="otherworld-info" id="otherworldInfo">Набирает силы...</div>
+                </div>
+            </div>
+        </div>
+
         <div class="legend">
-            <span class="legend-item"><span class="status-dot status-ok">✅</span> Выполнено</span>
-            <span class="legend-item"><span class="status-dot status-wait">🔄</span> В процессе</span>
-            <span class="legend-item"><span class="status-dot status-no">❌</span> Не выполнено</span>
+            <span class="legend-item">
+                <span class="legend-symbol symbol-ok">✅</span> Выполнено
+            </span>
+            <span class="legend-item">
+                <span class="legend-symbol symbol-wait">⏹</span> В процессе
+            </span>
+            <span class="legend-item">
+                <span class="legend-symbol symbol-no">❌</span> Не выполнено
+            </span>
         </div>
     </div>
 

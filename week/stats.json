@@ -1,3 +1,18 @@
 {
-  "weeks": []
+  "weeks": [
+    {
+      "year": 2026,
+      "week": 27,
+      "tower": 6,
+      "doomsday": 1,
+      "kvm_tue_ok": 15,
+      "kvm_tue_points": 64,
+      "kvm_thu_ok": 15,
+      "kvm_thu_points": 64,
+      "kvm_sun_ok": 14,
+      "kvm_sun_points": 50,
+      "gvg": 1,
+      "other": 1
+    }
+  ]
 }
