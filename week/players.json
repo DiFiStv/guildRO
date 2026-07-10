@@ -9,7 +9,7 @@
           "tower": 2,
           "doomsday": 0,
           "kvm_tue": 1,
-          "kvm_thu": 0,
+          "kvm_thu": 1,
           "kvm_sun": 0,
           "gvg": 0
         },
@@ -19,7 +19,7 @@
           "tower": 0,
           "doomsday": 0,
           "kvm_tue": 1,
-          "kvm_thu": 0,
+          "kvm_thu": 1,
           "kvm_sun": 0,
           "gvg": 0
         },
@@ -28,7 +28,7 @@
           "nick": "Денис (Лук)",
           "tower": 0,
           "doomsday": 0,
-          "kvm_tue": 1,
+          "kvm_tue": 0,
           "kvm_thu": 0,
           "kvm_sun": 0,
           "gvg": 0
@@ -39,7 +39,7 @@
           "tower": 0,
           "doomsday": 0,
           "kvm_tue": 1,
-          "kvm_thu": 0,
+          "kvm_thu": 1,
           "kvm_sun": 0,
           "gvg": 0
         },
@@ -49,7 +49,7 @@
           "tower": 0,
           "doomsday": 0,
           "kvm_tue": 1,
-          "kvm_thu": 0,
+          "kvm_thu": 1,
           "kvm_sun": 0,
           "gvg": 0
         },
@@ -59,7 +59,7 @@
           "tower": 0,
           "doomsday": 0,
           "kvm_tue": 1,
-          "kvm_thu": 0,
+          "kvm_thu": 1,
           "kvm_sun": 0,
           "gvg": 0
         },
@@ -79,7 +79,7 @@
           "tower": 0,
           "doomsday": 0,
           "kvm_tue": 1,
-          "kvm_thu": 0,
+          "kvm_thu": 1,
           "kvm_sun": 0,
           "gvg": 0
         },
@@ -99,7 +99,7 @@
           "tower": 0,
           "doomsday": 0,
           "kvm_tue": 1,
-          "kvm_thu": 0,
+          "kvm_thu": 1,
           "kvm_sun": 0,
           "gvg": 0
         },
@@ -109,7 +109,7 @@
           "tower": 0,
           "doomsday": 0,
           "kvm_tue": 0,
-          "kvm_thu": 0,
+          "kvm_thu": 1,
           "kvm_sun": 0,
           "gvg": 0
         }
@@ -124,7 +124,7 @@
           "tower": 2,
           "doomsday": 0,
           "kvm_tue": 1,
-          "kvm_thu": 0,
+          "kvm_thu": 1,
           "kvm_sun": 0,
           "gvg": 0
         },
@@ -134,7 +134,7 @@
           "tower": 2,
           "doomsday": 0,
           "kvm_tue": 1,
-          "kvm_thu": 0,
+          "kvm_thu": 1,
           "kvm_sun": 0,
           "gvg": 0
         },
@@ -144,7 +144,7 @@
           "tower": 0,
           "doomsday": 0,
           "kvm_tue": 1,
-          "kvm_thu": 0,
+          "kvm_thu": 1,
           "kvm_sun": 0,
           "gvg": 0
         },
@@ -154,7 +154,7 @@
           "tower": 2,
           "doomsday": 0,
           "kvm_tue": 1,
-          "kvm_thu": 0,
+          "kvm_thu": 1,
           "kvm_sun": 0,
           "gvg": 0
         },
@@ -164,7 +164,7 @@
           "tower": 0,
           "doomsday": 0,
           "kvm_tue": 1,
-          "kvm_thu": 0,
+          "kvm_thu": 1,
           "kvm_sun": 0,
           "gvg": 0
         },
@@ -174,7 +174,7 @@
           "tower": 0,
           "doomsday": 0,
           "kvm_tue": 1,
-          "kvm_thu": 0,
+          "kvm_thu": 1,
           "kvm_sun": 0,
           "gvg": 0
         },
@@ -194,7 +194,7 @@
           "tower": 0,
           "doomsday": 0,
           "kvm_tue": 1,
-          "kvm_thu": 0,
+          "kvm_thu": 1,
           "kvm_sun": 0,
           "gvg": 0
         },
@@ -204,7 +204,7 @@
           "tower": 0,
           "doomsday": 0,
           "kvm_tue": 1,
-          "kvm_thu": 0,
+          "kvm_thu": 1,
           "kvm_sun": 0,
           "gvg": 0
         }
@@ -213,10 +213,10 @@
   ],
   "kvm": {
     "tue": {
-      "points": 105
+      "points": 98
     },
     "thu": {
-      "points": 0
+      "points": 54
     },
     "sun": {
       "points": 0
@@ -224,7 +224,7 @@
   },
   "otherworld": {
     "title": "🌌 Иномир",
-    "info": "Четверг 09.07.26 с 21:00 до 21:20",
-    "active": true
+    "info": "",
+    "active": false
   }
 }
