@@ -1,30 +1,27 @@
 // Состояние данных
 let weekData = null;
 let currentWeek = '';
+let currentTab = 'illusion'; // illusion, guild, tower
 
-// Статусы
+// Статусы для иллюзии и гильдии
 const STATUS = {
     NO: 0,
-    OK: 1,
-    WAIT: 2
+    OK: 1
 };
 
 const STATUS_SYMBOLS = {
     0: '❌',
-    1: '✅',
-    2: '⏹'
+    1: '✅'
 };
 
 const STATUS_COLORS = {
     0: '#ff4444',
-    1: '#4caf50',
-    2: '#ff9800'
+    1: '#4caf50'
 };
 
 const STATUS_CLASSES = {
     0: 'status-0',
-    1: 'status-1',
-    2: 'status-2'
+    1: 'status-1'
 };
 
 // Загрузка данных
@@ -72,7 +69,7 @@ async function loadWeekData() {
             document.getElementById('otherworldCloud').style.background = 'linear-gradient(135deg, #0a0a1a, #1a0a2e, #0a0a1a)';
         }
         
-        renderTable(weekData);
+        renderTable(currentTab);
         return true;
     } catch (error) {
         console.error('Ошибка загрузки:', error);
@@ -93,45 +90,80 @@ function getWeekNumber(date) {
     return Math.ceil((diff + startOfYear.getDay() + 1) / 7);
 }
 
+// Переключение вкладок
+function switchTab(tab) {
+    currentTab = tab;
+    document.querySelectorAll('.tab-btn').forEach(btn => {
+        btn.classList.toggle('active', btn.dataset.tab === tab);
+    });
+    renderTable(tab);
+}
+
 // Рендер таблицы
-function renderTable(data) {
+function renderTable(tab) {
     const container = document.getElementById('tableContainer');
     
-    if (!data || !data.groups || data.groups.length === 0) {
+    if (!weekData || !weekData.groups || weekData.groups.length === 0) {
         container.innerHTML = '<div style="text-align: center; color: #888; padding: 40px;">Нет данных</div>';
         return;
     }
 
     let html = '<div class="week-table-wrapper"><table class="week-table">';
     
-    html += `
-        <thead>
-            <tr>
-                <th class="col-nick">Ник</th>
-                <th class="col-status">Башня</th>
-                <th class="col-status">Судный день</th>
-                <th class="col-status">КВМ Вт</th>
-                <th class="col-status">КВМ Чт</th>
-                <th class="col-status">КВМ Вс</th>
-                <th class="col-status">ГВГ Сб 600+</th>
-            </tr>
-        </thead>
-        <tbody>
-    `;
+    // Заголовок в зависимости от вкладки
+    if (tab === 'illusion') {
+        html += `
+            <thead>
+                <tr>
+                    <th class="col-nick">Ник</th>
+                    <th class="col-status">Минотавр 1</th>
+                    <th class="col-status">Бафомет 2</th>
+                    <th class="col-status">Бафомет 3</th>
+                </tr>
+            </thead>
+            <tbody>
+        `;
+    } else if (tab === 'guild') {
+        html += `
+            <thead>
+                <tr>
+                    <th class="col-nick">Ник</th>
+                    <th class="col-status">КВМ Вт</th>
+                    <th class="col-status">КВМ Чт</th>
+                    <th class="col-status">ГВГ Сб 600+</th>
+                    <th class="col-status">КВМ Вс</th>
+                </tr>
+            </thead>
+            <tbody>
+        `;
+    } else if (tab === 'tower') {
+        html += `
+            <thead>
+                <tr>
+                    <th class="col-nick">Ник</th>
+                    <th class="col-prof">Профа</th>
+                    <th class="col-dps">ДПС</th>
+                    <th class="col-tower">Результат</th>
+                </tr>
+            </thead>
+            <tbody>
+        `;
+    }
 
-    const totals = {
-        tower: { ok: 0, total: 0 },
-        doomsday: { ok: 0, total: 0 },
-        kvm_tue: { ok: 0, total: 0 },
-        kvm_thu: { ok: 0, total: 0 },
-        kvm_sun: { ok: 0, total: 0 },
-        gvg: { ok: 0, total: 0 }
-    };
-
-    data.groups.forEach((group, groupIndex) => {
+    // Инициализируем счётчики для итогов
+    const totals = {};
+    
+    // Определяем colspan для заголовка группы
+    let colspan;
+    if (tab === 'illusion') colspan = 4; // Ник + 3 колонки
+    else if (tab === 'guild') colspan = 5; // Ник + 4 колонки
+    else if (tab === 'tower') colspan = 4; // Ник + Профа + ДПС + Результат
+    
+    // Проходим по группам
+    weekData.groups.forEach((group, groupIndex) => {
         html += `
             <tr class="group-header">
-                <td colspan="7">
+                <td colspan="${colspan}">
                     <span class="group-name">${group.name}</span>
                     <span class="group-controls">
                         <input type="text" class="add-input" id="addInput-${groupIndex}" placeholder="Новый ник">
@@ -145,54 +177,156 @@ function renderTable(data) {
             html += `<tr id="row-${groupIndex}-${playerIndex}">`;
             html += `<td class="col-nick">${player.nick}</td>`;
             
-            const columns = ['tower', 'doomsday', 'kvm_tue', 'kvm_thu', 'kvm_sun', 'gvg'];
-            columns.forEach(col => {
-                const value = player[col] !== undefined ? player[col] : STATUS.NO;
-                const symbol = STATUS_SYMBOLS[value] || '❌';
-                const statusClass = STATUS_CLASSES[value] || 'status-0';
-                const color = STATUS_COLORS[value] || '#ff4444';
+            if (tab === 'illusion') {
+                // Иллюзия: mino, baph2, baph3
+                const columns = ['mino', 'baph2', 'baph3'];
+                columns.forEach(col => {
+                    const value = player.illusion?.[col] !== undefined ? player.illusion[col] : STATUS.NO;
+                    const symbol = STATUS_SYMBOLS[value] || '❌';
+                    const statusClass = STATUS_CLASSES[value] || 'status-0';
+                    const color = STATUS_COLORS[value] || '#ff4444';
+                    
+                    html += `
+                        <td class="col-status ${statusClass}" 
+                            data-group="${groupIndex}" 
+                            data-player="${playerIndex}" 
+                            data-tab="illusion"
+                            data-col="${col}"
+                            style="color: ${color}"
+                            onclick="toggleStatus(this)">
+                            ${symbol}
+                        </td>
+                    `;
+                    
+                    // Считаем итоги
+                    const key = `illusion_${col}`;
+                    if (!totals[key]) totals[key] = { ok: 0, total: 0 };
+                    totals[key].total++;
+                    if (value === STATUS.OK) totals[key].ok++;
+                });
+            } else if (tab === 'guild') {
+                // Гильдия: kvm_tue, kvm_thu, gvg, kvm_sun
+                const columns = ['kvm_tue', 'kvm_thu', 'gvg', 'kvm_sun'];
+                columns.forEach(col => {
+                    const value = player.guild?.[col] !== undefined ? player.guild[col] : STATUS.NO;
+                    const symbol = STATUS_SYMBOLS[value] || '❌';
+                    const statusClass = STATUS_CLASSES[value] || 'status-0';
+                    const color = STATUS_COLORS[value] || '#ff4444';
+                    
+                    html += `
+                        <td class="col-status ${statusClass}" 
+                            data-group="${groupIndex}" 
+                            data-player="${playerIndex}" 
+                            data-tab="guild"
+                            data-col="${col}"
+                            style="color: ${color}"
+                            onclick="toggleStatus(this)">
+                            ${symbol}
+                        </td>
+                    `;
+                    
+                    // Считаем итоги
+                    const key = `guild_${col}`;
+                    if (!totals[key]) totals[key] = { ok: 0, total: 0 };
+                    totals[key].total++;
+                    if (value === STATUS.OK) totals[key].ok++;
+                });
+            } else if (tab === 'tower') {
+                // Башня: профа (текст), ДПС (отформатированный), результат
+                const prof = player.tower?.prof || '';
+                const dps = player.tower?.dps || 0;
+                const result = player.tower?.result !== undefined ? player.tower.result : -1;
                 
                 html += `
-                    <td class="col-status ${statusClass}" 
+                    <td class="col-prof">${prof}</td>
+                    <td class="col-dps">${formatDps(dps)}</td>
+                    <td class="col-tower ${getTowerClass(result)}" 
                         data-group="${groupIndex}" 
-                        data-player="${playerIndex}" 
-                        data-col="${col}"
-                        style="color: ${color}"
-                        onclick="toggleStatus(this)">
-                        ${symbol}
+                        data-player="${playerIndex}"
+                        onclick="toggleTowerResult(this)">
+                        ${getTowerDisplay(result)}
                     </td>
                 `;
                 
-                totals[col].total++;
-                if (value === STATUS.OK) {
-                    totals[col].ok++;
-                }
-            });
+                // Считаем итоги для башни
+                if (!totals.tower) totals.tower = { total: 0, passed: 0 };
+                totals.tower.total++;
+                if (result >= 1 && result <= 15) totals.tower.passed++;
+                if (result === 16) totals.tower.passed++;
+            }
             
             html += '</tr>';
         });
     });
 
-    html += `
-        <tr class="total-row">
-            <td class="col-nick">ИТОГО:</td>
-            <td class="col-status">${totals.tower.ok}/${totals.tower.total}</td>
-            <td class="col-status">${totals.doomsday.ok}/${totals.doomsday.total}</td>
-            <td class="col-status">${totals.kvm_tue.ok}/${totals.kvm_tue.total}</td>
-            <td class="col-status">${totals.kvm_thu.ok}/${totals.kvm_thu.total}</td>
-            <td class="col-status">${totals.kvm_sun.ok}/${totals.kvm_sun.total}</td>
-            <td class="col-status">${totals.gvg.ok}/${totals.gvg.total}</td>
-        </tr>
-    `;
-
+    // Строка итогов
+    html += `<tr class="total-row"><td class="col-nick">ИТОГО:</td>`;
+    
+    if (tab === 'illusion') {
+        const cols = ['mino', 'baph2', 'baph3'];
+        cols.forEach(col => {
+            const key = `illusion_${col}`;
+            const ok = totals[key]?.ok || 0;
+            const total = totals[key]?.total || 0;
+            html += `<td class="col-status">${ok}/${total}</td>`;
+        });
+    } else if (tab === 'guild') {
+        const cols = ['kvm_tue', 'kvm_thu', 'gvg', 'kvm_sun'];
+        cols.forEach(col => {
+            const key = `guild_${col}`;
+            const ok = totals[key]?.ok || 0;
+            const total = totals[key]?.total || 0;
+            html += `<td class="col-status">${ok}/${total}</td>`;
+        });
+    } else if (tab === 'tower') {
+        const total = totals.tower?.total || 0;
+        const passed = totals.tower?.passed || 0;
+        html += `<td class="col-tower" colspan="3">${passed}/${total} пройдено</td>`;
+    }
+    
+    html += '</tr>';
     html += '</tbody></table></div>';
     container.innerHTML = html;
 }
 
-// Переключение статуса
+// Получение отображения для башни
+function getTowerDisplay(result) {
+    if (result === -1) return '❌';
+    if (result === 0) return '⏳';
+    if (result === 16) return '✨16';
+    if (result >= 1 && result <= 15) return result.toString();
+    return '❌';
+}
+
+// Форматирование ДПС
+function formatDps(value) {
+    if (!value || value === 0) return '0';
+    
+    const num = Number(value);
+    if (num >= 1000000000) {
+        return (num / 1000000000).toFixed(2) + ' млрд';
+    } else if (num >= 1000000) {
+        return (num / 1000000).toFixed(2) + ' млн';
+    } else if (num >= 1000) {
+        return (num / 1000).toFixed(1) + ' тыс';
+    }
+    return num.toString();
+}
+
+// Получение класса для башни
+function getTowerClass(result) {
+    if (result === -1) return 'tower-no';
+    if (result === 0) return 'tower-wait';
+    if (result === 16) return 'tower-gold';
+    if (result >= 1 && result <= 15) return 'tower-normal';
+    return 'tower-no';
+}
+
+// Переключение статуса (для иллюзии и гильдии)
 function toggleStatus(element) {
     const groupIdx = parseInt(element.dataset.group);
     const playerIdx = parseInt(element.dataset.player);
+    const tab = element.dataset.tab;
     const col = element.dataset.col;
     
     if (!weekData || !weekData.groups[groupIdx]) return;
@@ -200,24 +334,74 @@ function toggleStatus(element) {
     const player = weekData.groups[groupIdx].players[playerIdx];
     if (!player) return;
     
-    const currentValue = player[col] !== undefined ? player[col] : STATUS.NO;
-    let newValue;
+    // Определяем, где хранится значение
+    let section;
+    if (tab === 'illusion') section = 'illusion';
+    else if (tab === 'guild') section = 'guild';
+    else return;
     
-    if (currentValue === STATUS.NO) {
-        newValue = STATUS.WAIT;
-    } else if (currentValue === STATUS.WAIT) {
-        newValue = STATUS.OK;
-    } else {
-        newValue = STATUS.NO;
-    }
+    if (!player[section]) player[section] = {};
     
-    player[col] = newValue;
+    const currentValue = player[section][col] !== undefined ? player[section][col] : STATUS.NO;
+    // Переключение: 0 → 1 → 0
+    const newValue = currentValue === STATUS.OK ? STATUS.NO : STATUS.OK;
+    
+    player[section][col] = newValue;
     
     element.textContent = STATUS_SYMBOLS[newValue];
     element.className = `col-status ${STATUS_CLASSES[newValue]}`;
     element.style.color = STATUS_COLORS[newValue];
     
-    recalculateTotals();
+    renderTable(currentTab);
+}
+
+// Переключение результата башни
+function toggleTowerResult(element) {
+    const groupIdx = parseInt(element.dataset.group);
+    const playerIdx = parseInt(element.dataset.player);
+    
+    if (!weekData || !weekData.groups[groupIdx]) return;
+    
+    const player = weekData.groups[groupIdx].players[playerIdx];
+    if (!player) return;
+    
+    if (!player.tower) player.tower = { prof: '', result: -1 };
+    
+    // Циклическое переключение: -1 → 1 → 2 → ... → 16 → -1
+    const currentValue = player.tower.result !== undefined ? player.tower.result : -1;
+    let newValue;
+    
+    if (currentValue === -1) {
+        newValue = 1;
+    } else if (currentValue >= 1 && currentValue < 16) {
+        newValue = currentValue + 1;
+    } else if (currentValue === 16) {
+        newValue = -1;
+    } else {
+        newValue = -1;
+    }
+    
+    player.tower.result = newValue;
+    
+    element.textContent = getTowerDisplay(newValue);
+    element.className = `col-tower ${getTowerClass(newValue)}`;
+    
+    renderTable(currentTab);
+}
+
+// Обновление профы в башне
+function updateTowerProf(input) {
+    const groupIdx = parseInt(input.dataset.group);
+    const playerIdx = parseInt(input.dataset.player);
+    const value = input.value.trim();
+    
+    if (!weekData || !weekData.groups[groupIdx]) return;
+    
+    const player = weekData.groups[groupIdx].players[playerIdx];
+    if (!player) return;
+    
+    if (!player.tower) player.tower = { prof: '', result: -1 };
+    player.tower.prof = value;
 }
 
 // Добавление игрока
@@ -239,58 +423,31 @@ function addPlayer(groupIndex) {
     const newPlayer = {
         id: Date.now(),
         nick: nick,
-        tower: STATUS.NO,
-        doomsday: STATUS.NO,
-        kvm_tue: STATUS.NO,
-        kvm_thu: STATUS.NO,
-        kvm_sun: STATUS.NO,
-        gvg: STATUS.NO
+        illusion: {
+            mino: STATUS.NO,
+            baph2: STATUS.NO,
+            baph3: STATUS.NO
+        },
+        guild: {
+            kvm_tue: STATUS.NO,
+            kvm_thu: STATUS.NO,
+            gvg: STATUS.NO,
+            kvm_sun: STATUS.NO
+        },
+        tower: {
+            prof: '',
+            dps: 0,
+            result: -1
+        }
     };
     
     weekData.groups[groupIndex].players.push(newPlayer);
     input.value = '';
-    renderTable(weekData);
-}
-
-// Пересчёт итогов
-function recalculateTotals() {
-    const totals = {
-        tower: { ok: 0, total: 0 },
-        doomsday: { ok: 0, total: 0 },
-        kvm_tue: { ok: 0, total: 0 },
-        kvm_thu: { ok: 0, total: 0 },
-        kvm_sun: { ok: 0, total: 0 },
-        gvg: { ok: 0, total: 0 }
-    };
-
-    const columns = ['tower', 'doomsday', 'kvm_tue', 'kvm_thu', 'kvm_sun', 'gvg'];
-    
-    weekData.groups.forEach(group => {
-        group.players.forEach(player => {
-            columns.forEach(col => {
-                const value = player[col] !== undefined ? player[col] : STATUS.NO;
-                totals[col].total++;
-                if (value === STATUS.OK) {
-                    totals[col].ok++;
-                }
-            });
-        });
-    });
-
-    const totalRow = document.querySelector('.week-table .total-row');
-    if (totalRow) {
-        const cells = totalRow.querySelectorAll('.col-status');
-        columns.forEach((col, idx) => {
-            if (cells[idx]) {
-                cells[idx].textContent = `${totals[col].ok}/${totals[col].total}`;
-            }
-        });
-    }
+    renderTable(currentTab);
 }
 
 // Сбор данных для статистики
 function collectStats() {
-    const columns = ['tower', 'doomsday', 'kvm_tue', 'kvm_thu', 'kvm_sun', 'gvg'];
     const totals = {
         tower: { ok: 0, total: 0 },
         doomsday: { ok: 0, total: 0 },
@@ -302,13 +459,37 @@ function collectStats() {
     
     weekData.groups.forEach(group => {
         group.players.forEach(player => {
-            columns.forEach(col => {
-                const value = player[col] !== undefined ? player[col] : STATUS.NO;
-                totals[col].total++;
-                if (value === STATUS.OK) {
-                    totals[col].ok++;
-                }
-            });
+            // Иллюзия (СД)
+            if (player.illusion) {
+                ['mino', 'baph2', 'baph3'].forEach(col => {
+                    if (player.illusion[col] === STATUS.OK) totals.doomsday.ok++;
+                });
+                totals.doomsday.total += 3;
+            }
+            
+            // Гильдия
+            if (player.guild) {
+                ['kvm_tue', 'kvm_thu', 'kvm_sun', 'gvg'].forEach(col => {
+                    if (player.guild[col] === STATUS.OK) {
+                        if (col === 'kvm_tue') totals.kvm_tue.ok++;
+                        else if (col === 'kvm_thu') totals.kvm_thu.ok++;
+                        else if (col === 'kvm_sun') totals.kvm_sun.ok++;
+                        else if (col === 'gvg') totals.gvg.ok++;
+                    }
+                    // Считаем общее количество
+                    if (col === 'kvm_tue') totals.kvm_tue.total++;
+                    else if (col === 'kvm_thu') totals.kvm_thu.total++;
+                    else if (col === 'kvm_sun') totals.kvm_sun.total++;
+                    else if (col === 'gvg') totals.gvg.total++;
+                });
+            }
+            
+            // Башня
+            if (player.tower) {
+                const result = player.tower.result !== undefined ? player.tower.result : -1;
+                totals.tower.total++;
+                if (result >= 1 && result <= 16) totals.tower.ok++;
+            }
         });
     });
     
@@ -365,28 +546,58 @@ function saveTXT() {
         return;
     }
 
-    const columns = ['tower', 'doomsday', 'kvm_tue', 'kvm_thu', 'kvm_sun', 'gvg'];
-    const columnNames = ['Башня', 'Судный день', 'КВМ Вт', 'КВМ Чт', 'КВМ Вс', 'ГВГ Сб 600+'];
-    const statusNames = ['❌', '✅', '⏹'];
+    const statusNames = ['❌', '✅'];
     
     let lines = [];
-    lines.push('Ник\t' + columnNames.join('\t'));
+    lines.push('=== ИЛЛЮЗИЯ ИСПЫТАНИЯ ===');
+    lines.push('Ник\tМинотавр 1\tБафомет 2\tБафомет 3');
     
     weekData.groups.forEach(group => {
-        lines.push(`=== ${group.name} ===`);
+        lines.push(`--- ${group.name} ---`);
         group.players.forEach(player => {
-            const statuses = columns.map(col => {
-                const val = player[col] !== undefined ? player[col] : STATUS.NO;
-                return statusNames[val] || '❌';
-            });
-            lines.push(player.nick + '\t' + statuses.join('\t'));
+            const mino = player.illusion?.mino !== undefined ? statusNames[player.illusion.mino] || '❌' : '❌';
+            const baph2 = player.illusion?.baph2 !== undefined ? statusNames[player.illusion.baph2] || '❌' : '❌';
+            const baph3 = player.illusion?.baph3 !== undefined ? statusNames[player.illusion.baph3] || '❌' : '❌';
+            lines.push(`${player.nick}\t${mino}\t${baph2}\t${baph3}`);
         });
-        lines.push('');
     });
     
-    const totals = collectStats();
-    lines.push(`ИТОГО:\t${totals.tower}\t${totals.doomsday}\t${totals.kvm_tue_ok}\t${totals.kvm_thu_ok}\t${totals.kvm_sun_ok}\t${totals.gvg}`);
     lines.push('');
+    lines.push('=== АКТИВНОСТИ ГИЛЬДИИ ===');
+    lines.push('Ник\tКВМ Вт\tКВМ Чт\tГВГ Сб 600+\tКВМ Вс');
+    
+    weekData.groups.forEach(group => {
+        lines.push(`--- ${group.name} ---`);
+        group.players.forEach(player => {
+            const kvm_tue = player.guild?.kvm_tue !== undefined ? statusNames[player.guild.kvm_tue] || '❌' : '❌';
+            const kvm_thu = player.guild?.kvm_thu !== undefined ? statusNames[player.guild.kvm_thu] || '❌' : '❌';
+            const gvg = player.guild?.gvg !== undefined ? statusNames[player.guild.gvg] || '❌' : '❌';
+            const kvm_sun = player.guild?.kvm_sun !== undefined ? statusNames[player.guild.kvm_sun] || '❌' : '❌';
+            lines.push(`${player.nick}\t${kvm_tue}\t${kvm_thu}\t${gvg}\t${kvm_sun}`);
+        });
+    });
+    
+    lines.push('');
+    lines.push('=== БЕСКОНЕЧНАЯ БАШНЯ ===');
+    lines.push('Ник\tПрофа\tРезультат');
+    
+    weekData.groups.forEach(group => {
+        lines.push(`--- ${group.name} ---`);
+        group.players.forEach(player => {
+            const prof = player.tower?.prof || '';
+            const result = player.tower?.result !== undefined ? player.tower.result : -1;
+            let resultDisplay;
+            if (result === -1) resultDisplay = '❌';
+            else if (result === 0) resultDisplay = '⏳';
+            else if (result === 16) resultDisplay = '✨16';
+            else resultDisplay = result.toString();
+            lines.push(`${player.nick}\t${prof}\t${resultDisplay}`);
+        });
+    });
+    
+    lines.push('');
+    const totals = collectStats();
+    lines.push(`ИТОГО:\tБашня:${totals.tower}\tСД:${totals.doomsday}\tКВМ Вт:${totals.kvm_tue_ok}\tКВМ Чт:${totals.kvm_thu_ok}\tКВМ Вс:${totals.kvm_sun_ok}\tГВГ:${totals.gvg}`);
     lines.push(`КВМ очки:\tВТ:${totals.kvm_tue_points}\tЧТ:${totals.kvm_thu_points}\tВС:${totals.kvm_sun_points}`);
     
     const txt = lines.join('\n');
@@ -410,12 +621,24 @@ function resetAll() {
     
     weekData.groups.forEach(group => {
         group.players.forEach(player => {
-            player.tower = STATUS.NO;
-            player.doomsday = STATUS.NO;
-            player.kvm_tue = STATUS.NO;
-            player.kvm_thu = STATUS.NO;
-            player.kvm_sun = STATUS.NO;
-            player.gvg = STATUS.NO;
+            // Иллюзия
+            if (player.illusion) {
+                player.illusion.mino = STATUS.NO;
+                player.illusion.baph2 = STATUS.NO;
+                player.illusion.baph3 = STATUS.NO;
+            }
+            // Гильдия
+            if (player.guild) {
+                player.guild.kvm_tue = STATUS.NO;
+                player.guild.kvm_thu = STATUS.NO;
+                player.guild.gvg = STATUS.NO;
+                player.guild.kvm_sun = STATUS.NO;
+            }
+            // Башня
+            if (player.tower) {
+                player.tower.prof = '';
+                player.tower.result = -1;
+            }
         });
     });
     
@@ -424,7 +647,7 @@ function resetAll() {
     document.getElementById('kvmThuPoints').value = 0;
     document.getElementById('kvmSunPoints').value = 0;
     
-    renderTable(weekData);
+    renderTable(currentTab);
     alert('✅ Все статусы обнулены!');
 }
 
@@ -441,25 +664,20 @@ function saveStats() {
     fetch('stats.json')
         .then(response => response.json())
         .then(existingStats => {
-            // Добавляем новую запись
             if (!existingStats.weeks) {
                 existingStats.weeks = [];
             }
             
-            // Проверяем, есть ли уже запись за эту неделю
             const existingIndex = existingStats.weeks.findIndex(w => 
                 w.year === stats.year && w.week === stats.week
             );
             
             if (existingIndex !== -1) {
-                // Обновляем существующую запись
                 existingStats.weeks[existingIndex] = stats;
             } else {
-                // Добавляем новую запись
                 existingStats.weeks.push(stats);
             }
             
-            // Сортируем по году и неделе
             existingStats.weeks.sort((a, b) => {
                 if (a.year !== b.year) return a.year - b.year;
                 return a.week - b.week;
@@ -480,7 +698,6 @@ function saveStats() {
             alert(`✅ Статистика за ${stats.week}-ю неделю ${stats.year} года сохранена!`);
         })
         .catch(() => {
-            // Если stats.json нет, создаём новый
             const newStats = { weeks: [stats] };
             const json = JSON.stringify(newStats, null, 2);
             const blob = new Blob([json], { type: 'application/json;charset=utf-8' });
@@ -511,8 +728,28 @@ function updateKvmTotal() {
 document.addEventListener('DOMContentLoaded', function() {
     loadWeekData();
     
+    // Обработчики вкладок
+    document.querySelectorAll('.tab-btn').forEach(btn => {
+        btn.addEventListener('click', function() {
+            switchTab(this.dataset.tab);
+        });
+    });
+    
+    // Подключаем кнопки
     document.getElementById('saveJsonBtn').addEventListener('click', saveJSON);
     document.getElementById('saveTxtBtn').addEventListener('click', saveTXT);
     document.getElementById('resetBtn').addEventListener('click', resetAll);
     document.getElementById('saveStatsBtn').addEventListener('click', saveStats);
 });
+
+// Экспортируем функции для использования в HTML
+window.toggleStatus = toggleStatus;
+window.toggleTowerResult = toggleTowerResult;
+window.updateTowerProf = updateTowerProf;
+window.addPlayer = addPlayer;
+window.updateKvmTotal = updateKvmTotal;
+window.saveJSON = saveJSON;
+window.saveTXT = saveTXT;
+window.resetAll = resetAll;
+window.saveStats = saveStats;
+window.switchTab = switchTab;

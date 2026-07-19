@@ -5,123 +5,183 @@
       "players": [
         {
           "id": 1,
-          "nick": "Дифис (Прист)",
-          "tower": 0,
-          "doomsday": 0,
-          "kvm_tue": 1,
-          "kvm_thu": 1,
-          "kvm_sun": 0,
-          "gvg": 0
+          "nick": "Дифис",
+          "illusion": {
+            "mino": 0,
+            "baph2": 0,
+            "baph3": 0
+          },
+          "guild": {
+            "kvm_tue": 0,
+            "kvm_thu": 0,
+            "gvg": 0,
+            "kvm_sun": 0
+          },
+          "tower": {
+            "prof": "Верховный жрец",
+            "dps": 0,
+            "result": -1
+          }
         },
         {
           "id": 2,
-          "nick": "Суши (Данса)",
-          "tower": 0,
-          "doomsday": 0,
-          "kvm_tue": 0,
-          "kvm_thu": 0,
-          "kvm_sun": 0,
-          "gvg": 0
+          "nick": "Sushi",
+          "illusion": {
+            "mino": 0,
+            "baph2": 0,
+            "baph3": 0
+          },
+          "guild": {
+            "kvm_tue": 0,
+            "kvm_thu": 0,
+            "gvg": 0,
+            "kvm_sun": 0
+          },
+          "tower": {
+            "prof": "Цыганка",
+            "dps": 0,
+            "result": -1
+          }
         },
         {
           "id": 3,
-          "nick": "Денис (Лук)",
-          "tower": 0,
-          "doomsday": 0,
-          "kvm_tue": 0,
-          "kvm_thu": 0,
-          "kvm_sun": 0,
-          "gvg": 0
+          "nick": "Денис",
+          "illusion": {
+            "mino": 0,
+            "baph2": 0,
+            "baph3": 0
+          },
+          "guild": {
+            "kvm_tue": 0,
+            "kvm_thu": 0,
+            "gvg": 0,
+            "kvm_sun": 0
+          },
+          "tower": {
+            "prof": "Снайпер",
+            "dps": 0,
+            "result": -1
+          }
         },
         {
           "id": 4,
-          "nick": "Борис (Рыцарь)",
-          "tower": 0,
-          "doomsday": 0,
-          "kvm_tue": 0,
-          "kvm_thu": 0,
-          "kvm_sun": 0,
-          "gvg": 0
+          "nick": "Megan 82",
+          "illusion": {
+            "mino": 0,
+            "baph2": 0,
+            "baph3": 0
+          },
+          "guild": {
+            "kvm_tue": 0,
+            "kvm_thu": 0,
+            "gvg": 0,
+            "kvm_sun": 0
+          },
+          "tower": {
+            "prof": "Лорд-рыцарь",
+            "dps": 0,
+            "result": -1
+          }
         },
         {
           "id": 5,
-          "nick": "Андрей (Рыцарь)",
-          "tower": 0,
-          "doomsday": 0,
-          "kvm_tue": 0,
-          "kvm_thu": 0,
-          "kvm_sun": 0,
-          "gvg": 0
+          "nick": "Мэг 2.0",
+          "illusion": {
+            "mino": 0,
+            "baph2": 0,
+            "baph3": 0
+          },
+          "guild": {
+            "kvm_tue": 0,
+            "kvm_thu": 0,
+            "gvg": 0,
+            "kvm_sun": 0
+          },
+          "tower": {
+            "prof": "Лорд-рыцарь",
+            "dps": 0,
+            "result": -1
+          }
         },
         {
           "id": 6,
-          "nick": "Саня (Монк)",
-          "tower": 0,
-          "doomsday": 0,
-          "kvm_tue": 0,
-          "kvm_thu": 1,
-          "kvm_sun": 0,
-          "gvg": 0
-        },
-        {
-          "id": 7,
-          "nick": "Муля (Лук)",
-          "tower": 0,
-          "doomsday": 0,
-          "kvm_tue": 0,
-          "kvm_thu": 0,
-          "kvm_sun": 0,
-          "gvg": 0
-        },
-        {
-          "id": 8,
-          "nick": "Аня (Лук)",
-          "tower": 0,
-          "doomsday": 0,
-          "kvm_tue": 0,
-          "kvm_thu": 0,
-          "kvm_sun": 0,
-          "gvg": 0
+          "nick": "Cmex",
+          "illusion": {
+            "mino": 0,
+            "baph2": 0,
+            "baph3": 0
+          },
+          "guild": {
+            "kvm_tue": 0,
+            "kvm_thu": 0,
+            "gvg": 0,
+            "kvm_sun": 0
+          },
+          "tower": {
+            "prof": "Чемпион",
+            "dps": 0,
+            "result": -1
+          }
         },
         {
           "id": 9,
-          "nick": "Жека (Рыцарь)",
-          "tower": 0,
-          "doomsday": 0,
-          "kvm_tue": 1,
-          "kvm_thu": 1,
-          "kvm_sun": 0,
-          "gvg": 1
-        },
-        {
-          "id": 10,
-          "nick": "Эли (Мудрец)",
-          "tower": 0,
-          "doomsday": 0,
-          "kvm_tue": 0,
-          "kvm_thu": 0,
-          "kvm_sun": 0,
-          "gvg": 0
+          "nick": "NemesisPrim",
+          "illusion": {
+            "mino": 0,
+            "baph2": 0,
+            "baph3": 0
+          },
+          "guild": {
+            "kvm_tue": 0,
+            "kvm_thu": 0,
+            "gvg": 0,
+            "kvm_sun": 0
+          },
+          "tower": {
+            "prof": "Лорд-рыцарь",
+            "dps": 0,
+            "result": -1
+          }
         },
         {
           "id": 11,
-          "nick": "Юра (Паладин)",
-          "tower": 0,
-          "doomsday": 0,
-          "kvm_tue": 0,
-          "kvm_thu": 0,
-          "kvm_sun": 0,
-          "gvg": 0
+          "nick": "бёрн",
+          "illusion": {
+            "mino": 0,
+            "baph2": 0,
+            "baph3": 0
+          },
+          "guild": {
+            "kvm_tue": 0,
+            "kvm_thu": 0,
+            "gvg": 0,
+            "kvm_sun": 0
+          },
+          "tower": {
+            "prof": "Паладин",
+            "dps": 0,
+            "result": -1
+          }
         },
         {
           "id": 12,
-          "nick": "Никита (Маг)",
-          "tower": 0,
-          "doomsday": 0,
-          "kvm_tue": 0,
-          "kvm_thu": 1,
-          "kvm_sun": 0,
-          "gvg": 0
+          "nick": "Firestriker",
+          "illusion": {
+            "mino": 0,
+            "baph2": 0,
+            "baph3": 0
+          },
+          "guild": {
+            "kvm_tue": 0,
+            "kvm_thu": 0,
+            "gvg": 0,
+            "kvm_sun": 0
+          },
+          "tower": {
+            "prof": "Верховный маг",
+            "dps": 0,
+            "result": -1
+          }
         }
       ]
     },
@@ -129,104 +189,194 @@
       "name": "Твины",
       "players": [
         {
-          "id": 4,
-          "nick": "Дифис (Лук)",
-          "tower": 0,
-          "doomsday": 0,
-          "kvm_tue": 1,
-          "kvm_thu": 1,
-          "kvm_sun": 0,
-          "gvg": 0
+          "id": 13,
+          "nick": "Модница",
+          "illusion": {
+            "mino": 0,
+            "baph2": 0,
+            "baph3": 0
+          },
+          "guild": {
+            "kvm_tue": 0,
+            "kvm_thu": 0,
+            "gvg": 0,
+            "kvm_sun": 0
+          },
+          "tower": {
+            "prof": "Снайпер",
+            "dps": 0,
+            "result": -1
+          }
         },
         {
-          "id": 5,
-          "nick": "Дифис (Хим)",
-          "tower": 0,
-          "doomsday": 0,
-          "kvm_tue": 1,
-          "kvm_thu": 1,
-          "kvm_sun": 0,
-          "gvg": 0
+          "id": 14,
+          "nick": "Химия",
+          "illusion": {
+            "mino": 0,
+            "baph2": 0,
+            "baph3": 0
+          },
+          "guild": {
+            "kvm_tue": 0,
+            "kvm_thu": 0,
+            "gvg": 0,
+            "kvm_sun": 0
+          },
+          "tower": {
+            "prof": "Создатель",
+            "dps": 0,
+            "result": -1
+          }
         },
         {
-          "id": 6,
-          "nick": "Дифис (Син)",
-          "tower": 0,
-          "doomsday": 0,
-          "kvm_tue": 1,
-          "kvm_thu": 1,
-          "kvm_sun": 0,
-          "gvg": 0
+          "id": 15,
+          "nick": "Дельта",
+          "illusion": {
+            "mino": 0,
+            "baph2": 0,
+            "baph3": 0
+          },
+          "guild": {
+            "kvm_tue": 0,
+            "kvm_thu": 0,
+            "gvg": 0,
+            "kvm_sun": 0
+          },
+          "tower": {
+            "prof": "Ассасин Кросс",
+            "dps": 0,
+            "result": -1
+          }
         },
         {
-          "id": 7,
-          "nick": "Дифис (Маг)",
-          "tower": 0,
-          "doomsday": 0,
-          "kvm_tue": 1,
-          "kvm_thu": 1,
-          "kvm_sun": 0,
-          "gvg": 0
+          "id": 16,
+          "nick": "Щелбан",
+          "illusion": {
+            "mino": 0,
+            "baph2": 0,
+            "baph3": 0
+          },
+          "guild": {
+            "kvm_tue": 0,
+            "kvm_thu": 0,
+            "gvg": 0,
+            "kvm_sun": 0
+          },
+          "tower": {
+            "prof": "Верховный маг",
+            "dps": 0,
+            "result": -1
+          }
         },
         {
-          "id": 8,
-          "nick": "Суши (Прист)",
-          "tower": 0,
-          "doomsday": 0,
-          "kvm_tue": 0,
-          "kvm_thu": 0,
-          "kvm_sun": 0,
-          "gvg": 0
+          "id": 17,
+          "nick": "Солнечно",
+          "illusion": {
+            "mino": 0,
+            "baph2": 0,
+            "baph3": 0
+          },
+          "guild": {
+            "kvm_tue": 0,
+            "kvm_thu": 0,
+            "gvg": 0,
+            "kvm_sun": 0
+          },
+          "tower": {
+            "prof": "Верховный жрец",
+            "dps": 0,
+            "result": -1
+          }
         },
         {
-          "id": 9,
-          "nick": "Суши (Кузнец)",
-          "tower": 0,
-          "doomsday": 0,
-          "kvm_tue": 0,
-          "kvm_thu": 0,
-          "kvm_sun": 0,
-          "gvg": 0
+          "id": 18,
+          "nick": "Сяо By",
+          "illusion": {
+            "mino": 0,
+            "baph2": 0,
+            "baph3": 0
+          },
+          "guild": {
+            "kvm_tue": 0,
+            "kvm_thu": 0,
+            "gvg": 0,
+            "kvm_sun": 0
+          },
+          "tower": {
+            "prof": "Белый кузнец",
+            "dps": 0,
+            "result": -1
+          }
         },
         {
-          "id": 10,
-          "nick": "Суши (Бард)",
-          "tower": 0,
-          "doomsday": 0,
-          "kvm_tue": 0,
-          "kvm_thu": 0,
-          "kvm_sun": 0,
-          "gvg": 0
+          "id": 19,
+          "nick": "~Chen~",
+          "illusion": {
+            "mino": 0,
+            "baph2": 0,
+            "baph3": 0
+          },
+          "guild": {
+            "kvm_tue": 0,
+            "kvm_thu": 0,
+            "gvg": 0,
+            "kvm_sun": 0
+          },
+          "tower": {
+            "prof": "Снайпер",
+            "dps": 0,
+            "result": -1
+          }
         },
         {
-          "id": 11,
-          "nick": "Суши (Проф)",
-          "tower": 0,
-          "doomsday": 0,
-          "kvm_tue": 0,
-          "kvm_thu": 0,
-          "kvm_sun": 0,
-          "gvg": 0
+          "id": 20,
+          "nick": "Sun",
+          "illusion": {
+            "mino": 0,
+            "baph2": 0,
+            "baph3": 0
+          },
+          "guild": {
+            "kvm_tue": 0,
+            "kvm_thu": 0,
+            "gvg": 0,
+            "kvm_sun": 0
+          },
+          "tower": {
+            "prof": "Снайпер",
+            "dps": 0,
+            "result": -1
+          }
         },
         {
-          "id": 12,
-          "nick": "Борис (Маг)",
-          "tower": 0,
-          "doomsday": 0,
-          "kvm_tue": 0,
-          "kvm_thu": 0,
-          "kvm_sun": 0,
-          "gvg": 0
+          "id": 21,
+          "nick": "БУБУ",
+          "illusion": {
+            "mino": 0,
+            "baph2": 0,
+            "baph3": 0
+          },
+          "guild": {
+            "kvm_tue": 0,
+            "kvm_thu": 0,
+            "gvg": 0,
+            "kvm_sun": 0
+          },
+          "tower": {
+            "prof": "Верховный маг",
+            "dps": 0,
+            "result": -1
+          }
         }
       ]
     }
   ],
   "kvm": {
     "tue": {
-      "points": 40
+      "points": 0
     },
     "thu": {
-      "points": 40
+      "points": 0
     },
     "sun": {
       "points": 0
@@ -235,6 +385,6 @@
   "otherworld": {
     "title": "🌌 Иномир",
     "info": "Четверг 09.07.26 с 21:00 до 21:20",
-    "active": true
+    "active": false
   }
 }

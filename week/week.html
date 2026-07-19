@@ -19,25 +19,28 @@
         <div class="week-header">
             <h1>📋 ЕЖЕНЕДЕЛЬНЫЕ АКТИВНОСТИ ГИЛЬДИИ SUPER</h1>
             <div class="week-controls">
-                
+                <!--<div class="controls-left">
+                    <button id="saveJsonBtn" class="save-btn save-json">💾 JSON</button>
+                    <button id="saveTxtBtn" class="save-btn save-txt">📊 Excel</button>
+                </div>
+                <div class="controls-right">
+                    <button id="resetBtn" class="save-btn save-reset">🔄 Обнулить</button>
+                    <button id="saveStatsBtn" class="save-btn save-stats">📈 Статистика</button>
+                </div>-->
                 <span id="weekInfo" class="week-info">📅 Неделя: Загрузка...</span>
             </div>
         </div>
 
-        <div id="tableContainer">
-            <div style="text-align: center; color: #888; padding: 40px;">Загрузка данных...</div>
+        <!-- Вкладки -->
+        <div class="tabs">
+            <button class="tab-btn active" data-tab="illusion">🏛️ Иллюзия Испытания</button>
+            <button class="tab-btn" data-tab="guild">⚔️ Активности гильдии</button>
+            <button class="tab-btn" data-tab="tower">🏰 Бесконечная башня</button>
         </div>
 
-        <div class="legend">
-            <span class="legend-item">
-                <span class="legend-symbol symbol-ok">✅</span> Выполнено
-            </span>
-            <span class="legend-item">
-                <span class="legend-symbol symbol-wait">⏹</span> В процессе
-            </span>
-            <span class="legend-item">
-                <span class="legend-symbol symbol-no">❌</span> Не выполнено
-            </span>
+        <!-- Контейнер для таблиц -->
+        <div id="tableContainer">
+            <div style="text-align: center; color: #888; padding: 40px;">Загрузка данных...</div>
         </div>
 
         <!-- КВМ Очки -->
@@ -80,6 +83,18 @@
                     <div class="otherworld-info" id="otherworldInfo">Набирает силы...</div>
                 </div>
             </div>
+        </div>
+
+        <div class="legend">
+            <span class="legend-item">
+                <span class="legend-symbol symbol-ok">✅</span> Выполнено
+            </span>
+            <span class="legend-item">
+                <span class="legend-symbol symbol-no">❌</span> Не выполнено
+            </span>
+            <span class="legend-item tower-legend">
+                <span class="legend-symbol symbol-gold">✨16</span> 16-й этаж (золотой)
+            </span>
         </div>
     </div>
 
