@@ -8,7 +8,7 @@
           "nick": "Дифис",
           "illusion": {
             "mino": 0,
-            "baph2": 0,
+            "baph2": 1,
             "baph3": 0
           },
           "guild": {
@@ -20,7 +20,7 @@
           "tower": {
             "prof": "Верховный жрец",
             "dps": 2679000,
-            "result": -1
+            "result": 15
           }
         },
         {
@@ -93,7 +93,7 @@
           },
           "guild": {
             "kvm_tue": 0,
-            "kvm_thu": 1,
+            "kvm_thu": 0,
             "gvg": 0,
             "kvm_sun": 0
           },
@@ -113,7 +113,7 @@
           },
           "guild": {
             "kvm_tue": 1,
-            "kvm_thu": 1,
+            "kvm_thu": 0,
             "gvg": 0,
             "kvm_sun": 0
           },
@@ -193,7 +193,7 @@
           "nick": "Модница",
           "illusion": {
             "mino": 0,
-            "baph2": 0,
+            "baph2": 1,
             "baph3": 0
           },
           "guild": {
@@ -213,7 +213,7 @@
           "nick": "Химия",
           "illusion": {
             "mino": 0,
-            "baph2": 0,
+            "baph2": 1,
             "baph3": 0
           },
           "guild": {
@@ -233,7 +233,7 @@
           "nick": "Дельта",
           "illusion": {
             "mino": 0,
-            "baph2": 0,
+            "baph2": 1,
             "baph3": 0
           },
           "guild": {
@@ -253,7 +253,7 @@
           "nick": "Щелбан",
           "illusion": {
             "mino": 0,
-            "baph2": 0,
+            "baph2": 1,
             "baph3": 0
           },
           "guild": {
@@ -373,10 +373,10 @@
   ],
   "kvm": {
     "tue": {
-      "points": 75
+      "points": 41
     },
     "thu": {
-      "points": 84
+      "points": 72
     },
     "sun": {
       "points": 0
