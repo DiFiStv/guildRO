@@ -8,19 +8,19 @@
           "nick": "Дифис",
           "illusion": {
             "mino": 0,
-            "baph2": 1,
+            "baph2": 0,
             "baph3": 0
           },
           "guild": {
             "kvm_tue": 1,
-            "kvm_thu": 1,
+            "kvm_thu": 0,
             "gvg": 0,
             "kvm_sun": 0
           },
           "tower": {
-            "prof": "Верховный жрец",
+            "prof": "",
             "dps": 2679000,
-            "result": 16
+            "result": -1
           }
         },
         {
@@ -32,13 +32,13 @@
             "baph3": 0
           },
           "guild": {
-            "kvm_tue": 1,
-            "kvm_thu": 1,
+            "kvm_tue": 0,
+            "kvm_thu": 0,
             "gvg": 0,
             "kvm_sun": 0
           },
           "tower": {
-            "prof": "Цыганка",
+            "prof": "",
             "dps": 0,
             "result": -1
           }
@@ -58,7 +58,7 @@
             "kvm_sun": 0
           },
           "tower": {
-            "prof": "Снайпер",
+            "prof": "",
             "dps": 0,
             "result": -1
           }
@@ -72,15 +72,15 @@
             "baph3": 0
           },
           "guild": {
-            "kvm_tue": 1,
+            "kvm_tue": 0,
             "kvm_thu": 0,
             "gvg": 0,
             "kvm_sun": 0
           },
           "tower": {
-            "prof": "Лорд-рыцарь",
+            "prof": "",
             "dps": 3701000,
-            "result": 15
+            "result": -1
           }
         },
         {
@@ -98,7 +98,7 @@
             "kvm_sun": 0
           },
           "tower": {
-            "prof": "Лорд-рыцарь",
+            "prof": "",
             "dps": 0,
             "result": -1
           }
@@ -118,7 +118,7 @@
             "kvm_sun": 0
           },
           "tower": {
-            "prof": "Чемпион",
+            "prof": "",
             "dps": 0,
             "result": -1
           }
@@ -133,12 +133,12 @@
           },
           "guild": {
             "kvm_tue": 1,
-            "kvm_thu": 1,
+            "kvm_thu": 0,
             "gvg": 0,
             "kvm_sun": 0
           },
           "tower": {
-            "prof": "Лорд-рыцарь",
+            "prof": "",
             "dps": 561000,
             "result": -1
           }
@@ -158,7 +158,7 @@
             "kvm_sun": 0
           },
           "tower": {
-            "prof": "Паладин",
+            "prof": "",
             "dps": 0,
             "result": -1
           }
@@ -173,12 +173,32 @@
           },
           "guild": {
             "kvm_tue": 0,
-            "kvm_thu": 1,
+            "kvm_thu": 0,
             "gvg": 0,
             "kvm_sun": 0
           },
           "tower": {
-            "prof": "Верховный маг",
+            "prof": "",
+            "dps": 0,
+            "result": -1
+          }
+        },
+        {
+          "id": 1785876859641,
+          "nick": "Джайна",
+          "illusion": {
+            "mino": 0,
+            "baph2": 0,
+            "baph3": 0
+          },
+          "guild": {
+            "kvm_tue": 1,
+            "kvm_thu": 0,
+            "gvg": 0,
+            "kvm_sun": 0
+          },
+          "tower": {
+            "prof": "",
             "dps": 0,
             "result": -1
           }
@@ -193,17 +213,17 @@
           "nick": "Модница",
           "illusion": {
             "mino": 0,
-            "baph2": 1,
+            "baph2": 0,
             "baph3": 0
           },
           "guild": {
             "kvm_tue": 1,
-            "kvm_thu": 1,
+            "kvm_thu": 0,
             "gvg": 0,
             "kvm_sun": 0
           },
           "tower": {
-            "prof": "Снайпер",
+            "prof": "",
             "dps": 1000000,
             "result": -1
           }
@@ -213,17 +233,17 @@
           "nick": "Химия",
           "illusion": {
             "mino": 0,
-            "baph2": 1,
+            "baph2": 0,
             "baph3": 0
           },
           "guild": {
             "kvm_tue": 1,
-            "kvm_thu": 1,
+            "kvm_thu": 0,
             "gvg": 0,
             "kvm_sun": 0
           },
           "tower": {
-            "prof": "Создатель",
+            "prof": "",
             "dps": 0,
             "result": -1
           }
@@ -233,17 +253,17 @@
           "nick": "Дельта",
           "illusion": {
             "mino": 0,
-            "baph2": 1,
+            "baph2": 0,
             "baph3": 0
           },
           "guild": {
             "kvm_tue": 1,
-            "kvm_thu": 1,
+            "kvm_thu": 0,
             "gvg": 0,
             "kvm_sun": 0
           },
           "tower": {
-            "prof": "Ассасин Кросс",
+            "prof": "",
             "dps": 0,
             "result": -1
           }
@@ -253,17 +273,17 @@
           "nick": "Щелбан",
           "illusion": {
             "mino": 0,
-            "baph2": 1,
+            "baph2": 0,
             "baph3": 0
           },
           "guild": {
             "kvm_tue": 1,
-            "kvm_thu": 1,
+            "kvm_thu": 0,
             "gvg": 0,
             "kvm_sun": 0
           },
           "tower": {
-            "prof": "Верховный маг",
+            "prof": "",
             "dps": 0,
             "result": -1
           }
@@ -277,13 +297,13 @@
             "baph3": 0
           },
           "guild": {
-            "kvm_tue": 1,
-            "kvm_thu": 1,
+            "kvm_tue": 0,
+            "kvm_thu": 0,
             "gvg": 0,
             "kvm_sun": 0
           },
           "tower": {
-            "prof": "Верховный жрец",
+            "prof": "",
             "dps": 0,
             "result": -1
           }
@@ -297,13 +317,13 @@
             "baph3": 0
           },
           "guild": {
-            "kvm_tue": 1,
-            "kvm_thu": 1,
+            "kvm_tue": 0,
+            "kvm_thu": 0,
             "gvg": 0,
             "kvm_sun": 0
           },
           "tower": {
-            "prof": "Белый кузнец",
+            "prof": "",
             "dps": 0,
             "result": -1
           }
@@ -317,13 +337,13 @@
             "baph3": 0
           },
           "guild": {
-            "kvm_tue": 1,
-            "kvm_thu": 1,
+            "kvm_tue": 0,
+            "kvm_thu": 0,
             "gvg": 0,
             "kvm_sun": 0
           },
           "tower": {
-            "prof": "Снайпер",
+            "prof": "",
             "dps": 0,
             "result": -1
           }
@@ -337,13 +357,13 @@
             "baph3": 0
           },
           "guild": {
-            "kvm_tue": 1,
-            "kvm_thu": 1,
+            "kvm_tue": 0,
+            "kvm_thu": 0,
             "gvg": 0,
             "kvm_sun": 0
           },
           "tower": {
-            "prof": "Снайпер",
+            "prof": "",
             "dps": 0,
             "result": -1
           }
@@ -357,13 +377,13 @@
             "baph3": 0
           },
           "guild": {
-            "kvm_tue": 1,
+            "kvm_tue": 0,
             "kvm_thu": 0,
             "gvg": 0,
             "kvm_sun": 0
           },
           "tower": {
-            "prof": "Верховный маг",
+            "prof": "",
             "dps": 2001000,
             "result": -1
           }
@@ -373,10 +393,10 @@
   ],
   "kvm": {
     "tue": {
-      "points": 41
+      "points": 70
     },
     "thu": {
-      "points": 72
+      "points": 0
     },
     "sun": {
       "points": 0
