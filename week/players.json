@@ -8,12 +8,12 @@
           "nick": "Дифис",
           "illusion": {
             "mino": 0,
-            "baph2": 0,
+            "baph2": 1,
             "baph3": 0
           },
           "guild": {
             "kvm_tue": 1,
-            "kvm_thu": 0,
+            "kvm_thu": 1,
             "gvg": 0,
             "kvm_sun": 0
           },
@@ -33,7 +33,7 @@
           },
           "guild": {
             "kvm_tue": 0,
-            "kvm_thu": 0,
+            "kvm_thu": 1,
             "gvg": 0,
             "kvm_sun": 0
           },
@@ -73,7 +73,7 @@
           },
           "guild": {
             "kvm_tue": 0,
-            "kvm_thu": 0,
+            "kvm_thu": 1,
             "gvg": 0,
             "kvm_sun": 0
           },
@@ -113,7 +113,7 @@
           },
           "guild": {
             "kvm_tue": 1,
-            "kvm_thu": 0,
+            "kvm_thu": 1,
             "gvg": 0,
             "kvm_sun": 0
           },
@@ -133,7 +133,7 @@
           },
           "guild": {
             "kvm_tue": 1,
-            "kvm_thu": 0,
+            "kvm_thu": 1,
             "gvg": 0,
             "kvm_sun": 0
           },
@@ -153,7 +153,7 @@
           },
           "guild": {
             "kvm_tue": 0,
-            "kvm_thu": 0,
+            "kvm_thu": 1,
             "gvg": 0,
             "kvm_sun": 0
           },
@@ -193,7 +193,27 @@
           },
           "guild": {
             "kvm_tue": 1,
-            "kvm_thu": 0,
+            "kvm_thu": 1,
+            "gvg": 0,
+            "kvm_sun": 0
+          },
+          "tower": {
+            "prof": "",
+            "dps": 0,
+            "result": -1
+          }
+        },
+        {
+          "id": 1786046340386,
+          "nick": "Nestle",
+          "illusion": {
+            "mino": 0,
+            "baph2": 0,
+            "baph3": 0
+          },
+          "guild": {
+            "kvm_tue": 0,
+            "kvm_thu": 1,
             "gvg": 0,
             "kvm_sun": 0
           },
@@ -213,12 +233,12 @@
           "nick": "Модница",
           "illusion": {
             "mino": 0,
-            "baph2": 0,
+            "baph2": 1,
             "baph3": 0
           },
           "guild": {
             "kvm_tue": 1,
-            "kvm_thu": 0,
+            "kvm_thu": 1,
             "gvg": 0,
             "kvm_sun": 0
           },
@@ -233,12 +253,12 @@
           "nick": "Химия",
           "illusion": {
             "mino": 0,
-            "baph2": 0,
+            "baph2": 1,
             "baph3": 0
           },
           "guild": {
             "kvm_tue": 1,
-            "kvm_thu": 0,
+            "kvm_thu": 1,
             "gvg": 0,
             "kvm_sun": 0
           },
@@ -253,12 +273,12 @@
           "nick": "Дельта",
           "illusion": {
             "mino": 0,
-            "baph2": 0,
+            "baph2": 1,
             "baph3": 0
           },
           "guild": {
             "kvm_tue": 1,
-            "kvm_thu": 0,
+            "kvm_thu": 1,
             "gvg": 0,
             "kvm_sun": 0
           },
@@ -273,12 +293,12 @@
           "nick": "Щелбан",
           "illusion": {
             "mino": 0,
-            "baph2": 0,
+            "baph2": 1,
             "baph3": 0
           },
           "guild": {
             "kvm_tue": 1,
-            "kvm_thu": 0,
+            "kvm_thu": 1,
             "gvg": 0,
             "kvm_sun": 0
           },
@@ -298,7 +318,7 @@
           },
           "guild": {
             "kvm_tue": 0,
-            "kvm_thu": 0,
+            "kvm_thu": 1,
             "gvg": 0,
             "kvm_sun": 0
           },
@@ -318,7 +338,7 @@
           },
           "guild": {
             "kvm_tue": 0,
-            "kvm_thu": 0,
+            "kvm_thu": 1,
             "gvg": 0,
             "kvm_sun": 0
           },
@@ -338,7 +358,7 @@
           },
           "guild": {
             "kvm_tue": 0,
-            "kvm_thu": 0,
+            "kvm_thu": 1,
             "gvg": 0,
             "kvm_sun": 0
           },
@@ -358,7 +378,7 @@
           },
           "guild": {
             "kvm_tue": 0,
-            "kvm_thu": 0,
+            "kvm_thu": 1,
             "gvg": 0,
             "kvm_sun": 0
           },
@@ -378,7 +398,7 @@
           },
           "guild": {
             "kvm_tue": 0,
-            "kvm_thu": 0,
+            "kvm_thu": 1,
             "gvg": 0,
             "kvm_sun": 0
           },
@@ -396,7 +416,7 @@
       "points": 70
     },
     "thu": {
-      "points": 0
+      "points": 79
     },
     "sun": {
       "points": 0
