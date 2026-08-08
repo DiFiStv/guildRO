@@ -14,7 +14,7 @@
           "guild": {
             "kvm_tue": 1,
             "kvm_thu": 1,
-            "gvg": 0,
+            "gvg": 1,
             "kvm_sun": 0
           },
           "tower": {
@@ -79,7 +79,7 @@
           },
           "tower": {
             "prof": "",
-            "dps": 5615500,
+            "dps": 3701000,
             "result": -1
           }
         },
@@ -134,7 +134,7 @@
           "guild": {
             "kvm_tue": 1,
             "kvm_thu": 1,
-            "gvg": 0,
+            "gvg": 1,
             "kvm_sun": 0
           },
           "tower": {
@@ -239,7 +239,7 @@
           "guild": {
             "kvm_tue": 1,
             "kvm_thu": 1,
-            "gvg": 0,
+            "gvg": 1,
             "kvm_sun": 0
           },
           "tower": {
