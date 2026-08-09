@@ -15,7 +15,7 @@
             "kvm_tue": 1,
             "kvm_thu": 1,
             "gvg": 1,
-            "kvm_sun": 0
+            "kvm_sun": 1
           },
           "tower": {
             "prof": "",
@@ -35,7 +35,7 @@
             "kvm_tue": 0,
             "kvm_thu": 1,
             "gvg": 0,
-            "kvm_sun": 0
+            "kvm_sun": 1
           },
           "tower": {
             "prof": "",
@@ -75,7 +75,7 @@
             "kvm_tue": 0,
             "kvm_thu": 1,
             "gvg": 0,
-            "kvm_sun": 0
+            "kvm_sun": 1
           },
           "tower": {
             "prof": "",
@@ -95,7 +95,7 @@
             "kvm_tue": 1,
             "kvm_thu": 0,
             "gvg": 0,
-            "kvm_sun": 0
+            "kvm_sun": 1
           },
           "tower": {
             "prof": "",
@@ -135,7 +135,7 @@
             "kvm_tue": 1,
             "kvm_thu": 1,
             "gvg": 1,
-            "kvm_sun": 0
+            "kvm_sun": 1
           },
           "tower": {
             "prof": "",
@@ -222,6 +222,26 @@
             "dps": 0,
             "result": -1
           }
+        },
+        {
+          "id": 1786301649432,
+          "nick": "ZeF1RKa",
+          "illusion": {
+            "mino": 0,
+            "baph2": 0,
+            "baph3": 0
+          },
+          "guild": {
+            "kvm_tue": 0,
+            "kvm_thu": 0,
+            "gvg": 0,
+            "kvm_sun": 1
+          },
+          "tower": {
+            "prof": "",
+            "dps": 0,
+            "result": -1
+          }
         }
       ]
     },
@@ -240,7 +260,7 @@
             "kvm_tue": 1,
             "kvm_thu": 1,
             "gvg": 1,
-            "kvm_sun": 0
+            "kvm_sun": 1
           },
           "tower": {
             "prof": "",
@@ -260,7 +280,7 @@
             "kvm_tue": 1,
             "kvm_thu": 1,
             "gvg": 0,
-            "kvm_sun": 0
+            "kvm_sun": 1
           },
           "tower": {
             "prof": "",
@@ -280,7 +300,7 @@
             "kvm_tue": 1,
             "kvm_thu": 1,
             "gvg": 0,
-            "kvm_sun": 0
+            "kvm_sun": 1
           },
           "tower": {
             "prof": "",
@@ -300,7 +320,7 @@
             "kvm_tue": 1,
             "kvm_thu": 1,
             "gvg": 0,
-            "kvm_sun": 0
+            "kvm_sun": 1
           },
           "tower": {
             "prof": "",
@@ -320,7 +340,7 @@
             "kvm_tue": 0,
             "kvm_thu": 1,
             "gvg": 0,
-            "kvm_sun": 0
+            "kvm_sun": 1
           },
           "tower": {
             "prof": "",
@@ -340,7 +360,7 @@
             "kvm_tue": 0,
             "kvm_thu": 1,
             "gvg": 0,
-            "kvm_sun": 0
+            "kvm_sun": 1
           },
           "tower": {
             "prof": "",
@@ -360,7 +380,7 @@
             "kvm_tue": 0,
             "kvm_thu": 1,
             "gvg": 0,
-            "kvm_sun": 0
+            "kvm_sun": 1
           },
           "tower": {
             "prof": "",
@@ -380,7 +400,7 @@
             "kvm_tue": 0,
             "kvm_thu": 1,
             "gvg": 0,
-            "kvm_sun": 0
+            "kvm_sun": 1
           },
           "tower": {
             "prof": "",
@@ -419,7 +439,7 @@
       "points": 79
     },
     "sun": {
-      "points": 0
+      "points": 78
     }
   },
   "otherworld": {
