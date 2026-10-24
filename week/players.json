@@ -6,51 +6,31 @@
         {
           "id": 1,
           "nick": "Дифис",
-          "illusion": {
-            "mino": 0,
-            "baph2": 1,
-            "baph3": 0
-          },
           "guild": {
-            "kvm_tue": 1,
-            "kvm_thu": 1,
-            "gvg": 1,
-            "kvm_sun": 1
+            "kvm_tue": 0,
+            "kvm_thu": 0,
+            "gvg": 0,
+            "kvm_sun": 0
           },
           "tower": {
-            "prof": "",
-            "dps": 8250000,
+            "prof": "Верховный жрец",
+            "dps": 13000000,
             "result": -1
+          },
+          "doomsday": {
+            "mino": 0,
+            "baph2": 0,
+            "baph3": 0
+          },
+          "thanatos": {
+            "t1": 0,
+            "t2": 0,
+            "t3": 0
           }
         },
         {
           "id": 2,
           "nick": "Sushi",
-          "illusion": {
-            "mino": 0,
-            "baph2": 0,
-            "baph3": 0
-          },
-          "guild": {
-            "kvm_tue": 0,
-            "kvm_thu": 1,
-            "gvg": 0,
-            "kvm_sun": 1
-          },
-          "tower": {
-            "prof": "",
-            "dps": 0,
-            "result": -1
-          }
-        },
-        {
-          "id": 3,
-          "nick": "Денис",
-          "illusion": {
-            "mino": 0,
-            "baph2": 0,
-            "baph3": 0
-          },
           "guild": {
             "kvm_tue": 0,
             "kvm_thu": 0,
@@ -58,119 +38,124 @@
             "kvm_sun": 0
           },
           "tower": {
-            "prof": "",
+            "prof": "Цыганка",
             "dps": 0,
             "result": -1
+          },
+          "doomsday": {
+            "mino": 0,
+            "baph2": 0,
+            "baph3": 0
+          },
+          "thanatos": {
+            "t1": 0,
+            "t2": 0,
+            "t3": 0
           }
         },
         {
           "id": 4,
           "nick": "Megan 82",
-          "illusion": {
+          "guild": {
+            "kvm_tue": 0,
+            "kvm_thu": 0,
+            "gvg": 0,
+            "kvm_sun": 0
+          },
+          "tower": {
+            "prof": "Лорд-рыцарь",
+            "dps": 15000000,
+            "result": -1
+          },
+          "doomsday": {
             "mino": 0,
             "baph2": 0,
             "baph3": 0
           },
-          "guild": {
-            "kvm_tue": 0,
-            "kvm_thu": 1,
-            "gvg": 0,
-            "kvm_sun": 1
-          },
-          "tower": {
-            "prof": "",
-            "dps": 8700000,
-            "result": -1
+          "thanatos": {
+            "t1": 0,
+            "t2": 0,
+            "t3": 0
           }
         },
         {
           "id": 5,
           "nick": "Мэг 2.0",
-          "illusion": {
+          "guild": {
+            "kvm_tue": 0,
+            "kvm_thu": 0,
+            "gvg": 0,
+            "kvm_sun": 0
+          },
+          "tower": {
+            "prof": "Лорд-рыцарь",
+            "dps": 0,
+            "result": -1
+          },
+          "doomsday": {
             "mino": 0,
             "baph2": 0,
             "baph3": 0
           },
-          "guild": {
-            "kvm_tue": 1,
-            "kvm_thu": 0,
-            "gvg": 0,
-            "kvm_sun": 1
-          },
-          "tower": {
-            "prof": "",
-            "dps": 0,
-            "result": -1
+          "thanatos": {
+            "t1": 0,
+            "t2": 0,
+            "t3": 0
           }
         },
         {
           "id": 6,
           "nick": "Cmex",
-          "illusion": {
-            "mino": 0,
-            "baph2": 0,
-            "baph3": 0
-          },
           "guild": {
-            "kvm_tue": 1,
-            "kvm_thu": 1,
+            "kvm_tue": 0,
+            "kvm_thu": 0,
             "gvg": 0,
             "kvm_sun": 0
           },
           "tower": {
-            "prof": "",
+            "prof": "Чемпион",
             "dps": 0,
             "result": -1
+          },
+          "doomsday": {
+            "mino": 0,
+            "baph2": 0,
+            "baph3": 0
+          },
+          "thanatos": {
+            "t1": 0,
+            "t2": 0,
+            "t3": 0
           }
         },
         {
           "id": 9,
           "nick": "NemesisPrim",
-          "illusion": {
-            "mino": 0,
-            "baph2": 0,
-            "baph3": 0
-          },
-          "guild": {
-            "kvm_tue": 1,
-            "kvm_thu": 1,
-            "gvg": 1,
-            "kvm_sun": 1
-          },
-          "tower": {
-            "prof": "",
-            "dps": 561000,
-            "result": -1
-          }
-        },
-        {
-          "id": 11,
-          "nick": "бёрн",
-          "illusion": {
-            "mino": 0,
-            "baph2": 0,
-            "baph3": 0
-          },
           "guild": {
             "kvm_tue": 0,
-            "kvm_thu": 1,
+            "kvm_thu": 0,
             "gvg": 0,
             "kvm_sun": 0
           },
           "tower": {
-            "prof": "",
-            "dps": 0,
+            "prof": "Лорд-рыцарь",
+            "dps": 1000000,
             "result": -1
+          },
+          "doomsday": {
+            "mino": 0,
+            "baph2": 0,
+            "baph3": 0
+          },
+          "thanatos": {
+            "t1": 0,
+            "t2": 0,
+            "t3": 0
           }
         },
         {
           "id": 12,
           "nick": "Firestriker",
-          "illusion": {
-            "mino": 0,
-            "baph2": 0,
-            "baph3": 0
-          },
           "guild": {
             "kvm_tue": 0,
             "kvm_thu": 0,
@@ -178,64 +163,39 @@
             "kvm_sun": 0
           },
           "tower": {
-            "prof": "",
+            "prof": "Верховный маг",
             "dps": 0,
             "result": -1
-          }
-        },
-        {
-          "id": 1785876859641,
-          "nick": "Джайна",
-          "illusion": {
+          },
+          "doomsday": {
             "mino": 0,
             "baph2": 0,
             "baph3": 0
           },
-          "guild": {
-            "kvm_tue": 1,
-            "kvm_thu": 1,
-            "gvg": 0,
-            "kvm_sun": 0
-          },
-          "tower": {
-            "prof": "",
-            "dps": 0,
-            "result": -1
+          "thanatos": {
+            "t1": 0,
+            "t2": 0,
+            "t3": 0
           }
         },
         {
-          "id": 1786046340386,
-          "nick": "Nestle",
-          "illusion": {
+          "id": 1792836033213,
+          "nick": "Qassab",
+          "doomsday": {
             "mino": 0,
             "baph2": 0,
             "baph3": 0
           },
-          "guild": {
-            "kvm_tue": 0,
-            "kvm_thu": 1,
-            "gvg": 0,
-            "kvm_sun": 0
-          },
-          "tower": {
-            "prof": "",
-            "dps": 0,
-            "result": -1
-          }
-        },
-        {
-          "id": 1786301649432,
-          "nick": "ZeF1RKa",
-          "illusion": {
-            "mino": 0,
-            "baph2": 0,
-            "baph3": 0
+          "thanatos": {
+            "t1": 0,
+            "t2": 0,
+            "t3": 0
           },
           "guild": {
             "kvm_tue": 0,
             "kvm_thu": 0,
             "gvg": 0,
-            "kvm_sun": 1
+            "kvm_sun": 0
           },
           "tower": {
             "prof": "",
@@ -251,181 +211,201 @@
         {
           "id": 13,
           "nick": "Модница",
-          "illusion": {
-            "mino": 0,
-            "baph2": 1,
-            "baph3": 0
-          },
           "guild": {
-            "kvm_tue": 1,
-            "kvm_thu": 1,
-            "gvg": 1,
-            "kvm_sun": 1
+            "kvm_tue": 0,
+            "kvm_thu": 0,
+            "gvg": 0,
+            "kvm_sun": 0
           },
           "tower": {
-            "prof": "",
-            "dps": 1000000,
+            "prof": "Снайпер",
+            "dps": 0,
             "result": -1
+          },
+          "doomsday": {
+            "mino": 0,
+            "baph2": 0,
+            "baph3": 0
+          },
+          "thanatos": {
+            "t1": 0,
+            "t2": 0,
+            "t3": 0
           }
         },
         {
           "id": 14,
           "nick": "Химия",
-          "illusion": {
-            "mino": 0,
-            "baph2": 1,
-            "baph3": 0
-          },
           "guild": {
-            "kvm_tue": 1,
-            "kvm_thu": 1,
+            "kvm_tue": 0,
+            "kvm_thu": 0,
             "gvg": 0,
-            "kvm_sun": 1
+            "kvm_sun": 0
           },
           "tower": {
-            "prof": "",
+            "prof": "Создатель",
             "dps": 0,
             "result": -1
+          },
+          "doomsday": {
+            "mino": 0,
+            "baph2": 0,
+            "baph3": 0
+          },
+          "thanatos": {
+            "t1": 0,
+            "t2": 0,
+            "t3": 0
           }
         },
         {
           "id": 15,
           "nick": "Дельта",
-          "illusion": {
-            "mino": 0,
-            "baph2": 1,
-            "baph3": 0
-          },
           "guild": {
-            "kvm_tue": 1,
-            "kvm_thu": 1,
+            "kvm_tue": 0,
+            "kvm_thu": 0,
             "gvg": 0,
-            "kvm_sun": 1
+            "kvm_sun": 0
           },
           "tower": {
-            "prof": "",
+            "prof": "Ассасин Кросс",
             "dps": 0,
             "result": -1
+          },
+          "doomsday": {
+            "mino": 0,
+            "baph2": 0,
+            "baph3": 0
+          },
+          "thanatos": {
+            "t1": 0,
+            "t2": 0,
+            "t3": 0
           }
         },
         {
           "id": 16,
           "nick": "Щелбан",
-          "illusion": {
-            "mino": 0,
-            "baph2": 1,
-            "baph3": 0
-          },
           "guild": {
-            "kvm_tue": 1,
-            "kvm_thu": 1,
+            "kvm_tue": 0,
+            "kvm_thu": 0,
             "gvg": 0,
-            "kvm_sun": 1
+            "kvm_sun": 0
           },
           "tower": {
-            "prof": "",
+            "prof": "Верховный маг",
             "dps": 0,
             "result": -1
+          },
+          "doomsday": {
+            "mino": 0,
+            "baph2": 0,
+            "baph3": 0
+          },
+          "thanatos": {
+            "t1": 0,
+            "t2": 0,
+            "t3": 0
           }
         },
         {
           "id": 17,
           "nick": "Солнечно",
-          "illusion": {
+          "guild": {
+            "kvm_tue": 0,
+            "kvm_thu": 0,
+            "gvg": 0,
+            "kvm_sun": 0
+          },
+          "tower": {
+            "prof": "Верховный жрец",
+            "dps": 0,
+            "result": -1
+          },
+          "doomsday": {
             "mino": 0,
             "baph2": 0,
             "baph3": 0
           },
-          "guild": {
-            "kvm_tue": 0,
-            "kvm_thu": 1,
-            "gvg": 0,
-            "kvm_sun": 1
-          },
-          "tower": {
-            "prof": "",
-            "dps": 0,
-            "result": -1
+          "thanatos": {
+            "t1": 0,
+            "t2": 0,
+            "t3": 0
           }
         },
         {
           "id": 18,
           "nick": "Сяо By",
-          "illusion": {
+          "guild": {
+            "kvm_tue": 0,
+            "kvm_thu": 0,
+            "gvg": 0,
+            "kvm_sun": 0
+          },
+          "tower": {
+            "prof": "Белый кузнец",
+            "dps": 0,
+            "result": -1
+          },
+          "doomsday": {
             "mino": 0,
             "baph2": 0,
             "baph3": 0
           },
-          "guild": {
-            "kvm_tue": 0,
-            "kvm_thu": 1,
-            "gvg": 0,
-            "kvm_sun": 1
-          },
-          "tower": {
-            "prof": "",
-            "dps": 0,
-            "result": -1
+          "thanatos": {
+            "t1": 0,
+            "t2": 0,
+            "t3": 0
           }
         },
         {
           "id": 19,
           "nick": "~Chen~",
-          "illusion": {
+          "guild": {
+            "kvm_tue": 0,
+            "kvm_thu": 0,
+            "gvg": 0,
+            "kvm_sun": 0
+          },
+          "tower": {
+            "prof": "Снайпер",
+            "dps": 0,
+            "result": -1
+          },
+          "doomsday": {
             "mino": 0,
             "baph2": 0,
             "baph3": 0
           },
-          "guild": {
-            "kvm_tue": 0,
-            "kvm_thu": 1,
-            "gvg": 0,
-            "kvm_sun": 1
-          },
-          "tower": {
-            "prof": "",
-            "dps": 0,
-            "result": -1
+          "thanatos": {
+            "t1": 0,
+            "t2": 0,
+            "t3": 0
           }
         },
         {
           "id": 20,
           "nick": "Sun",
-          "illusion": {
-            "mino": 0,
-            "baph2": 0,
-            "baph3": 0
-          },
           "guild": {
             "kvm_tue": 0,
-            "kvm_thu": 1,
-            "gvg": 0,
-            "kvm_sun": 1
-          },
-          "tower": {
-            "prof": "",
-            "dps": 0,
-            "result": -1
-          }
-        },
-        {
-          "id": 21,
-          "nick": "БУБУ",
-          "illusion": {
-            "mino": 0,
-            "baph2": 0,
-            "baph3": 0
-          },
-          "guild": {
-            "kvm_tue": 0,
-            "kvm_thu": 1,
+            "kvm_thu": 0,
             "gvg": 0,
             "kvm_sun": 0
           },
           "tower": {
-            "prof": "",
-            "dps": 2001000,
+            "prof": "Снайпер",
+            "dps": 0,
             "result": -1
+          },
+          "doomsday": {
+            "mino": 0,
+            "baph2": 0,
+            "baph3": 0
+          },
+          "thanatos": {
+            "t1": 0,
+            "t2": 0,
+            "t3": 0
           }
         }
       ]
@@ -436,15 +416,16 @@
       "points": 70
     },
     "thu": {
-      "points": 79
+      "points": 58
     },
     "sun": {
-      "points": 78
+      "points": 0
     }
   },
   "otherworld": {
-    "title": "🌌 Иномир",
-    "info": "Воскресенье 26.07.26 с 21:00 до 21:20",
-    "active": false
+    "active": true,
+    "date": "2026-10-24",
+    "day": "СБ",
+    "time": "19:00"
   }
 }

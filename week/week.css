@@ -443,6 +443,173 @@
     font-size: 14px;
 }
 
+/* ===== Кнопка «Применить» ===== */
+.save-apply {
+    background: #4caf50;
+    color: white;
+}
+
+/* ===== Кнопка «Исключить» в таблице ===== */
+.col-remove {
+    text-align: center;
+    width: 60px;
+}
+
+.remove-btn {
+    background: #f44336;
+    color: white;
+    border: none;
+    padding: 6px 10px;
+    border-radius: 6px;
+    font-size: 12px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: opacity 0.2s;
+}
+
+.remove-btn:hover {
+    opacity: 0.85;
+}
+
+/* ===== Поле ввода ДПС в башне ===== */
+.col-dps input.dps-input {
+    width: 100px;
+    padding: 4px 8px;
+    border-radius: 6px;
+    border: 1px solid #444;
+    background: #2a2a3a;
+    color: #ffd700;
+    font-size: 13px;
+    text-align: right;
+}
+
+.col-dps input.dps-input:focus {
+    outline: none;
+    border-color: #ffd700;
+}
+
+/* ===== Редактор Иномира ===== */
+.otherworld-editor {
+    margin-top: 15px;
+    padding: 15px 20px;
+    background: rgba(0,0,0,0.3);
+    border: 1px solid #444;
+    border-radius: 12px;
+}
+
+.otherworld-editor h3 {
+    margin: 0 0 12px 0;
+    color: #ffd700;
+    font-size: 15px;
+}
+
+.otherworld-editor .editor-row {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 10px;
+}
+
+.otherworld-editor .editor-row label {
+    color: #ccc;
+    font-size: 14px;
+    margin: 0;
+    min-width: 120px;
+}
+
+.otherworld-editor .editor-row input[type="date"],
+.otherworld-editor .editor-row select {
+    padding: 6px 10px;
+    border-radius: 8px;
+    border: 1px solid #444;
+    background: #2a2a3a;
+    color: white;
+    font-size: 14px;
+}
+
+.otherworld-editor .editor-row input[type="date"]:focus,
+.otherworld-editor .editor-row select:focus {
+    outline: none;
+    border-color: #ffd700;
+}
+
+.otherworld-editor .editor-row input[type="checkbox"] {
+    width: 18px;
+    height: 18px;
+    accent-color: #ffd700;
+}
+
+/* Колонка ДПС в башне */
+.week-table .col-dps {
+    text-align: right;
+    padding-right: 15px;
+    font-weight: bold;
+    color: #ffd700;
+    font-size: 14px;
+    min-width: 80px;
+    white-space: nowrap;
+}
+
+
+/* ===== КНОПКИ ===== */
+.week-controls {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    flex-wrap: wrap;
+}
+
+.controls-left,
+.controls-right {
+    display: flex;
+    gap: 8px;
+    align-items: center;
+}
+
+.save-btn {
+    border: none;
+    padding: 8px 16px;
+    border-radius: 40px;
+    font-size: 14px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: opacity 0.2s;
+    white-space: nowrap;
+}
+
+.save-btn:hover {
+    opacity: 0.85;
+}
+
+.save-json {
+    background: #4caf50;
+    color: white;
+}
+
+.save-txt {
+    background: #ff9800;
+    color: white;
+}
+
+.save-reset {
+    background: #f44336;
+    color: white;
+}
+
+.save-stats {
+    background: #9c27b0;
+    color: white;
+}
+
+/* ===== ИТОГИ БАШНИ ===== */
+/* Исправляем colspan для строки итогов в башне */
+.week-table .total-row .col-tower {
+    text-align: center;
+    font-size: 16px;
+    color: #ffd700;
+    font-weight: bold;
+}
+
 /* Адаптация */
 @media (max-width: 768px) {
     .week-header {
@@ -560,89 +727,21 @@
     .week-table .group-header .group-name {
         padding-left: 0;
     }
-}
 
-/* Колонка ДПС в башне */
-.week-table .col-dps {
-    text-align: right;
-    padding-right: 15px;
-    font-weight: bold;
-    color: #ffd700;
-    font-size: 14px;
-    min-width: 80px;
-    white-space: nowrap;
-}
+    .otherworld-editor .editor-row {
+        flex-direction: column;
+        align-items: stretch;
+    }
+    .otherworld-editor .editor-row label {
+        min-width: unset;
+    }
 
-/* Адаптация для мобильных */
-@media (max-width: 768px) {
     .week-table .col-dps {
         font-size: 12px;
         min-width: 60px;
         padding-right: 8px;
     }
-}
 
-/* ===== КНОПКИ ===== */
-.week-controls {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    flex-wrap: wrap;
-}
-
-.controls-left,
-.controls-right {
-    display: flex;
-    gap: 8px;
-    align-items: center;
-}
-
-.save-btn {
-    border: none;
-    padding: 8px 16px;
-    border-radius: 40px;
-    font-size: 14px;
-    font-weight: bold;
-    cursor: pointer;
-    transition: opacity 0.2s;
-    white-space: nowrap;
-}
-
-.save-btn:hover {
-    opacity: 0.85;
-}
-
-.save-json {
-    background: #4caf50;
-    color: white;
-}
-
-.save-txt {
-    background: #ff9800;
-    color: white;
-}
-
-.save-reset {
-    background: #f44336;
-    color: white;
-}
-
-.save-stats {
-    background: #9c27b0;
-    color: white;
-}
-
-/* ===== ИТОГИ БАШНИ ===== */
-/* Исправляем colspan для строки итогов в башне */
-.week-table .total-row .col-tower {
-    text-align: center;
-    font-size: 16px;
-    color: #ffd700;
-    font-weight: bold;
-}
-
-/* ===== АДАПТАЦИЯ ===== */
-@media (max-width: 768px) {
     .week-controls {
         justify-content: center;
         gap: 6px;
@@ -658,4 +757,5 @@
         font-size: 12px;
         padding: 6px 12px;
     }
+
 }

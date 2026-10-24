@@ -19,23 +19,21 @@
         <div class="week-header">
             <h1>📋 ЕЖЕНЕДЕЛЬНЫЕ АКТИВНОСТИ ГИЛЬДИИ SUPER</h1>
             <div class="week-controls">
-                <!--<div class="controls-left">
-                    <button id="saveJsonBtn" class="save-btn save-json">💾 JSON</button>
-                    <button id="saveTxtBtn" class="save-btn save-txt">📊 Excel</button>
+                <div class="controls-left">
+                    <button id="applyBtn" class="save-btn save-apply" style="display:none;">💾 Применить</button>
                 </div>
                 <div class="controls-right">
-                    <button id="resetBtn" class="save-btn save-reset">🔄 Обнулить</button>
-                    <button id="saveStatsBtn" class="save-btn save-stats">📈 Статистика</button>
-                </div>-->
-                <span id="weekInfo" class="week-info">📅 Неделя: Загрузка...</span>
+                    <span id="weekInfo" class="week-info">📅 Неделя: Загрузка...</span>
+                </div>
             </div>
         </div>
 
         <!-- Вкладки -->
         <div class="tabs">
-            <button class="tab-btn active" data-tab="illusion">🏛️ Иллюзия Испытания</button>
-            <button class="tab-btn" data-tab="guild">⚔️ Активности гильдии</button>
-            <button class="tab-btn" data-tab="tower">🏰 Бесконечная башня</button>
+            <button class="tab-btn" data-tab="guild">🛡️ PVP активности</button>
+            <button class="tab-btn active" data-tab="doomsday">⚔️ Битва судного дня</button>
+            <button class="tab-btn" data-tab="thanatos">🏰 Башня Танатоса</button>
+            <button class="tab-btn" data-tab="tower">🗼 Бесконечная башня</button>
         </div>
 
         <!-- Контейнер для таблиц -->
@@ -69,18 +67,45 @@
         <div class="otherworld-section">
             <div class="otherworld-cloud" id="otherworldCloud">
                 <div class="particles">
-                    <span class="particle">✦</span>
-                    <span class="particle">✦</span>
-                    <span class="particle">✦</span>
-                    <span class="particle">✦</span>
-                    <span class="particle">✦</span>
-                    <span class="particle">✦</span>
-                    <span class="particle">✦</span>
-                    <span class="particle">✦</span>
+                    <span class="particle">✦</span><span class="particle">✦</span>
+                    <span class="particle">✦</span><span class="particle">✦</span>
+                    <span class="particle">✦</span><span class="particle">✦</span>
+                    <span class="particle">✦</span><span class="particle">✦</span>
                 </div>
                 <div class="otherworld-content">
                     <div class="otherworld-title" id="otherworldTitle">🌌 ИНОМИР</div>
                     <div class="otherworld-info" id="otherworldInfo">Набирает силы...</div>
+                </div>
+            </div>
+
+            <!-- Редактор Иномира (только в dynamic) -->
+            <div id="otherworldEditor" class="otherworld-editor" style="display:none;">
+                <h3>⚙️ Настройка Иномира</h3>
+                <div class="editor-row">
+                    <label>Дата:</label>
+                    <input type="date" id="owDate">
+                </div>
+                <div class="editor-row">
+                    <label>День недели:</label>
+                    <select id="owDay">
+                        <option value="">—</option>
+                        <option value="ПН">Понедельник</option>
+                        <option value="ВТ">Вторник</option>
+                        <option value="СР">Среда</option>
+                        <option value="ЧТ">Четверг</option>
+                        <option value="ПТ">Пятница</option>
+                        <option value="СБ">Суббота</option>
+                        <option value="ВС">Воскресенье</option>
+                    </select>
+                </div>
+                <div class="editor-row">
+                    <label>Время:</label>
+                    <select id="owTime"></select>
+                </div>
+                <div class="editor-row">
+                    <label>
+                        <input type="checkbox" id="owActive"> Активно
+                    </label>
                 </div>
             </div>
         </div>
