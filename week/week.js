@@ -4,7 +4,7 @@ let IS_LOCAL = false;
 // ============ СОСТОЯНИЕ ============
 let weekData = null;
 let currentWeek = '';
-let currentTab = 'doomsday';
+let currentTab = 'activists';
 
 const STATUS = { NO: 0, OK: 1 };
 const STATUS_SYMBOLS = { 0: '❌', 1: '✅' };
