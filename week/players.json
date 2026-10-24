@@ -210,6 +210,32 @@
             "dps": 0,
             "result": -1
           }
+        },
+        {
+          "id": 1792846843591,
+          "nick": "Алиндор",
+          "renome": "Активный воин",
+          "doomsday": {
+            "mino": 0,
+            "baph2": 0,
+            "baph3": 0
+          },
+          "thanatos": {
+            "t1": 0,
+            "t2": 0,
+            "t3": 0
+          },
+          "guild": {
+            "kvm_tue": 0,
+            "kvm_thu": 0,
+            "gvg": 0,
+            "kvm_sun": 0
+          },
+          "tower": {
+            "prof": "Лорд-рыцарь",
+            "dps": 2000000,
+            "result": -1
+          }
         }
       ]
     },
