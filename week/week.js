@@ -1,5 +1,5 @@
 // ============ КОНФИГУРАЦИЯ ============
-let IS_LOCAL = false; // определим асинхронно
+let IS_LOCAL = false;
 
 // ============ СОСТОЯНИЕ ============
 let weekData = null;
@@ -35,7 +35,7 @@ async function loadWeekData() {
         const data = await response.json();
         weekData = data;
 
-        // Миграция: если старый формат с illusion — переносим в doomsday
+        // Миграция на всякий случай
         weekData.groups.forEach(group => {
             group.players.forEach(player => {
                 if (player.illusion && !player.doomsday) {
@@ -43,6 +43,7 @@ async function loadWeekData() {
                     delete player.illusion;
                 }
                 if (!player.thanatos) player.thanatos = { t1: 0, t2: 0, t3: 0 };
+                if (player.renome === undefined) player.renome = "";
             });
         });
 
@@ -61,7 +62,6 @@ async function loadWeekData() {
         initOtherworldEditor();
         renderTable(currentTab);
 
-        // Показываем «Применить» только в localhost
         if (IS_LOCAL) {
             document.getElementById('applyBtn').style.display = '';
             document.getElementById('otherworldEditor').style.display = '';
@@ -139,6 +139,14 @@ function renderTable(tab) {
             <th class="col-tower">Результат</th>
             ${IS_LOCAL ? '<th class="col-remove">Исключить</th>' : ''}
         </tr></thead><tbody>`;
+    } else if (tab === 'activists') {
+        html += `<thead><tr>
+            <th class="col-nick">Ник</th>
+            <th class="col-prof">Профа</th>
+            <th class="col-dps">ДПС</th>
+            <th class="col-renome">Статус</th>
+            ${IS_LOCAL ? '<th class="col-remove">Исключить</th>' : ''}
+        </tr></thead><tbody>`;
     }
 
     const totals = {};
@@ -148,54 +156,51 @@ function renderTable(tab) {
     else if (tab === 'thanatos') colspan = IS_LOCAL ? 5 : 4;
     else if (tab === 'guild') colspan = IS_LOCAL ? 6 : 5;
     else if (tab === 'tower') colspan = IS_LOCAL ? 5 : 4;
+    else if (tab === 'activists') colspan = IS_LOCAL ? 5 : 4;
 
     weekData.groups.forEach((group, groupIndex) => {
         html += `<tr class="group-header"><td colspan="${colspan}">
             <span class="group-name">${group.name}</span>
+            ${IS_LOCAL ? `
             <span class="group-controls">
-                <input type="text" class="add-input" id="addInput-${groupIndex}" placeholder="Новый ник">
+                <input type="text" class="add-input" id="addNick-${groupIndex}" placeholder="Ник">
+                <input type="text" class="add-input" id="addProf-${groupIndex}" placeholder="Профа">
+                <input type="text" class="add-input" id="addRenome-${groupIndex}" placeholder="Статус (описание)">
                 <button class="add-btn" onclick="addPlayer(${groupIndex})">➕ Добавить</button>
-            </span>
+            </span>` : ''}
         </td></tr>`;
+
 
         group.players.forEach((player, playerIndex) => {
             html += `<tr id="row-${groupIndex}-${playerIndex}">`;
             html += `<td class="col-nick">${player.nick}</td>`;
 
-            if (tab === 'doomsday' || tab === 'thanatos') {
-                const section = tab;
-                const cols = tab === 'doomsday' ? ['mino', 'baph2', 'baph3'] : ['t1', 't2', 't3'];
-                cols.forEach(col => {
-                    const value = player[section]?.[col] !== undefined ? player[section][col] : STATUS.NO;
-                    const symbol = STATUS_SYMBOLS[value] || '❌';
-                    const statusClass = STATUS_CLASSES[value] || 'status-0';
-                    const color = STATUS_COLORS[value] || '#ff4444';
-                    html += `<td class="col-status ${statusClass}"
+            if (tab === 'doomsday') {
+                ['mino', 'baph2', 'baph3'].forEach(col => {
+                    const value = player.doomsday?.[col] !== undefined ? player.doomsday[col] : STATUS.NO;
+                    html += `<td class="col-status ${STATUS_CLASSES[value] || 'status-0'}"
                         data-group="${groupIndex}" data-player="${playerIndex}"
-                        data-tab="${tab}" data-col="${col}"
-                        style="color: ${color}"
-                        onclick="toggleStatus(this)">${symbol}</td>`;
-                    const key = `${tab}_${col}`;
-                    if (!totals[key]) totals[key] = { ok: 0, total: 0 };
-                    totals[key].total++;
-                    if (value === STATUS.OK) totals[key].ok++;
+                        data-tab="doomsday" data-col="${col}"
+                        style="color: ${STATUS_COLORS[value] || '#ff4444'}"
+                        onclick="toggleStatus(this)">${STATUS_SYMBOLS[value] || '❌'}</td>`;
+                });
+            } else if (tab === 'thanatos') {
+                ['t1', 't2', 't3'].forEach(col => {
+                    const value = player.thanatos?.[col] !== undefined ? player.thanatos[col] : STATUS.NO;
+                    html += `<td class="col-status ${STATUS_CLASSES[value] || 'status-0'}"
+                        data-group="${groupIndex}" data-player="${playerIndex}"
+                        data-tab="thanatos" data-col="${col}"
+                        style="color: ${STATUS_COLORS[value] || '#ff4444'}"
+                        onclick="toggleStatus(this)">${STATUS_SYMBOLS[value] || '❌'}</td>`;
                 });
             } else if (tab === 'guild') {
-                const cols = ['kvm_tue', 'kvm_thu', 'gvg', 'kvm_sun'];
-                cols.forEach(col => {
+                ['kvm_tue', 'kvm_thu', 'gvg', 'kvm_sun'].forEach(col => {
                     const value = player.guild?.[col] !== undefined ? player.guild[col] : STATUS.NO;
-                    const symbol = STATUS_SYMBOLS[value] || '❌';
-                    const statusClass = STATUS_CLASSES[value] || 'status-0';
-                    const color = STATUS_COLORS[value] || '#ff4444';
-                    html += `<td class="col-status ${statusClass}"
+                    html += `<td class="col-status ${STATUS_CLASSES[value] || 'status-0'}"
                         data-group="${groupIndex}" data-player="${playerIndex}"
                         data-tab="guild" data-col="${col}"
-                        style="color: ${color}"
-                        onclick="toggleStatus(this)">${symbol}</td>`;
-                    const key = `guild_${col}`;
-                    if (!totals[key]) totals[key] = { ok: 0, total: 0 };
-                    totals[key].total++;
-                    if (value === STATUS.OK) totals[key].ok++;
+                        style="color: ${STATUS_COLORS[value] || '#ff4444'}"
+                        onclick="toggleStatus(this)">${STATUS_SYMBOLS[value] || '❌'}</td>`;
                 });
             } else if (tab === 'tower') {
                 const prof = player.tower?.prof || '';
@@ -214,12 +219,30 @@ function renderTable(tab) {
                 html += `<td class="col-tower ${getTowerClass(result)}"
                     data-group="${groupIndex}" data-player="${playerIndex}"
                     onclick="toggleTowerResult(this)">${getTowerDisplay(result)}</td>`;
-                if (!totals.tower) totals.tower = { total: 0, passed: 0 };
-                totals.tower.total++;
-                if (result >= 1 && result <= 16) totals.tower.passed++;
+            } else if (tab === 'activists') {
+                const prof = player.tower?.prof || '';
+                const dps = player.tower?.dps || 0;
+                html += `<td class="col-prof">${prof}</td>`;
+                if (IS_LOCAL) {
+                    html += `<td class="col-dps">
+                        <input type="number" class="dps-input" value="${dps}"
+                            data-group="${groupIndex}" data-player="${playerIndex}"
+                            onchange="updateTowerDps(this)">
+                    </td>`;
+                } else {
+                    html += `<td class="col-dps">${formatDps(dps)}</td>`;
+                }
+            if (IS_LOCAL) {
+                html += `<td class="col-renome">
+                    <input type="text" class="text-input" value="${player.renome || ''}"
+                        data-group="${groupIndex}" data-player="${playerIndex}"
+                        onchange="updateRenome(this)">
+                </td>`;
+            } else {
+                html += `<td class="col-renome">${player.renome || ''}</td>`;
+            }
             }
 
-            // Кнопка «Исключить»
             if (IS_LOCAL) {
                 html += `<td class="col-remove">
                     <button class="remove-btn" onclick="removePlayer(${groupIndex}, ${playerIndex})">✖</button>
@@ -230,32 +253,25 @@ function renderTable(tab) {
         });
     });
 
-    // Итоги
+    // Итоги (пока оставим только для старых вкладок, чтобы не усложнять)
     html += `<tr class="total-row"><td class="col-nick">ИТОГО:</td>`;
     if (tab === 'doomsday') {
-        ['mino', 'baph2', 'baph3'].forEach(col => {
-            const k = `doomsday_${col}`;
-            html += `<td class="col-status">${totals[k]?.ok || 0}/${totals[k]?.total || 0}</td>`;
-        });
+        ['mino', 'baph2', 'baph3'].forEach(col => { html += `<td class="col-status">-/-</td>`; });
     } else if (tab === 'thanatos') {
-        ['t1', 't2', 't3'].forEach(col => {
-            const k = `thanatos_${col}`;
-            html += `<td class="col-status">${totals[k]?.ok || 0}/${totals[k]?.total || 0}</td>`;
-        });
+        ['t1', 't2', 't3'].forEach(col => { html += `<td class="col-status">-/-</td>`; });
     } else if (tab === 'guild') {
-        ['kvm_tue', 'kvm_thu', 'gvg', 'kvm_sun'].forEach(col => {
-            const k = `guild_${col}`;
-            html += `<td class="col-status">${totals[k]?.ok || 0}/${totals[k]?.total || 0}</td>`;
-        });
+        ['kvm_tue', 'kvm_thu', 'gvg', 'kvm_sun'].forEach(col => { html += `<td class="col-status">-/-</td>`; });
     } else if (tab === 'tower') {
-        html += `<td class="col-tower" colspan="3">${totals.tower?.passed || 0}/${totals.tower?.total || 0} пройдено</td>`;
+        html += `<td class="col-tower" colspan="3">-/- пройдено</td>`;
+    } else if (tab === 'activists') {
+        html += `<td class="col-tower" colspan="3"></td>`;
     }
     if (IS_LOCAL) html += `<td class="col-remove"></td>`;
     html += '</tr></tbody></table></div>';
     container.innerHTML = html;
 }
 
-// ============ БАШНЯ ============
+// ============ ФУНКЦИИ БАШНИ И АКТИВИСТОВ ============
 function getTowerDisplay(result) {
     if (result === -1) return '❌';
     if (result === 0) return '⏳';
@@ -279,7 +295,7 @@ function getTowerClass(result) {
     return 'tower-no';
 }
 
-// ============ СТАТУСЫ ============
+// ============ СТАТУСЫ И РЕДАКТИРОВАНИЕ ============
 function toggleStatus(element) {
     const groupIdx = parseInt(element.dataset.group);
     const playerIdx = parseInt(element.dataset.player);
@@ -289,16 +305,47 @@ function toggleStatus(element) {
     const player = weekData.groups[groupIdx].players[playerIdx];
     if (!player) return;
 
-    const section = tab;
-    if (!player[section]) player[section] = {};
-    const cur = player[section][col] !== undefined ? player[section][col] : STATUS.NO;
+    if (!player[tab]) player[tab] = {};
+    const cur = player[tab][col] !== undefined ? player[tab][col] : STATUS.NO;
     const next = cur === STATUS.OK ? STATUS.NO : STATUS.OK;
-    player[section][col] = next;
+    player[tab][col] = next;
 
     element.textContent = STATUS_SYMBOLS[next];
     element.className = `col-status ${STATUS_CLASSES[next]}`;
     element.style.color = STATUS_COLORS[next];
-    renderTable(currentTab);
+
+    updateTotals(tab);
+}
+
+// Новая функция для подсчета итогов
+function updateTotals(tab) {
+    const cols = (tab === 'doomsday') ? ['mino', 'baph2', 'baph3'] :
+                 (tab === 'thanatos') ? ['t1', 't2', 't3'] :
+                 (tab === 'guild') ? ['kvm_tue', 'kvm_thu', 'gvg', 'kvm_sun'] : [];
+    
+    if (cols.length === 0) return;
+
+    cols.forEach((col, index) => {
+        let ok = 0, total = 0;
+        weekData.groups.forEach(group => {
+            group.players.forEach(player => {
+                if (player[tab]) {
+                    total++;
+                    if (player[tab][col] === STATUS.OK) ok++;
+                }
+            });
+        });
+        
+        // Находим ячейку в строке ИТОГО и обновляем текст.
+        // Строка ИТОГО — последняя в таблице, смещение зависит от первой колонки (Ник).
+        const table = document.querySelector('.week-table');
+        const totalRow = table.querySelector('.total-row');
+        if (totalRow) {
+            // Ячейки в строке итогов: 0 - Ник, 1,2,3 - статусы, последняя - Исключить
+            const cell = totalRow.cells[index + 1]; 
+            if (cell) cell.textContent = `${ok}/${total}`;
+        }
+    });
 }
 
 function toggleTowerResult(element) {
@@ -309,14 +356,10 @@ function toggleTowerResult(element) {
     if (!player) return;
     if (!player.tower) player.tower = { prof: '', dps: 0, result: -1 };
     const cur = player.tower.result !== undefined ? player.tower.result : -1;
-    let next;
-    if (cur === -1) next = 1;
-    else if (cur >= 1 && cur < 16) next = cur + 1;
-    else next = -1;
+    let next = (cur === -1) ? 1 : (cur >= 1 && cur < 16) ? cur + 1 : -1;
     player.tower.result = next;
     element.textContent = getTowerDisplay(next);
     element.className = `col-tower ${getTowerClass(next)}`;
-    renderTable(currentTab);
 }
 
 function updateTowerDps(input) {
@@ -329,24 +372,40 @@ function updateTowerDps(input) {
     player.tower.dps = parseInt(input.value) || 0;
 }
 
+function updateRenome(input) {
+    const groupIdx = parseInt(input.dataset.group);
+    const playerIdx = parseInt(input.dataset.player);
+    if (!weekData?.groups[groupIdx]) return;
+    const player = weekData.groups[groupIdx].players[playerIdx];
+    if (!player) return;
+    player.renome = input.value.trim();
+}
+
 // ============ ИГРОКИ ============
 function addPlayer(groupIndex) {
-    const input = document.getElementById(`addInput-${groupIndex}`);
-    const nick = input.value.trim();
-    if (!nick) { alert('Введите ник игрока!'); return; }
+    const nickInput = document.getElementById(`addNick-${groupIndex}`);
+    const profInput = document.getElementById(`addProf-${groupIndex}`);
+    const renomeInput = document.getElementById(`addRenome-${groupIndex}`);
+    
+    const nick = nickInput.value.trim();
+    const prof = profInput.value.trim();
+    const renome = renomeInput.value.trim();
+    
+    if (!nick) { alert('Введите ник!'); return; }
     const existing = weekData.groups[groupIndex].players.some(p => p.nick === nick);
-    if (existing) { alert('Игрок с таким ником уже есть в этой группе!'); return; }
+    if (existing) { alert('Игрок уже есть!'); return; }
 
     const newPlayer = {
         id: Date.now(),
         nick: nick,
+        renome: renome,
         doomsday: { mino: 0, baph2: 0, baph3: 0 },
         thanatos: { t1: 0, t2: 0, t3: 0 },
         guild: { kvm_tue: 0, kvm_thu: 0, gvg: 0, kvm_sun: 0 },
-        tower: { prof: '', dps: 0, result: -1 }
+        tower: { prof: prof, dps: 0, result: -1 }
     };
     weekData.groups[groupIndex].players.push(newPlayer);
-    input.value = '';
+    nickInput.value = ''; profInput.value = ''; renomeInput.value = '';
     renderTable(currentTab);
 }
 
@@ -384,6 +443,7 @@ function renderOtherworld() {
 }
 
 function addMinutes(time, mins) {
+    if (!time) return '';
     const [h, m] = time.split(':').map(Number);
     const total = h * 60 + m + mins;
     const nh = Math.floor(total / 60) % 24;
@@ -393,21 +453,15 @@ function addMinutes(time, mins) {
 
 function initOtherworldEditor() {
     const timeSelect = document.getElementById('owTime');
+    if (!timeSelect) return;
     timeSelect.innerHTML = '';
     for (let h = 19; h <= 23; h++) {
         for (let m = 0; m < 60; m += 20) {
             const t = `${String(h).padStart(2, '0')}:${String(m).padStart(2, '0')}`;
             const opt = document.createElement('option');
-            opt.value = t;
-            opt.textContent = t;
-            timeSelect.appendChild(opt);
+            opt.value = t; opt.textContent = t; timeSelect.appendChild(opt);
         }
     }
-    // 24:00 — отдельно
-    const opt24 = document.createElement('option');
-    opt24.value = '23:40';
-    opt24.textContent = '23:40';
-    // (на самом деле 23:40 уже есть выше, но если нужен 24:00 — это 00:00 следующего дня, лучше не добавлять)
 
     const ow = weekData.otherworld || {};
     document.getElementById('owDate').value = ow.date || '';
@@ -415,7 +469,6 @@ function initOtherworldEditor() {
     document.getElementById('owTime').value = ow.time || '19:00';
     document.getElementById('owActive').checked = !!ow.active;
 
-    // Обработчики
     ['owDate', 'owDay', 'owTime', 'owActive'].forEach(id => {
         document.getElementById(id).addEventListener('change', saveOtherworldToMemory);
     });
@@ -432,10 +485,9 @@ function saveOtherworldToMemory() {
     renderOtherworld();
 }
 
-// ============ СОХРАНЕНИЕ НА СЕРВЕР ============
+// ============ СОХРАНЕНИЕ ============
 async function applyChanges() {
-    if (!weekData) { alert('Нет данных'); return; }
-    // Собираем актуальные КВМ-очки
+    if (!weekData) return;
     weekData.kvm = {
         tue: { points: parseInt(document.getElementById('kvmTuePoints').value) || 0 },
         thu: { points: parseInt(document.getElementById('kvmThuPoints').value) || 0 },
@@ -450,11 +502,8 @@ async function applyChanges() {
             body: JSON.stringify(weekData)
         });
         const j = await r.json();
-        if (!j.ok) {
-            alert('❌ Ошибка сохранения: ' + (j.error || 'неизвестно'));
-            return;
-        }
-        alert('✅ Сохранено в Dynamic и Static');
+        if (!j.ok) alert('❌ Ошибка: ' + (j.error || 'неизвестно'));
+        else alert('✅ Сохранено в Dynamic и Static');
     } catch (e) {
         alert('❌ Ошибка сети: ' + e.message);
     }
@@ -466,19 +515,17 @@ document.addEventListener('DOMContentLoaded', async function() {
     await loadWeekData();
 
     document.querySelectorAll('.tab-btn').forEach(btn => {
-        btn.addEventListener('click', function() {
-            switchTab(this.dataset.tab);
-        });
+        btn.addEventListener('click', function() { switchTab(this.dataset.tab); });
     });
 
     const applyBtn = document.getElementById('applyBtn');
     if (applyBtn) applyBtn.addEventListener('click', applyChanges);
 });
 
-// Экспорт
 window.toggleStatus = toggleStatus;
 window.toggleTowerResult = toggleTowerResult;
 window.updateTowerDps = updateTowerDps;
+window.updateRenome = updateRenome;
 window.addPlayer = addPlayer;
 window.removePlayer = removePlayer;
 window.updateKvmTotal = updateKvmTotal;

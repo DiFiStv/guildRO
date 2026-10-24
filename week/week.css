@@ -610,6 +610,55 @@
     font-weight: bold;
 }
 
+/* Поля добавления игрока */
+.group-controls {
+    display: flex;
+    gap: 5px;
+    align-items: center;
+}
+
+.group-controls .add-input {
+    width: 120px;
+    padding: 4px 10px;
+    border-radius: 6px;
+    border: 1px solid #444;
+    background: #2a2a3a;
+    color: white;
+    font-size: 12px;
+}
+
+/* Поле статуса при добавлении сделаем пошире */
+.group-controls .add-input[id^="addRenome-"] {
+    width: 140px;
+}
+
+/* Колонка Реноме */
+.col-renome {
+    text-align: left;
+    min-width: 150px;
+}
+
+.col-renome input {
+    width: 70px;
+    text-align: center;
+}
+
+.col-renome .text-input {
+    width: 100%;
+    max-width: 200px;
+    padding: 4px 8px;
+    border-radius: 6px;
+    border: 1px solid #444;
+    background: #2a2a3a;
+    color: #eee;
+    font-size: 13px;
+}
+
+.col-renome .text-input:focus {
+    outline: none;
+    border-color: #ffd700;
+}
+
 /* Адаптация */
 @media (max-width: 768px) {
     .week-header {
